@@ -249,7 +249,7 @@ if (url.includes("/v6/homefeed")) {
     // 信息流广告
     let newItems = [];
     // Get regex array from $argument, assuming it's a JSON string like "["regex1", "regex2"]"
-    const filterRegexStrs = JSON.parse($argument || "[]"); 
+    const filterRegexStrs = JSON.parse($argument.xhs_regex || "[]"); 
     const regexes = [];
     if (Array.isArray(filterRegexStrs)) {
       for (const str of filterRegexStrs) {
