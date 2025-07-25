@@ -249,15 +249,29 @@ if (url.includes("/v6/homefeed")) {
     // 信息流广告
     let newItems = [];
     // Get regex array from $argument, assuming it's a JSON string like "["regex1", "regex2"]"
-    const filterRegexStrs = JSON.parse($argument.xhs_regex || "[]"); 
+    const filterRegexStrs = JSON.parse($argument.xhs_regex || "[]");
+    const nicknameFilterRegexStrs = JSON.parse($argument.xhs_nickname_regex || "[]");
     const regexes = [];
+    const nicknameRegexes = [];
+
     if (Array.isArray(filterRegexStrs)) {
       for (const str of filterRegexStrs) {
         try {
           regexes.push(new RegExp(str));
-          console.log(`Added regex filter: ${str}`);
+          console.log(`Added desc regex filter: ${str}`);
         } catch (e) {
-          console.error(`Invalid regex provided: ${str}, Error: ${e}`);
+          console.error(`Invalid regex provided for desc: ${str}, Error: ${e}`);
+        }
+      }
+    }
+
+    if (Array.isArray(nicknameFilterRegexStrs)) {
+      for (const str of nicknameFilterRegexStrs) {
+        try {
+          nicknameRegexes.push(new RegExp(str));
+          console.log(`Added nickname regex filter: ${str}`);
+        } catch (e) {
+          console.error(`Invalid regex provided for nickname: ${str}, Error: ${e}`);
         }
       }
     }
@@ -269,6 +283,16 @@ if (url.includes("/v6/homefeed")) {
           if (regex.test(item.desc)) {
             shouldFilter = true;
             console.log(`Filtered out item with desc matching regex: ${item.desc}`);
+            break;
+          }
+        }
+      }
+
+      if (!shouldFilter && nicknameRegexes.length > 0 && item?.user?.nickname) {
+        for (const regex of nicknameRegexes) {
+          if (regex.test(item.user.nickname)) {
+            shouldFilter = true;
+            console.log(`Filtered out item with nickname matching regex: ${item.user.nickname}`);
             break;
           }
         }
