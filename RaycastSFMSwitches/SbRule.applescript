@@ -2,7 +2,7 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title SFMGlobal
+# @raycast.title SbRule
 # @raycast.mode compact
 
 # Optional parameters:
@@ -13,7 +13,7 @@
 # @raycast.author LeonardoX
 # @raycast.authorURL https://raycast.com/LeonardoX
 
-set targetMode to "Global"
+set targetMode to "Enhanced" -- change to "Rule", "Global", or "Direct"
 set apiURL to "http://127.0.0.1:9090/configs"
 
 -- Construct the curl command for PATCH

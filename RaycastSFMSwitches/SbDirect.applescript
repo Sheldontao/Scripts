@@ -2,7 +2,7 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title SFMRule
+# @raycast.title SbDirect
 # @raycast.mode compact
 
 # Optional parameters:
@@ -13,7 +13,7 @@
 # @raycast.author LeonardoX
 # @raycast.authorURL https://raycast.com/LeonardoX
 
-set targetMode to "Rule" -- change to "Rule", "Global", or "Direct"
+set targetMode to "Direct"
 set apiURL to "http://127.0.0.1:9090/configs"
 
 -- Construct the curl command for PATCH
