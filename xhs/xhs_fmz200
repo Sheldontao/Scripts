@@ -42,7 +42,7 @@ if (url.includes("/search/notes?")) {
 
 if (url.includes("/system_service/config?")) {
   // 整体配置
-  const item = ["app_theme", "loading_img", "splash", "store"];
+  const item = ["app_theme", "loading_img", "splash", "store","name_2tab_config"];
   if (obj.data) {
     for (let i of item) {
       delete obj.data[i];
