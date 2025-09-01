@@ -468,21 +468,7 @@ function isFiltered(e, t, r, n, o) {
       }
     }
   }
-  // New logic for filtering based on consent_number
-  if (e.children && Array.isArray(e.children)) {
-    for (const child of e.children) {
-      if (child.elements && Array.isArray(child.elements)) {
-        for (const element of child.elements) {
-          const matches = element.text.match(/（(\d+)）赞同/),
-            consent_number = 50;
-          if (matches && parseInt(matches[1]) < consent_number) {
-            $.logger.debug(`过滤掉含有 ${element.text} 的子元素: ${JSON.stringify(child)}`);
-            return true; // 过滤掉该子元素
-          }
-        }
-      }
-    }
-  }
+
   //
   return !1;
 }
