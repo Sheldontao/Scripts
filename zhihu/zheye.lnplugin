@@ -3,9 +3,7 @@
 #!openUrl=https://github.com/blackmatrix7/ios_rule_script
 #!author=blackmatrix7
 #!homepage=https://github.com/blackmatrix7/ios_rule_script
-#!icon=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/script/zheye/zheye.png
-
-[Rule]
+#!icon=https://raw.githubusercontent.com/blacSheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.jsRule]
 # 拦截HTTP DNS
 IP-CIDR,103.41.167.237/32,REJECT,no-resolve
 IP-CIDR,118.89.204.198/32,REJECT,no-resolve
@@ -52,52 +50,52 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 
 [Script]
 # 获取用户信息 - 隔离用户数据，开启本地会员等
-http-response ^https?:\/\/api\.zhihu\.com\/people\/ requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_处理用户信息
+http-response ^https?:\/\/api\.zhihu\.com\/people\/ requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_处理用户信息
 
 # 关键词屏蔽 - 解锁本地的关键词屏蔽功能，需要开启本地VIP
-http-request ^https?:\/\/api\.zhihu\.com\/feed-root\/block requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_解锁关键词屏蔽
+http-request ^https?:\/\/api\.zhihu\.com\/feed-root\/block requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_解锁关键词屏蔽
 
 # 优化软件配置 - 优化下发的配置文件来实现某些效果
-http-response ^https?:\/\/api\.zhihu\.com\/root\/tab\/v2 requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_优化推荐标签页
+http-response ^https?:\/\/api\.zhihu\.com\/root\/tab\/v2 requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_优化推荐标签页
 
 # 推荐页 - 移除黑名单用户发布的文章、去除广告，及自定义一些屏蔽项目
-http-response ^https:\/\/(api|web-render)\.zhihu\.com\/topstory\/recommend requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_推荐页优化
+http-response ^https:\/\/(api|web-render)\.zhihu\.com\/topstory\/recommend requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_推荐页优化
 
 # 回答列表 - 移除黑名单用户的回答及去除广告
-http-response ^https:\/\/api\.zhihu\.com\/questions\/\d+\/feeds? requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_回答列表优化
+http-response ^https:\/\/api\.zhihu\.com\/questions\/\d+\/feeds? requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_回答列表优化
 
 # 回答信息流 - 移除黑名单用户的回答、去除广告
-http-response ^https?:\/\/api\.zhihu\.com\/next-render requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_回答信息流优化
+http-response ^https?:\/\/api\.zhihu\.com\/next-render requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_回答信息流优化
 
 # 消息页 - 折叠官方消息、屏蔽营销消息
-http-response ^https?:\/\/api\.zhihu\.com\/notifications\/v3\/(message|timeline\/entry\/system_message) requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_消息优化
+http-response ^https?:\/\/api\.zhihu\.com\/notifications\/v3\/(message|timeline\/entry\/system_message) requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_消息优化
 
 # 评论页 - 去除黑名单用户发表的评论
-http-response ^https?:\/\/api\.zhihu\.com\/(comment_v5\/)?(answers|comments?|articles|pins)\/\d+\/(root_|child_)?comments? requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_评论优化
+http-response ^https?:\/\/api\.zhihu\.com\/(comment_v5\/)?(answers|comments?|articles|pins)\/\d+\/(root_|child_)?comments? requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_评论优化
 
 # 回答页 - 移除相关问题推荐
-http-response ^https:\/\/(page-info|api)\.zhihu\.com\/answers\/v2\/\d+ requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_回答页广告移除
+http-response ^https:\/\/(page-info|api)\.zhihu\.com\/answers\/v2\/\d+ requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_回答页广告移除
 
 # 文章页 - 移除相关问题推荐
-http-response ^https:\/\/api\.zhihu\.com\/articles\/v\d\/\d+ requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_文章页广告移除
+http-response ^https:\/\/api\.zhihu\.com\/articles\/v\d\/\d+ requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_文章页广告移除
 
 # 关注页 - 屏蔽黑名单用户
-http-response ^https?:\/\/api\.zhihu\.com\/moments_v3\? requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_关注列表优化
+http-response ^https?:\/\/api\.zhihu\.com\/moments_v3\? requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_关注列表优化
 
 # 热榜页 - 去除广告
-http-response ^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists(\?|\/) requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_热榜优化
+http-response ^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists(\?|\/) requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_热榜优化
 
 # 搜索页 - 去除预置广告
-http-response ^https?:\/\/api\.zhihu\.com\/search\/preset_words\? requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_预置关键词优化
+http-response ^https?:\/\/api\.zhihu\.com\/search\/preset_words\? requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_预置关键词优化
 
 # 搜索页 - 猜你想搜去广告
-http-response ^https?:\/\/api\.zhihu\.com\/search\/recommend_query requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_猜你想搜去广告
+http-response ^https?:\/\/api\.zhihu\.com\/search\/recommend_query requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_猜你想搜去广告
 
 # 黑名单页 - 同步黑名单数据
-http-response ^https:\/\/api\.zhihu\.com\/settings\/blocked_users requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_同步黑名单
+http-response ^https:\/\/api\.zhihu\.com\/settings\/blocked_users requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_同步黑名单
 
 # 回答页底部评论摘要 - 移除黑名单用户发表的评论
-http-response ^https?:\/\/www\.zhihu\.com\/api\/v4\/comment_v5\/answers\/\d+\/abstract_comment\? requires-body=1,script-path=https://gist.githubusercontent.com/blackmatrix7/f5f780d0f56b319b6ad9848fd080bb18/raw/zheye.min.js,tag=哲也_评论摘要优化
+http-response ^https?:\/\/www\.zhihu\.com\/api\/v4\/comment_v5\/answers\/\d+\/abstract_comment\? requires-body=1,script-path=https://gist.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_评论摘要优化
 
 [MITM]
 hostname = www.zhihu.com,api.zhihu.com,zhuanlan.zhihu.com,m-cloud.zhihu.com,page-info.zhihu.com,web-render.zhihu.com
