@@ -470,7 +470,7 @@ function isFiltered(e, t, r, n, o) {
             }
 
             // Check for "（\d+）赞同" and consent_number
-            const match = element.text.match(/（(\d+)）赞同/);
+            const match = element.text.match(/(\d+)\s*赞同/);
             if (match && parseInt(match[1]) < consent_number) {
               $.logger.debug(`过滤掉赞同数低于 ${consent_number} 的元素: ${JSON.stringify(e)}`);
               return true;
