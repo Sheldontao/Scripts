@@ -455,35 +455,27 @@ function isFiltered(e, t, r, n, o) {
     if (o.hasOwnProperty(t)) return !0;
   }
 
-  // New tweak
+
+  // 2 new logic for filtering
+  const consent_number = 50;
   if (e.children && Array.isArray(e.children)) {
     for (const child of e.children) {
       if (child.elements && Array.isArray(child.elements)) {
-        let shouldFilter = false; // 用于跟踪是否需要过滤
-
-        // Logic1: 检查是否包含 "浏览"
         for (const element of child.elements) {
-          if (element.text && element.text.includes("浏览")) {
-            $.logger.debug(`过滤掉含有“浏览”的父元素: ${JSON.stringify(e)}`);
-            shouldFilter = true; // 标记为需要过滤
-            break; // 一旦找到，直接跳出
-          }
-        }
+          if (element.text) {
+            // Check for "浏览"
+            if (element.text.includes("浏览")) {
+              $.logger.debug(`过滤掉含有“浏览”的父元素: ${JSON.stringify(e)}`);
+              return true;
+            }
 
-        // Logic2: 根据 consent_number 过滤
-        for (const element of child.elements) {
-          const matches = element.text.match(/（(\d+)）赞同/);
-          const consent_number = 50; // 示例值，考虑使用真实参数
-          if (matches && parseInt(matches[1]) < consent_number) {
-            $.logger.debug(`过滤掉含有 ${element.text} 的子元素: ${JSON.stringify(child)}`);
-            shouldFilter = true; // 标记为需要过滤
-            break; // 一旦找到，直接跳出
+            // Check for "（\d+）赞同" and consent_number
+            const match = element.text.match(/（(\d+)）赞同/);
+            if (match && parseInt(match[1]) < consent_number) {
+              $.logger.debug(`过滤掉赞同数低于 ${consent_number} 的元素: ${JSON.stringify(e)}`);
+              return true;
+            }
           }
-        }
-
-        // 如果标记为需要过滤，返回 true
-        if (shouldFilter) {
-          return true;
         }
       }
     }
