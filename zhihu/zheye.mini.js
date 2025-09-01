@@ -455,7 +455,7 @@ function isFiltered(e, t, r, n, o) {
     if (o.hasOwnProperty(t)) return !0;
   }
 
-  // New logic: filter out items if any child element contains "浏览" or consent_number is less than the set value
+  // New logic: filter out items if any child element contains "浏览"
   if (e.children && Array.isArray(e.children)) {
     for (const child of e.children) {
       if (child.elements && Array.isArray(child.elements)) {
@@ -464,8 +464,17 @@ function isFiltered(e, t, r, n, o) {
             $.logger.debug(`过滤掉含有“浏览”的父元素: ${JSON.stringify(e)}`);
             return true; // Filter out the entire parent item
           }
+        }
+      }
+    }
+  }
+  // New logic for filtering based on consent_number
+  if (e.children && Array.isArray(e.children)) {
+    for (const child of e.children) {
+      if (child.elements && Array.isArray(child.elements)) {
+        for (const element of child.elements) {
           const matches = element.text.match(/（(\d+)）赞同/),
-            consent_number = 50; // Default value if not set
+            consent_number = 50;
           if (matches && parseInt(matches[1]) < consent_number) {
             $.logger.debug(`过滤掉含有 ${element.text} 的子元素: ${JSON.stringify(child)}`);
             return true; // 过滤掉该子元素
