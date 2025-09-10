@@ -1,0 +1,15 @@
+
+> build
+> npm run copy-binary && ray build -e dist
+
+
+> copy-binary
+> cp node_modules/@spotxyz/macos-audio-devices/audio-devices assets/audio-devices
+
+[36minfo[39m  - entry points ["src/set-output-device.tsx","src/set-input-device.tsx","src/favourite.tsx","src/toggle-favourites.tsx","src/use-combo1.tsx","src/use-combo2.tsx","src/use-combo3.tsx"]
+[36minfo[39m  - compiled entry points
+[36minfo[39m  - generated extension's TypeScript definitions
+src/helpers.tsx(229,23): error TS2345: Argument of type 'string | number | true' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+    Error: TypeScript check failed (Command failed with exit code 2: 
+    ./node_modules/.bin/tsc -p tsconfig.json --noEmit)

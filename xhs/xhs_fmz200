@@ -248,74 +248,57 @@ if (url.includes("/v6/homefeed")) {
   if (obj?.data?.length > 0) {
     // 信息流广告
     let newItems = [];
-    // Get regex array from $argument, assuming it's a JSON string like "["regex1", "regex2"]"
-    const filterRegexStrs = JSON.parse($argument.xhs_des_regex || "[]");
-    const nicknameFilterRegexStrs = JSON.parse($argument.xhs_nickname_regex || "[]");
-    const regexes = [];
-    const nicknameRegexes = [];
-
-    if (Array.isArray(filterRegexStrs)) {
-      for (const str of filterRegexStrs) {
-        try {
-          regexes.push(new RegExp(str));
-          console.log(`Added desc regex filter: ${str}`);
-        } catch (e) {
-          console.error(`Invalid regex provided for desc: ${str}, Error: ${e}`);
+    const createRegexArray = (regexStrs) => {
+      const regexes = [];
+      if (Array.isArray(regexStrs)) {
+        for (const str of regexStrs) {
+          try {
+            regexes.push(new RegExp(str));
+            console.log(`Added regex filter: ${str}`);
+          } catch (e) {
+            console.error(`Invalid regex provided: ${str}, Error: ${e}`);
+          }
         }
       }
-    }
+      return regexes;
+    };
 
-    if (Array.isArray(nicknameFilterRegexStrs)) {
-      for (const str of nicknameFilterRegexStrs) {
-        try {
-          nicknameRegexes.push(new RegExp(str));
-          console.log(`Added nickname regex filter: ${str}`);
-        } catch (e) {
-          console.error(`Invalid regex provided for nickname: ${str}, Error: ${e}`);
-        }
+    const descRegexes = createRegexArray(JSON.parse($argument.xhs_des_regex || "[]"));
+    const nicknameRegexes = createRegexArray(JSON.parse($argument.xhs_nickname_regex || "[]"));
+
+    obj.data = obj.data.filter(item => {
+      // Filter out known ad/sponsored content types
+      if (item?.model_type === "live_v2" || item?.ads_info || item?.card_icon || item?.note_attributes?.includes("goods")) {
+        return false;
       }
-    }
 
-    for (let item of obj.data) {
-      let shouldFilter = false;
-      if (regexes.length > 0 && item?.desc) {
-        for (const regex of regexes) {
+      // Apply description regex filters
+      if (descRegexes.length > 0 && item?.desc) {
+        for (const regex of descRegexes) {
           if (regex.test(item.desc)) {
-            shouldFilter = true;
             console.log(`Filtered out item with desc matching regex: ${item.desc}`);
-            break;
+            return false;
           }
         }
       }
 
-      if (!shouldFilter && nicknameRegexes.length > 0 && item?.user?.nickname) {
+      // Apply nickname regex filters
+      if (nicknameRegexes.length > 0 && item?.user?.nickname) {
         for (const regex of nicknameRegexes) {
           if (regex.test(item.user.nickname)) {
-            shouldFilter = true;
             console.log(`Filtered out item with nickname matching regex: ${item.user.nickname}`);
-            break;
+            return false;
           }
         }
       }
 
-      if (item?.model_type === "live_v2") {
-        // 信息流-直播
-      } else if (item?.hasOwnProperty("ads_info")) {
-        // 信息流-赞助
-      } else if (item?.hasOwnProperty("card_icon")) {
-        // 信息流-带货
-      } else if (item?.note_attributes?.includes("goods")) {
-        // 信息流-商品
-      } else if (shouldFilter) {
-        // Filter out items with descriptions matching any of the regexes
-      } else {
-        if (item?.related_ques) {
-          delete item.related_ques;
-        }
-        newItems.push(item);
+      // Remove related_ques if it exists
+      if (item?.related_ques) {
+        delete item.related_ques;
       }
-    }
-    obj.data = newItems;
+
+      return true;
+    });
   }
 }
 
