@@ -350,6 +350,8 @@ if (url.includes("/v6/homefeed")) {
       return counts;
     };
 
+    const countsThreshold = getCachedCountsThreshold("fmz200.xhs_counts_threshold_cache", $argument.xhs_counts_threshold);
+
     obj.data = obj.data.filter(item => {
       // Filter out known ad/sponsored content types
       if (item?.model_type === "live_v2" || item?.ads_info || item?.card_icon || item?.note_attributes?.includes("goods")) {
@@ -377,7 +379,6 @@ if (url.includes("/v6/homefeed")) {
       }
 
       // Apply counts threshold filter
-      const countsThreshold = getCachedCountsThreshold("fmz200.xhs_counts_threshold_cache", $argument.xhs_counts_threshold);
       if (countsThreshold.length === 3) {
         const [minShared, minLikes, minComments] = countsThreshold;
         if (
