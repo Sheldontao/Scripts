@@ -315,7 +315,7 @@ if (url.includes("/v6/homefeed")) {
       if (descRegexes.length > 0 && item?.desc) {
         for (const regex of descRegexes) {
           if (regex.test(item.desc)) {
-            console.log(`Filtered out item with desc matching regex: ${item.desc} (Matched by: ${regex.source})`);
+            console.log(`Filtered out item with desc matching regex \n(Matched by: ${regex.source}): \n${item.desc}`);
             return false;
           }
         }
@@ -325,7 +325,7 @@ if (url.includes("/v6/homefeed")) {
       if (nicknameRegexes.length > 0 && item?.user?.nickname) {
         for (const regex of nicknameRegexes) {
           if (regex.test(item.user.nickname)) {
-            console.log(`Filtered out item with nickname matching regex: ${item.user.nickname} (Matched by: ${regex.source})`);
+            console.log(`Filtered out item with nickname matching regex \n(Matched by: ${regex.source}): \n${item.user.nickname}`);
             return false;
           }
         }
