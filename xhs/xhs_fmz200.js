@@ -385,7 +385,7 @@ if (url.includes("/v6/homefeed")) {
           (item?.collected_count !== undefined && item.collected_count < minCollected) ||
           (item?.nice_count !== undefined && item.nice_count < minNice)
         ) {
-          console.log(`Filtered out item due to low counts: shared_count=${item.shared_count || 0} (min ${minShared}), likes=${item.likes || 0} (min ${minLikes}), comments_count=${item.comments_count || 0} (min ${minComments}), collected_count=${item.collected_count || 0} (min ${minCollected}), nice_count=${item.nice_count || 0} (min ${minNice})`);
+          console.log(`Filtered out item due to low counts: likes=${item.likes || 0} (min ${minLikes}), collected_count=${item.collected_count || 0} (min ${minCollected}), comments_count=${item.comments_count || 0} (min ${minComments}), shared_count=${item.shared_count || 0} (min ${minShared}), nice_count=${item.nice_count || 0} (min ${minNice})`);
           return false;
         }
       }
