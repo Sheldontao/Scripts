@@ -486,7 +486,7 @@ function replaceUrlContent(collectionA, collectionB) {
   collectionA.forEach(itemA => {
     const itemB = collectionB.find(itemB => itemB.file_id === itemA.file_id);
     if (itemB) {
-      itemA.url = itemA.url !== "" ? itemA.url.replace(/^https?:\/\/.*\.mp4(\?[^"\]*)?/g, `${itemB.url.match(/(.*)\.mp4/)[1]}.mp4`) : itemB.url;
+      itemA.url = itemA.url !== "" ? itemA.url.replace(/^https?:\/\/.*\.mp4(\?[^"]*)?/g, `${itemB.url.match(/(.*)\.mp4/)[1]}.mp4`) : itemB.url;
       itemA.author = "@fmz200"
     }
   });
