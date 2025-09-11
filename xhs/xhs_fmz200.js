@@ -380,13 +380,15 @@ if (url.includes("/v6/homefeed")) {
 
       // Apply counts threshold filter
       if (countsThreshold.length === 3) {
-        const [minShared, minLikes, minComments] = countsThreshold;
+        const [minShared, minLikes, minComments, minCollected, minNice] = countsThreshold;
         if (
           (item?.shared_count !== undefined && item.shared_count < minShared) ||
           (item?.likes !== undefined && item.likes < minLikes) ||
-          (item?.comments_count !== undefined && item.comments_count < minComments)
+          (item?.comments_count !== undefined && item.comments_count < minComments) ||
+          (item?.collected_count !== undefined && item.collected_count < minCollected) ||
+          (item?.nice_count !== undefined && item.nice_count < minNice)
         ) {
-          console.log(`Filtered out item due to low counts: shared_count=${item.shared_count || 0} (min ${minShared}), likes=${item.likes || 0} (min ${minLikes}), comments_count=${item.comments_count || 0} (min ${minComments})`);
+          console.log(`Filtered out item due to low counts: shared_count=${item.shared_count || 0} (min ${minShared}), likes=${item.likes || 0} (min ${minLikes}), comments_count=${item.comments_count || 0} (min ${minComments}), collected_count=${item.collected_count || 0} (min ${minCollected}), nice_count=${item.nice_count || 0} (min ${minNice})`);
           return false;
         }
       }
