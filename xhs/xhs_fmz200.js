@@ -334,17 +334,16 @@ if (url.includes("/v6/homefeed")) {
       console.log(`Using counts threshold for ${key} from: ${logSource}`);
 
       const counts = [];
-      try {
-        const parsedCounts = JSON.parse(sourceCounts);
-        if (Array.isArray(parsedCounts) && parsedCounts.every(num => typeof num === 'number')) {
-          counts.push(...parsedCounts);
+        try {
+          const parsedCounts = JSON.parse(sourceCounts);
+          if (Array.isArray(parsedCounts) && parsedCounts.every(num => typeof num === 'number')) {
+            counts.push(...parsedCounts);
+          } else {
+            console.error(`Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`);
           }
-        } else {
-          console.error(`Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`);
+        } catch (e) {
+          console.error(`Error parsing counts threshold string for ${key}: ${e}`);
         }
-      } catch (e) {
-        console.error(`Error parsing counts threshold string for ${key}: ${e}`);
-      }
       return counts;
     };
 
