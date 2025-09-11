@@ -1,0 +1,3212 @@
+{
+  "success": true,
+  "data": [
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c2a247000000001c0135a8",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "cooperate_binds",
+              "note_collection",
+              "rec_next_infos",
+              "image_stickers",
+              "image_filters",
+              "product_review",
+              "related_search",
+              "cooperate_comment_component",
+              "image_goods_cards",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "image_template",
+              "buyable_goods_card_v2",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "guide_post",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "bar_below_image",
+              "aigc_collection",
+              "co_produce",
+              "widgets_ndb",
+              "next_note_guide",
+              "pgy_bbc_exp",
+              "async_group",
+              "super_activity",
+              "widgets_enhance",
+              "music_player",
+              "soundtrack_player"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "share_to_msg",
+              "follow_guide",
+              "note_share_prompt_v1",
+              "sync_group",
+              "group_share",
+              "share_guide_bubble",
+              "widgets_share",
+              "guide_navigator"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "normal",
+      "display_title": "优衣库这件外套绝了 ",
+      "pk_status_info": "{\"ubtsecret\":\"RBgbJ7PBLnVVCbmmJ0GMdZzs0QYG7QGHxyR/03Zc5LLOB282LqgRlsCwtqm/bGIyfIhhMU9BYKB7gXWXQbWAZEIIU33y8XeKdU\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 15,
+      "user": {
+        "fstatus": "none",
+        "nickname": "gianma 詹马",
+        "userid": "68627006000000001b01b77c",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/1040g2jo31jbqeb3832005q32e036rdrsrhf0n5o?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 18,
+      "likes": 163,
+      "comments_count": 19,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "优衣库这件外套绝了",
+      "widgets_context": "{\"flags\":{},\"author_id\":\"68627006000000001b01b77c\",\"author_name\":\"gianma 詹马\"}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "cursor_score": "1757610636.9980",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.43751144,
+        "predict_click_ratio": 0.4139173,
+        "category_name": "时尚",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "dssmtopk_hsm_1day_exp@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef9045ee",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "generate_item_index": 1,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.43751144"
+      },
+      "is_tracking_upgrade": false,
+      "desc": "#我们只逛不买[话题]#",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "优衣库这件外套绝了",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "note_pre_post_uhdr/1040g3r031m9oed9mlmlg5q32e036rdrsuaokolg",
+          "height": 5712,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/note_pre_post_uhdr/1040g3r031m9oed9mlmlg5q32e036rdrsuaokolg?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=1ecc41359b0720a4bef24ea40f9d0b6d&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/note_pre_post_uhdr/1040g3r031m9oed9mlmlg5q32e036rdrsuaokolg?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=1ecc41359b0720a4bef24ea40f9d0b6d&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/note_pre_post_uhdr/1040g3r031m9oed9mlmlg5q32e036rdrsuaokolg?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=1ecc41359b0720a4bef24ea40f9d0b6d&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "WxgKHYLriHaQeYh6ZpiIw+CWB26J",
+          "width": 4284,
+          "original": "",
+          "rgb": "0x988671",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/note_pre_post_uhdr/1040g3r031m9oed9mlmlg5q32e036rdrsuaokolg?imageView2/2/w/1440/format/heif/q/45&redImage/frame/0&ap=11&sc=HF_DTL&sign=1ecc41359b0720a4bef24ea40f9d0b6d&t=68c3028d",
+          "trace_id": "note_pre_post_uhdr/1040g3r031m9oed9mlmlg5q32e036rdrsuaokolg",
+          "url": "https://sns-na-i1.xhscdn.com/note_pre_post_uhdr/1040g3r031m9oed9mlmlg5q32e036rdrsuaokolg?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=1ecc41359b0720a4bef24ea40f9d0b6d&t=68c3028d"
+        },
+        {
+          "fileid": "notes_pre_post/1040g3k031m9obu8r680g5q32e036rdrsvfvq1p0",
+          "height": 5712,
+          "need_load_original_image": false,
+          "width": 4284,
+          "original": "",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031m9obu8r680g5q32e036rdrsvfvq1p0?imageView2/2/w/1440/format/heif/q/45&redImage/frame/0&ap=11&sc=HF_DTL&sign=70c4585df802121089ffeab3671ce8aa&t=68c3028d",
+          "trace_id": "notes_pre_post/1040g3k031m9obu8r680g5q32e036rdrsvfvq1p0",
+          "url": ""
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757585991
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c072a7000000001d006d21",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "cooperate_binds",
+              "note_collection",
+              "rec_next_infos",
+              "image_stickers",
+              "image_filters",
+              "product_review",
+              "related_search",
+              "cooperate_comment_component",
+              "image_goods_cards",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "image_template",
+              "buyable_goods_card_v2",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "guide_post",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "bar_below_image",
+              "aigc_collection",
+              "co_produce",
+              "widgets_ndb",
+              "next_note_guide",
+              "pgy_bbc_exp",
+              "async_group",
+              "super_activity",
+              "widgets_enhance",
+              "music_player",
+              "soundtrack_player"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "share_to_msg",
+              "follow_guide",
+              "note_share_prompt_v1",
+              "sync_group",
+              "group_share",
+              "share_guide_bubble",
+              "widgets_share",
+              "guide_navigator"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "normal",
+      "display_title": "看完发布会决定再战一年",
+      "pk_status_info": "{\"ubtsecret\":\"RBedcLpYUzG1DAxsOJU6j+OLDewmwQTbyZ42jaaukN6HJ1N3wbS7kSWort/Nb+L9PMtXjbe85nYvXE4z/ryNjMfDmFYLOsb9tE\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 12,
+      "user": {
+        "fstatus": "none",
+        "nickname": "mommm",
+        "userid": "5e781176000000000100bb09",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/66b26e16f73b142ac1ef116e.jpg?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 6,
+      "likes": 192,
+      "comments_count": 101,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "看完发布会决定再战一年",
+      "widgets_context": "{\"flags\":{},\"author_id\":\"5e781176000000000100bb09\",\"author_name\":\"mommm\"}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "cursor_score": "1757610636.9960",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.54110616,
+        "predict_click_ratio": 0.26660186,
+        "category_name": "科技数码",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "memnet_recall_mem_net_merge_30day@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef904606",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "generate_item_index": 3,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.54110616"
+      },
+      "is_tracking_upgrade": false,
+      "desc": "感觉se3没必要换了，再战一年#苹果[话题]#",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "看完发布会决定再战一年",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "notes_pre_post/1040g3k031m7k62lcl0005njo25r09eo9r730h78",
+          "height": 4155,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031m7k62lcl0005njo25r09eo9r730h78?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=076c4a16779315fa57d305566572fa9e&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031m7k62lcl0005njo25r09eo9r730h78?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=076c4a16779315fa57d305566572fa9e&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031m7k62lcl0005njo25r09eo9r730h78?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=076c4a16779315fa57d305566572fa9e&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "ZQgGBQL1Nq+IRkbaaWHHGAZodnA2",
+          "width": 3116,
+          "original": "",
+          "rgb": "0xc9c7c0",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031m7k62lcl0005njo25r09eo9r730h78?imageView2/2/w/1440/format/heif/q/45&redImage/frame/0&ap=11&sc=HF_DTL&sign=076c4a16779315fa57d305566572fa9e&t=68c3028d",
+          "trace_id": "notes_pre_post/1040g3k031m7k62lcl0005njo25r09eo9r730h78",
+          "url": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031m7k62lcl0005njo25r09eo9r730h78?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=076c4a16779315fa57d305566572fa9e&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757442727
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c299cc000000001d005e9e",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "note_collection",
+              "cooperate_binds",
+              "rec_next_infos",
+              "video_marks",
+              "product_review",
+              "related_search",
+              "video_goods_cards",
+              "cooperate_comment_component",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "video_recommend_tag",
+              "buyable_goods_card_v2",
+              "cooperate_search_component",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "related_recommend",
+              "next_note_guide",
+              "widgets_ndb",
+              "pgy_bbc_exp",
+              "brand_max_trailer",
+              "super_activity",
+              "note_nice_guide",
+              "pin_search_highlights",
+              "widgets_enhance",
+              "packed_goods",
+              "packed_buyable_goods",
+              "widgets_ncb",
+              "note_nice_compound",
+              "live_shooting_flag",
+              "widgets_nbb",
+              "poi_declare",
+              "async_group"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "guide_post",
+              "video_foot_bar",
+              "follow_guide",
+              "share_to_msg",
+              "note_share_prompt_v1",
+              "note_share_prompt_v2",
+              "group_share",
+              "share_guide_bubble",
+              "goods_enhance_component",
+              "guide_navigator",
+              "sync_group"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "video",
+      "display_title": "短片看完他自己哭了 ",
+      "pk_status_info": "{\"ubtsecret\":\"RBBYHuCUzI+fgquH7ks/gIZexDftYpMiE3KU31lwWfxPVaE0TT8NCyGV3TLZMK+s6kHkDbo2680pRvfIFYKsB6bo15f5ef7ZE5\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 19,
+      "user": {
+        "fstatus": "none",
+        "nickname": "拉帝",
+        "userid": "5f9feda90000000001007766",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/64893735ae831c1007bca526.jpg?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 221,
+      "likes": 167,
+      "comments_count": 50,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "短片看完他自己哭了",
+      "nice_count": 10,
+      "widgets_context": "{\"video\":true,\"origin_video_key\":\"pre_post/1040g0cg31m9ndk4a4q005nsvtmkg8tr6uvtgsv0\",\"flags\":{\"sound_track\":true},\"author_id\":\"5f9feda90000000001007766\",\"author_name\":\"拉帝\",\"video_duration\":42}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "video_info_v2": {
+        "capa": {
+          "is_ai_tab": false,
+          "is_user_select": false,
+          "is_upload": false,
+          "frame_ts": 0,
+          "duration": 42
+        },
+        "consumer": {},
+        "image": {
+          "first_frame": "https://sns-na-i1.xhscdn.com/1040g00831m9n9ued4u005nsvtmkg8tr6b2s5pro?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=05c1adb4e911d2eaae171d97f9fa60f1&t=68c3028d",
+          "thumbnail_dim": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8c299080718be001000000001993829c174_0.webp?imageView2/2/w/720/h/720/format/heif/q/46&ap=11&sc=HF_SPRT&sign=411f8fc285aa502847c6c55457d8761c&t=68c3028d",
+          "thumbnail": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8c299080718be001000000001993829c174_0.webp?imageView2/format/heif/q/46&ap=11&sc=HF_ORG&sign=411f8fc285aa502847c6c55457d8761c&t=68c3028d"
+        },
+        "media": {
+          "user_level": 0,
+          "video": {
+            "drm_type": 0,
+            "bbox": {
+              "ocr_v3": [
+                {
+                  "y": 1125,
+                  "w": 969,
+                  "x": 55,
+                  "h": 613
+                }
+              ],
+              "ocr_v4": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v5": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v2": [
+                {
+                  "y": 1125,
+                  "w": 969,
+                  "x": 55,
+                  "h": 613
+                }
+              ]
+            },
+            "subtitles": {
+              "en-US": [
+                {
+                  "language": "en-US",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c299080718be01037003993828e8c5_12.srt?sign=cc3a55ba135fd076871d02bb05fa3fa1&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ],
+              "zh-CN": [
+                {
+                  "language": "zh-CN",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c299080718be01037003993828e750_11.srt?sign=64fc6068dd5338cf59a6ccd77d0eb0ef&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ],
+              "source": [
+                {
+                  "language": "zh-CN",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c299080718be01037003993828e449_1.srt?sign=27237d5e9693a0ec0f2cfc26b31b68aa&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ]
+            },
+            "biz_id": "281688942526619294",
+            "width": 1080,
+            "opaque1": {
+              "loudnorm": "{\"lra\":4.2,\"htp\":-2.68,\"hldn\":-19.33,\"ldn\":-18.56,\"thr\":-28.63}",
+              "hasHumanVoice": "true",
+              "audioClsInfo": "{\"music_ratio\":0.0,\"freesound_ratio\":0.9691401420697257,\"speech_ratio\":0.9717314258720512}",
+              "rightAvgLuma": "119",
+              "weakNetUserFlag": "1",
+              "domestic": "1",
+              "audioLevInfo": "{\"audio_quality_level\":\"G\",\"mos_overall\":2.993,\"version\":\"3.0\"}",
+              "bottomAvgLuma": "83",
+              "insertSubtitleLanguages": "[\"zh-CN\"]",
+              "videoLanguage": "[\"zh-CN\"]",
+              "isSupportSubtitle": "true",
+              "amend_mobile": "40",
+              "topAvgLuma": "139"
+            },
+            "hdr_type": 1,
+            "height": 1920,
+            "biz_name": 110,
+            "duration": 43,
+            "md5": "495aab4d73dc22fdf399e6c0acb29984",
+            "stream_types": [
+              258,
+              178,
+              179,
+              180,
+              24
+            ],
+            "bound": [
+              {
+                "y": 0,
+                "w": 0,
+                "x": 0,
+                "h": 0
+              }
+            ]
+          },
+          "stream": {
+            "h265": [
+              {
+                "audio_bitrate": 64202,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/178/01e8c299080718be0103700199391a350c_178.mp4",
+                "stream_type": 178,
+                "weight": 48,
+                "volume": 0,
+                "video_duration": 42533,
+                "duration": 42538,
+                "vmaf": -1,
+                "psnr": 41.52000045776367,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 1,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/178/01e8c299080718be0103700199391a350c_178.mp4"
+                ],
+                "video_bitrate": 945753,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "85.4266205"
+                },
+                "size": 5417439,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 42537,
+                "height": 1280,
+                "width": 720,
+                "stream_desc": "R265_MP4_720P_178_IOS",
+                "quality_type": "HD",
+                "avg_bitrate": 1018842,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 64202,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/179/01e8c299080718be0103700199391958e0_179.mp4",
+                "stream_type": 179,
+                "weight": 49,
+                "volume": 0,
+                "video_duration": 42533,
+                "duration": 42538,
+                "vmaf": -1,
+                "psnr": 42.1619987487793,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/179/01e8c299080718be0103700199391958e0_179.mp4"
+                ],
+                "video_bitrate": 1264585,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "88.6993525"
+                },
+                "size": 7112561,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 42537,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "R265_MP4_1080P_179_IOS_low",
+                "quality_type": "FHD",
+                "avg_bitrate": 1337639,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 64202,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/180/01e8c299080718be0103700199391ba87b_180.mp4",
+                "stream_type": 180,
+                "weight": 50,
+                "volume": 0,
+                "video_duration": 42533,
+                "duration": 42538,
+                "vmaf": -1,
+                "psnr": 42.45800018310547,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/180/01e8c299080718be0103700199391ba87b_180.mp4"
+                ],
+                "video_bitrate": 1365410,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "89.961265"
+                },
+                "size": 7648613,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 42537,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "R265_MP4_1080P_180_IOS_high",
+                "quality_type": "FHD",
+                "avg_bitrate": 1438452,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 128423,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/24/01e8c299080718be0103700199382bcb94_24.mp4",
+                "stream_type": 24,
+                "weight": 100,
+                "volume": 0,
+                "video_duration": 42533,
+                "duration": 42538,
+                "vmaf": -1,
+                "psnr": 0,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 1,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/24/01e8c299080718be0103700199382bcb94_24.mp4"
+                ],
+                "video_bitrate": 2546250,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "pcdn_supplier": "wangxin"
+                },
+                "size": 14256939,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 42537,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "HDR_Dolby_R265_MP4_24_IOS_multi",
+                "quality_type": "HD",
+                "avg_bitrate": 2681261,
+                "hdr_type": 1,
+                "ssim": 0
+              }
+            ],
+            "h266": [],
+            "h264": [
+              {
+                "audio_bitrate": 56200,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/258/01e8c299080718be01037001993829dd15_258.mp4",
+                "stream_type": 258,
+                "weight": 47,
+                "volume": 0,
+                "video_duration": 42533,
+                "duration": 42538,
+                "vmaf": -1,
+                "psnr": 0,
+                "audio_channels": 2,
+                "video_codec": "h264",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/258/01e8c299080718be01037001993829dd15_258.mp4"
+                ],
+                "video_bitrate": 2719471,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "0",
+                  "pcdn_supplier": "wangxin"
+                },
+                "size": 14794212,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 42537,
+                "height": 1280,
+                "width": 720,
+                "stream_desc": "X264_MP4",
+                "quality_type": "HD",
+                "avg_bitrate": 2782305,
+                "hdr_type": 0,
+                "ssim": 0
+              }
+            ],
+            "av1": []
+          },
+          "video_id": "137573751155267774"
+        }
+      },
+      "cursor_score": "1757610636.9940",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.1426752,
+        "predict_click_ratio": 0.15561317,
+        "category_name": "生活记录",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "dssmvideoti_hf_video_multi_30day_v1_merge@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef90460a",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "is_tracking_upgrade": false,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.1426752"
+      },
+      "generate_item_index": 5,
+      "desc": "嗯嗯\n#长发男[话题]# #长发[话题]# #电影[话题]# #strong哥[话题]# #精神状态[话题]# #破碎感[话题]# #长发男生[话题]# #约会[话题]# #高情商[话题]# #致歉一",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "短片看完他自己哭了",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "1040g00831m9n9ued4u005nsvtmkg8tr6b2s5pro",
+          "height": 1920,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/1040g00831m9n9ued4u005nsvtmkg8tr6b2s5pro?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=05c1adb4e911d2eaae171d97f9fa60f1&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/1040g00831m9n9ued4u005nsvtmkg8tr6b2s5pro?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=05c1adb4e911d2eaae171d97f9fa60f1&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/1040g00831m9n9ued4u005nsvtmkg8tr6b2s5pro?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=05c1adb4e911d2eaae171d97f9fa60f1&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "1wcKDACQvKfcmH44xXeST4nQtg==",
+          "width": 1080,
+          "original": "",
+          "rgb": "0x27252d",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/1040g00831m9n9ued4u005nsvtmkg8tr6b2s5pro?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=05c1adb4e911d2eaae171d97f9fa60f1&t=68c3028d",
+          "trace_id": "1040g00831m9n9ued4u005nsvtmkg8tr6b2s5pro",
+          "url": "https://sns-na-i1.xhscdn.com/1040g00831m9n9ued4u005nsvtmkg8tr6b2s5pro?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=05c1adb4e911d2eaae171d97f9fa60f1&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757583820
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c25a7d000000001c037ae0",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "cooperate_binds",
+              "note_collection",
+              "rec_next_infos",
+              "image_stickers",
+              "image_filters",
+              "product_review",
+              "related_search",
+              "cooperate_comment_component",
+              "image_goods_cards",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "image_template",
+              "buyable_goods_card_v2",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "guide_post",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "bar_below_image",
+              "aigc_collection",
+              "co_produce",
+              "widgets_ndb",
+              "next_note_guide",
+              "pgy_bbc_exp",
+              "async_group",
+              "super_activity",
+              "widgets_enhance",
+              "music_player",
+              "soundtrack_player"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "share_to_msg",
+              "follow_guide",
+              "note_share_prompt_v1",
+              "sync_group",
+              "group_share",
+              "share_guide_bubble",
+              "widgets_share",
+              "guide_navigator"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "normal",
+      "display_title": "正常人要懂得保护自己，人生来本就不平等",
+      "pk_status_info": "{\"ubtsecret\":\"RB5CgJoaWilUZcBPOs+4lueB7+8mapFAnpaUOqViGS17T0G7qU/3pH31nhTMuM5Gy3QgwFRmSOX6Gtnsox8Q9AUaIyWTuJVEwn\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 25,
+      "user": {
+        "fstatus": "none",
+        "nickname": "小红书meme宇宙中心",
+        "userid": "65d20fbe000000000401c140",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/1040g2jo30vaqn0rj5c005pei1uv13ga05v4s5vo?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 80,
+      "likes": 305,
+      "comments_count": 139,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "正常人要懂得保护自己，人生来本就不平等",
+      "widgets_context": "{\"flags\":{},\"author_id\":\"65d20fbe000000000401c140\",\"author_name\":\"小红书meme宇宙中心\"}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "cursor_score": "1757610636.9920",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.5250341,
+        "predict_click_ratio": 0.2524848,
+        "category_name": "生活记录",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "dssm_recall_dssm_newneg_ali_imp_7day@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef90460a",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "generate_item_index": 7,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.5250341"
+      },
+      "is_tracking_upgrade": false,
+      "desc": "",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "正常人要懂得保护自己，人生来本就不平等",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "notes_pre_post/1040g3k831m9fokcd52005pei1uv13ga0n8bfdf8",
+          "height": 1428,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k831m9fokcd52005pei1uv13ga0n8bfdf8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=e2a596a07c8d25f69004c7be82355192&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k831m9fokcd52005pei1uv13ga0n8bfdf8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=e2a596a07c8d25f69004c7be82355192&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k831m9fokcd52005pei1uv13ga0n8bfdf8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=e2a596a07c8d25f69004c7be82355192&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "KggSBgK5qrh3d/dmd4OIh1eIfC93ZwY=",
+          "width": 1290,
+          "original": "",
+          "rgb": "0xfdfcfe",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k831m9fokcd52005pei1uv13ga0n8bfdf8?imageView2/2/w/1440/format/heif/q/45&redImage/frame/0&ap=11&sc=HF_DTL&sign=e2a596a07c8d25f69004c7be82355192&t=68c3028d",
+          "trace_id": "notes_pre_post/1040g3k831m9fokcd52005pei1uv13ga0n8bfdf8",
+          "url": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k831m9fokcd52005pei1uv13ga0n8bfdf8?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=e2a596a07c8d25f69004c7be82355192&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757567613
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68b5a292000000001c03cc2f",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "cooperate_binds",
+              "note_collection",
+              "rec_next_infos",
+              "image_stickers",
+              "image_filters",
+              "product_review",
+              "related_search",
+              "cooperate_comment_component",
+              "image_goods_cards",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "image_template",
+              "buyable_goods_card_v2",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "guide_post",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "bar_below_image",
+              "aigc_collection",
+              "co_produce",
+              "widgets_ndb",
+              "next_note_guide",
+              "pgy_bbc_exp",
+              "async_group",
+              "super_activity",
+              "widgets_enhance",
+              "music_player",
+              "soundtrack_player"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "share_to_msg",
+              "follow_guide",
+              "note_share_prompt_v1",
+              "sync_group",
+              "group_share",
+              "share_guide_bubble",
+              "widgets_share",
+              "guide_navigator"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "normal",
+      "display_title": "当代育儿现状照片鉴赏",
+      "pk_status_info": "{\"ubtsecret\":\"RBiJHaCYVGfer6mVHo0wUT9HlSVUlndzYJ1jiiNirmULIC0eN91mWBo3mNSZjknKM+MaH+HLmHBlOvJBLM0hoiRoV8nUt1++rs\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 250,
+      "user": {
+        "fstatus": "none",
+        "nickname": "安娜娜子",
+        "userid": "5481a28cd6e4a96901ed5a82",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/1040g2jo31dspgfkjg800400ps4h8omk28r99228?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 1968,
+      "likes": 1808,
+      "comments_count": 1016,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "当代育儿现状照片鉴赏",
+      "widgets_context": "{\"flags\":{},\"author_id\":\"5481a28cd6e4a96901ed5a82\",\"author_name\":\"安娜娜子\"}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "cursor_score": "1757610636.9910",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.50031745,
+        "predict_click_ratio": 0.22981153,
+        "category_name": "萌娃",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "pdn_pdn_68b7144e000000001d01cc79_1kv0##68b7144e000000001d01cc79##@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab1c90e3a03eb81765398cd",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "generate_item_index": 8,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.50031745"
+      },
+      "is_tracking_upgrade": false,
+      "desc": "脖子前倾的爸\n面如土色的娃\n必点的黄瓜汁\n随时擦泪的纸\n#精神状态育儿[话题]# #陪孩子学习[话题]# #陪写作业[话题]# #日常碎片[话题]# #生活碎片[话题]# #带娃有多累[话题]#",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "当代育儿现状照片鉴赏",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "notes_pre_post/1040g3k031lt1ilpnl220400ps4h8omk2qpepnu8",
+          "height": 1920,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031lt1ilpnl220400ps4h8omk2qpepnu8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=67b27f8df441c205724d5ab660ca59d4&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031lt1ilpnl220400ps4h8omk2qpepnu8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=67b27f8df441c205724d5ab660ca59d4&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031lt1ilpnl220400ps4h8omk2qpepnu8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=67b27f8df441c205724d5ab660ca59d4&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "XxgODAJ09oh4eXmnqIZajZCmCA==",
+          "width": 1080,
+          "original": "",
+          "rgb": "0xc2b9ad",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031lt1ilpnl220400ps4h8omk2qpepnu8?imageView2/2/w/1440/format/heif/q/45&redImage/frame/0&ap=11&sc=HF_DTL&sign=67b27f8df441c205724d5ab660ca59d4&t=68c3028d",
+          "trace_id": "notes_pre_post/1040g3k031lt1ilpnl220400ps4h8omk2qpepnu8",
+          "url": "https://sns-na-i1.xhscdn.com/notes_pre_post/1040g3k031lt1ilpnl220400ps4h8omk2qpepnu8?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=67b27f8df441c205724d5ab660ca59d4&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1756734098
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c16e21000000001b035f22",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "note_collection",
+              "cooperate_binds",
+              "rec_next_infos",
+              "video_marks",
+              "product_review",
+              "related_search",
+              "video_goods_cards",
+              "cooperate_comment_component",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "video_recommend_tag",
+              "buyable_goods_card_v2",
+              "cooperate_search_component",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "related_recommend",
+              "next_note_guide",
+              "widgets_ndb",
+              "pgy_bbc_exp",
+              "brand_max_trailer",
+              "super_activity",
+              "note_nice_guide",
+              "pin_search_highlights",
+              "widgets_enhance",
+              "packed_goods",
+              "packed_buyable_goods",
+              "widgets_ncb",
+              "note_nice_compound",
+              "live_shooting_flag",
+              "widgets_nbb",
+              "poi_declare",
+              "async_group"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "guide_post",
+              "video_foot_bar",
+              "follow_guide",
+              "share_to_msg",
+              "note_share_prompt_v1",
+              "note_share_prompt_v2",
+              "group_share",
+              "share_guide_bubble",
+              "goods_enhance_component",
+              "guide_navigator",
+              "sync_group"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "video",
+      "display_title": "巴黎的浪漫从不期我 ",
+      "pk_status_info": "{\"ubtsecret\":\"RBmc14BeaVj6SAhzvHNPXTaTIdbRXLaLrqkk2YlNHEoUGZ4fUIO/sStSUeZZuLR2OgZKNN1wHN0YO7CQ9Dvl+U1dZqMgDOVpAx\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 3834,
+      "user": {
+        "fstatus": "none",
+        "nickname": "AB",
+        "userid": "5c68502600000000100221e3",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/670696b5e9acc3f1ee3fd7bc.jpg?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 6155,
+      "likes": 18987,
+      "comments_count": 1185,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "巴黎的浪漫从不期我",
+      "nice_count": 1009,
+      "widgets_context": "{\"video\":true,\"origin_video_key\":\"pre_post/1040g0cg31m8itjp058l05n38a0j448f3otkl0o0\",\"flags\":{\"sound_track\":true},\"author_id\":\"5c68502600000000100221e3\",\"author_name\":\"AB\",\"video_duration\":180}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "video_info_v2": {
+        "capa": {
+          "is_ai_tab": false,
+          "is_user_select": false,
+          "is_upload": false,
+          "frame_ts": 0,
+          "duration": 180
+        },
+        "consumer": {},
+        "image": {
+          "first_frame": "https://sns-na-i1.xhscdn.com/1040g2sg31m8itjp9li705n38a0j448f3gh8l59o?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=330bc9312a36ccf37b86c3ec3ffba8e1&t=68c3028d",
+          "thumbnail_dim": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8c16e18071e860010000000019933964c43_0.webp?imageView2/2/w/720/h/720/format/heif/q/46&ap=11&sc=HF_SPRT&sign=76154817977b9e27e172948b4373af01&t=68c3028d",
+          "thumbnail": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8c16e18071e860010000000019933964c43_0.webp?imageView2/format/heif/q/46&ap=11&sc=HF_ORG&sign=76154817977b9e27e172948b4373af01&t=68c3028d"
+        },
+        "media": {
+          "user_level": 0,
+          "video": {
+            "drm_type": 0,
+            "bbox": {
+              "ocr_v3": [
+                {
+                  "y": 659,
+                  "w": 434,
+                  "x": 99,
+                  "h": 265
+                }
+              ],
+              "ocr_v4": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v5": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v2": [
+                {
+                  "y": 272,
+                  "w": 493,
+                  "x": 99,
+                  "h": 652
+                }
+              ]
+            },
+            "subtitles": {
+              "en-US": [
+                {
+                  "language": "en-US",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c16e18071e860103700399339652cc_12.srt?sign=9b956c8a46b41586530901a8c2ae33f9&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ],
+              "zh-CN": [
+                {
+                  "language": "zh-CN",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c16e18071e860103700399339653c4_11.srt?sign=3218a731738f0fd9e11969f6a44ec479&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ],
+              "source": [
+                {
+                  "language": "en-US",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c16e18071e86010370039933965249_1.srt?sign=ed0bde1f8394a4bc41c27ba710b16541&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ]
+            },
+            "biz_id": "281687655462166306",
+            "width": 720,
+            "opaque1": {
+              "loudnorm": "{\"lra\":12.0,\"htp\":-12.59,\"hldn\":-25.02,\"ldn\":-14.1,\"thr\":-24.43}",
+              "hasHumanVoice": "true",
+              "audioClsInfo": "{\"music_ratio\":0.9999999944401201,\"freesound_ratio\":0.11331035186639413,\"speech_ratio\":4.4479039005454024E-4}",
+              "rightAvgLuma": "120",
+              "weakNetUserFlag": "1",
+              "domestic": "1",
+              "audioLevInfo": "{\"audio_quality_level\":\"E\",\"mos_overall\":3.9652,\"version\":\"3.0\"}",
+              "bottomAvgLuma": "102",
+              "insertSubtitleLanguages": "[\"zh-CN\"]",
+              "videoLanguage": "[\"en-US\",\"zh-CN\"]",
+              "isSupportSubtitle": "true",
+              "amend_mobile": "40",
+              "topAvgLuma": "133"
+            },
+            "hdr_type": 0,
+            "height": 1280,
+            "biz_name": 110,
+            "duration": 181,
+            "md5": "ecd7e64f8df5476e3ebbfc6bf2702b00",
+            "stream_types": [
+              258,
+              178,
+              179,
+              180
+            ],
+            "bound": [
+              {
+                "y": 0,
+                "w": 0,
+                "x": 0,
+                "h": 0
+              }
+            ]
+          },
+          "stream": {
+            "h265": [
+              {
+                "audio_bitrate": 57696,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/178/01e8c16e18071e860103700199355ecdc1_178.mp4",
+                "stream_type": 178,
+                "weight": 48,
+                "volume": 0,
+                "video_duration": 179966,
+                "duration": 180091,
+                "vmaf": -1,
+                "psnr": 39.042999267578125,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 1,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/178/01e8c16e18071e860103700199355ecdc1_178.mp4"
+                ],
+                "video_bitrate": 838952,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "87.83854355859376"
+                },
+                "size": 20321233,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 180090,
+                "height": 1280,
+                "width": 720,
+                "stream_desc": "R265_MP4_720P_178_IOS",
+                "quality_type": "HD",
+                "avg_bitrate": 902709,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 57696,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/179/01e8c16e18071e860103700199350e134f_179.mp4",
+                "stream_type": 179,
+                "weight": 49,
+                "volume": 0,
+                "video_duration": 179966,
+                "duration": 180091,
+                "vmaf": -1,
+                "psnr": 40.108001708984375,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/179/01e8c16e18071e860103700199350e134f_179.mp4"
+                ],
+                "video_bitrate": 1249527,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "89.67319347749999"
+                },
+                "size": 29557459,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 180090,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "R265_MP4_1080P_179_IOS_low",
+                "quality_type": "FHD",
+                "avg_bitrate": 1313001,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 57696,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/180/01e8c16e18071e860103700199350c5404_180.mp4",
+                "stream_type": 180,
+                "weight": 50,
+                "volume": 0,
+                "video_duration": 179966,
+                "duration": 180091,
+                "vmaf": -1,
+                "psnr": 41.07699966430664,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/180/01e8c16e18071e860103700199350c5404_180.mp4"
+                ],
+                "video_bitrate": 1588284,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "90.568314799375"
+                },
+                "size": 37178083,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 180090,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "R265_MP4_1080P_180_IOS_high",
+                "quality_type": "FHD",
+                "avg_bitrate": 1651524,
+                "hdr_type": 0,
+                "ssim": 0
+              }
+            ],
+            "h266": [],
+            "h264": [
+              {
+                "audio_bitrate": 56024,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/258/01e8c16e18071e8601037001993397ea87_258.mp4",
+                "stream_type": 258,
+                "weight": 47,
+                "volume": 0,
+                "video_duration": 179966,
+                "duration": 179980,
+                "vmaf": -1,
+                "psnr": 0,
+                "audio_channels": 2,
+                "video_codec": "h264",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/258/01e8c16e18071e8601037001993397ea87_258.mp4"
+                ],
+                "video_bitrate": 2438211,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "0",
+                  "pcdn_supplier": "wangxin"
+                },
+                "size": 56259382,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 179979,
+                "height": 1280,
+                "width": 720,
+                "stream_desc": "X264_MP4",
+                "quality_type": "HD",
+                "avg_bitrate": 2500694,
+                "hdr_type": 0,
+                "ssim": 0
+              }
+            ],
+            "av1": []
+          },
+          "video_id": "137572467228483206"
+        }
+      },
+      "cursor_score": "1757610636.9880",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.17458855,
+        "predict_click_ratio": 0.14251962,
+        "category_name": "旅游",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "hotnoteu2u_hotnoteu2u5bf6d07b51783a58ace5022a@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef9045f0",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "is_tracking_upgrade": false,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.17458855"
+      },
+      "generate_item_index": 11,
+      "desc": "#巴黎[话题]# #蒙马特[话题]# #巴黎蒙马特[话题]#",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "巴黎的浪漫从不期我",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "1040g2sg31m8itjp9li705n38a0j448f3gh8l59o",
+          "height": 1280,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/1040g2sg31m8itjp9li705n38a0j448f3gh8l59o?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=330bc9312a36ccf37b86c3ec3ffba8e1&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/1040g2sg31m8itjp9li705n38a0j448f3gh8l59o?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=330bc9312a36ccf37b86c3ec3ffba8e1&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/1040g2sg31m8itjp9li705n38a0j448f3gh8l59o?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=330bc9312a36ccf37b86c3ec3ffba8e1&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "3vcRHAJp+HdneHeHmHglWFABBQ==",
+          "width": 720,
+          "original": "",
+          "rgb": "0x83929b",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/1040g2sg31m8itjp9li705n38a0j448f3gh8l59o?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=330bc9312a36ccf37b86c3ec3ffba8e1&t=68c3028d",
+          "trace_id": "1040g2sg31m8itjp9li705n38a0j448f3gh8l59o",
+          "url": "https://sns-na-i1.xhscdn.com/1040g2sg31m8itjp9li705n38a0j448f3gh8l59o?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=330bc9312a36ccf37b86c3ec3ffba8e1&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757507105
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c24e21000000001c03d5a2",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "note_collection",
+              "cooperate_binds",
+              "rec_next_infos",
+              "video_marks",
+              "product_review",
+              "related_search",
+              "video_goods_cards",
+              "cooperate_comment_component",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "video_recommend_tag",
+              "buyable_goods_card_v2",
+              "cooperate_search_component",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "related_recommend",
+              "next_note_guide",
+              "widgets_ndb",
+              "pgy_bbc_exp",
+              "brand_max_trailer",
+              "super_activity",
+              "note_nice_guide",
+              "pin_search_highlights",
+              "widgets_enhance",
+              "packed_goods",
+              "packed_buyable_goods",
+              "widgets_ncb",
+              "note_nice_compound",
+              "live_shooting_flag",
+              "widgets_nbb",
+              "poi_declare",
+              "async_group"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "guide_post",
+              "video_foot_bar",
+              "follow_guide",
+              "share_to_msg",
+              "note_share_prompt_v1",
+              "note_share_prompt_v2",
+              "group_share",
+              "share_guide_bubble",
+              "goods_enhance_component",
+              "guide_navigator",
+              "sync_group"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "video",
+      "display_title": "妈？你在干啥？ ",
+      "pk_status_info": "{\"ubtsecret\":\"RBVz9IfQ1zatQzZXL++slRPKnbgQ21ejgHNfZWI+TXuhwmhxvYgRn5BHLUEObz4ehQKGgeTmsCfpgPVYJRJCw6CV2tmz8qO3j2\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 31,
+      "user": {
+        "fstatus": "none",
+        "nickname": "VIA｜维亚马术日常（被盗号版）",
+        "userid": "6534a6f1000000000301d1a2",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/1040g2jo31krb0rj32o005p9kkrogrkd2gf57vgg?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 10,
+      "likes": 318,
+      "comments_count": 33,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "妈？你在干啥？",
+      "widgets_context": "{\"video\":true,\"origin_video_key\":\"spectrum/1040g0jg31m9e1v99kq005p9kkrogrkd2d7jcrj0\",\"flags\":{\"sound_track\":true},\"author_id\":\"6534a6f1000000000301d1a2\",\"author_name\":\"VIA｜维亚马术日常（被盗号版）\",\"video_duration\":33}",
+      "nice_count": 10,
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "video_info_v2": {
+        "capa": {
+          "is_ai_tab": false,
+          "is_user_select": false,
+          "is_upload": false,
+          "frame_ts": 0,
+          "duration": 33
+        },
+        "consumer": {},
+        "image": {
+          "first_frame": "https://sns-na-i1.xhscdn.com/spectrum/1040g0k031m9e1mn9l2005p9kkrogrkd22al8e90?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=508306d49950f06fec8449ea751ebde7&t=68c3028d",
+          "thumbnail_dim": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8c24e1a07ec4100100000000199370172c2_0.webp?imageView2/2/w/720/h/720/format/heif/q/46&ap=11&sc=HF_SPRT&sign=98afc4c19aa0f8b1a5b529bc57052bf6&t=68c3028d",
+          "thumbnail": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8c24e1a07ec4100100000000199370172c2_0.webp?imageView2/format/heif/q/46&ap=11&sc=HF_ORG&sign=98afc4c19aa0f8b1a5b529bc57052bf6&t=68c3028d"
+        },
+        "media": {
+          "user_level": 0,
+          "video": {
+            "drm_type": 0,
+            "bbox": {
+              "ocr_v3": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v4": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v5": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v2": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ]
+            },
+            "biz_id": "281688617535133090",
+            "width": 2880,
+            "opaque1": {
+              "bottomAvgLuma": "179",
+              "audioClsInfo": "{\"music_ratio\":0.9999999700688424,\"freesound_ratio\":0.606105938159056,\"speech_ratio\":0.02274767965436457}",
+              "rightAvgLuma": "184",
+              "domestic": "1",
+              "isSupportSubtitle": "false",
+              "amend_mobile": "40",
+              "audioLevInfo": "{\"audio_quality_level\":\"G+\",\"mos_overall\":3.5067,\"version\":\"3.0\"}",
+              "topAvgLuma": "152",
+              "weakNetUserFlag": "1",
+              "loudnorm": "{\"lra\":3.9,\"htp\":-0.15,\"hldn\":-13.87,\"ldn\":-12.4,\"thr\":-22.4}",
+              "hasHumanVoice": "false"
+            },
+            "hdr_type": 0,
+            "height": 2160,
+            "biz_name": 110,
+            "duration": 34,
+            "md5": "6be1e574f06ee4501506a08940f53dcf",
+            "stream_types": [
+              258,
+              178,
+              179,
+              180,
+              77,
+              108
+            ],
+            "bound": [
+              {
+                "y": 0,
+                "w": 0,
+                "x": 0,
+                "h": 0
+              }
+            ]
+          },
+          "stream": {
+            "h265": [
+              {
+                "audio_bitrate": 128320,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/178/01e8c24e1a07ec41010370019937e3dde1_178.mp4",
+                "stream_type": 178,
+                "weight": 46,
+                "volume": 0,
+                "video_duration": 33400,
+                "duration": 33414,
+                "vmaf": -1,
+                "psnr": 32.62699890136719,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 1,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/178/01e8c24e1a07ec41010370019937e3dde1_178.mp4"
+                ],
+                "video_bitrate": 1039681,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "73.76083854984374"
+                },
+                "size": 4914557,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 33413,
+                "height": 720,
+                "width": 960,
+                "stream_desc": "R265_MP4_720P_178_IOS",
+                "quality_type": "HD",
+                "avg_bitrate": 1176646,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 128320,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/179/01e8c24e1a07ec41010370019937e43061_179.mp4",
+                "stream_type": 179,
+                "weight": 47,
+                "volume": 0,
+                "video_duration": 33400,
+                "duration": 33414,
+                "vmaf": -1,
+                "psnr": 32.9640007019043,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/179/01e8c24e1a07ec41010370019937e43061_179.mp4"
+                ],
+                "video_bitrate": 1552800,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "81.49116858984375"
+                },
+                "size": 7056831,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 33413,
+                "height": 1080,
+                "width": 1440,
+                "stream_desc": "R265_MP4_1080P_179_IOS_low",
+                "quality_type": "FHD",
+                "avg_bitrate": 1689550,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 128320,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/180/01e8c24e1a07ec41010370019937e4b697_180.mp4",
+                "stream_type": 180,
+                "weight": 48,
+                "volume": 0,
+                "video_duration": 33400,
+                "duration": 33414,
+                "vmaf": -1,
+                "psnr": 33.981998443603516,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/180/01e8c24e1a07ec41010370019937e4b697_180.mp4"
+                ],
+                "video_bitrate": 2036119,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "83.44906968999999"
+                },
+                "size": 9074685,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 33413,
+                "height": 1080,
+                "width": 1440,
+                "stream_desc": "R265_MP4_1080P_180_IOS_high",
+                "quality_type": "FHD",
+                "avg_bitrate": 2172666,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 128476,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/77/01e8c24e1a07ec41010370019937026dd5_77.mp4",
+                "stream_type": 77,
+                "weight": 49,
+                "volume": 0,
+                "video_duration": 33400,
+                "duration": 33414,
+                "vmaf": -1,
+                "psnr": 37.49599838256836,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/77/01e8c24e1a07ec41010370019937026dd5_77.mp4"
+                ],
+                "video_bitrate": 6307180,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "0",
+                  "roiWeight": "84.57852621484375"
+                },
+                "size": 26898239,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 33413,
+                "height": 2160,
+                "width": 2880,
+                "stream_desc": "R265_MP4_2K4K_77_IOS_xf",
+                "quality_type": "4K",
+                "avg_bitrate": 6439992,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 128083,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/108/01e8c24e1a07ec41010370019937da5a7b_108.mp4",
+                "stream_type": 108,
+                "weight": 50,
+                "volume": 0,
+                "video_duration": 33400,
+                "duration": 33415,
+                "vmaf": -1,
+                "psnr": 34.46799850463867,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/108/01e8c24e1a07ec41010370019937da5a7b_108.mp4"
+                ],
+                "video_bitrate": 4269908,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "85.2569547975"
+                },
+                "size": 18390963,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 33414,
+                "height": 1440,
+                "width": 1920,
+                "stream_desc": "R265_MP4_2K4K_108_IOS_xf",
+                "quality_type": "2K",
+                "avg_bitrate": 4403043,
+                "hdr_type": 0,
+                "ssim": 0
+              }
+            ],
+            "h266": [],
+            "h264": [
+              {
+                "audio_bitrate": 56318,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/258/01e8c24e1a07ec4101037001993701adcd_258.mp4",
+                "stream_type": 258,
+                "weight": 45,
+                "volume": 0,
+                "video_duration": 33400,
+                "duration": 33414,
+                "vmaf": -1,
+                "psnr": 0,
+                "audio_channels": 2,
+                "video_codec": "h264",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/258/01e8c24e1a07ec4101037001993701adcd_258.mp4"
+                ],
+                "video_bitrate": 4583172,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "0",
+                  "pcdn_supplier": "wangxin"
+                },
+                "size": 19399130,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 33413,
+                "height": 720,
+                "width": 960,
+                "stream_desc": "X264_MP4",
+                "quality_type": "HD",
+                "avg_bitrate": 4644551,
+                "hdr_type": 0,
+                "ssim": 0
+              }
+            ],
+            "av1": []
+          },
+          "video_id": "137573429334764609"
+        }
+      },
+      "cursor_score": "1757610636.9870",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.36020368,
+        "predict_click_ratio": 0.20063934,
+        "category_name": "社科",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "pdn_pdn_68c299f3000000001c03635f_1kv0##68c299f3000000001c03635f##@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "c00000000000000000000552",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "is_tracking_upgrade": false,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.36020368"
+      },
+      "generate_item_index": 12,
+      "poi_id_list": "B0I254ATWH",
+      "desc": "[黑薯问号R][黑薯问号R][黑薯问号R][黑薯问号R]#好奇心满满[话题]# #你不要过来啊[话题]# #好像不太聪明的样子[话题]# #马[话题]# #养马日常[话题]# #可爱到模糊[话题]# ",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "妈？你在干啥？",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "spectrum/1040g0k031m9e1mn9l2005p9kkrogrkd22al8e90",
+          "height": 3033,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/spectrum/1040g0k031m9e1mn9l2005p9kkrogrkd22al8e90?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=508306d49950f06fec8449ea751ebde7&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/spectrum/1040g0k031m9e1mn9l2005p9kkrogrkd22al8e90?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=508306d49950f06fec8449ea751ebde7&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/spectrum/1040g0k031m9e1mn9l2005p9kkrogrkd22al8e90?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=508306d49950f06fec8449ea751ebde7&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "YhgKDQSDiKmG9noHZY1WmHWfc6cI",
+          "width": 2274,
+          "original": "",
+          "rgb": "0xab9488",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/spectrum/1040g0k031m9e1mn9l2005p9kkrogrkd22al8e90?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=508306d49950f06fec8449ea751ebde7&t=68c3028d",
+          "trace_id": "spectrum/1040g0k031m9e1mn9l2005p9kkrogrkd22al8e90",
+          "url": "https://sns-na-i1.xhscdn.com/spectrum/1040g0k031m9e1mn9l2005p9kkrogrkd22al8e90?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=508306d49950f06fec8449ea751ebde7&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757564449
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c10131000000001b03dc98",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "cooperate_binds",
+              "note_collection",
+              "rec_next_infos",
+              "image_stickers",
+              "image_filters",
+              "product_review",
+              "related_search",
+              "cooperate_comment_component",
+              "image_goods_cards",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "image_template",
+              "buyable_goods_card_v2",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "guide_post",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "bar_below_image",
+              "aigc_collection",
+              "co_produce",
+              "widgets_ndb",
+              "next_note_guide",
+              "pgy_bbc_exp",
+              "async_group",
+              "super_activity",
+              "widgets_enhance",
+              "music_player",
+              "soundtrack_player"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "share_to_msg",
+              "follow_guide",
+              "note_share_prompt_v1",
+              "sync_group",
+              "group_share",
+              "share_guide_bubble",
+              "widgets_share",
+              "guide_navigator"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "normal",
+      "display_title": "iPhone17港版esim不支持内地啊，联通esim也不行，本来想抢香港首发的，这下没必要了，老老实实用阉割版的吧 ，",
+      "pk_status_info": "{\"ubtsecret\":\"RBqr+SuHVL/sToC3g8AdaQ8VRxoJ3azGJkYvzAHVB3znj17HR+ju8024FusoZlsuA4RjJ6HM1MJRiiLKsCZHYPBUkS8JIRK/SF\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 215,
+      "user": {
+        "fstatus": "none",
+        "nickname": "Nicholas wu",
+        "userid": "5ff86356000000000100b72e",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/5ff8639f8bd084860db22a38.jpg?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 597,
+      "likes": 340,
+      "comments_count": 733,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "",
+      "widgets_context": "{\"flags\":{},\"author_id\":\"5ff86356000000000100b72e\",\"author_name\":\"Nicholas wu\"}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "cursor_score": "1757610636.9860",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.55801857,
+        "predict_click_ratio": 0.14680068,
+        "category_name": "科技数码",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "es_ES@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef904606",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "generate_item_index": 13,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.55801857"
+      },
+      "is_tracking_upgrade": false,
+      "desc": "iPhone17港版esim不支持内地啊，联通esim也不行，本来想抢香港首发的，这下没必要了，老老实实用阉割版的吧 ，没办法要用两张手机卡[笑哭R][笑哭R][笑哭R]#iphone17[话题]##港版[话题]# #苹果17[话题]# #港版手机[话题]# #香港[话题]#",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "1040g00831m85ke0158005nvocdb09dpegui21e8",
+          "height": 1600,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/1040g00831m85ke0158005nvocdb09dpegui21e8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=c17694a083f0d567f134a2b1c1c326ec&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/1040g00831m85ke0158005nvocdb09dpegui21e8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=c17694a083f0d567f134a2b1c1c326ec&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/1040g00831m85ke0158005nvocdb09dpegui21e8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=c17694a083f0d567f134a2b1c1c326ec&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "OPgFBQDFuGl392lXiH12eZDED5fc",
+          "width": 1200,
+          "original": "",
+          "rgb": "0xfefef5",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/1040g00831m85ke0158005nvocdb09dpegui21e8?imageView2/2/w/1440/format/heif/q/45&redImage/frame/0&ap=11&sc=HF_DTL&sign=c17694a083f0d567f134a2b1c1c326ec&t=68c3028d",
+          "trace_id": "1040g00831m85ke0158005nvocdb09dpegui21e8",
+          "url": "https://sns-na-i1.xhscdn.com/1040g00831m85ke0158005nvocdb09dpegui21e8?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=c17694a083f0d567f134a2b1c1c326ec&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757479217
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c23a7e000000001d029574",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "note_collection",
+              "cooperate_binds",
+              "rec_next_infos",
+              "video_marks",
+              "product_review",
+              "related_search",
+              "video_goods_cards",
+              "cooperate_comment_component",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "video_recommend_tag",
+              "buyable_goods_card_v2",
+              "cooperate_search_component",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "related_recommend",
+              "next_note_guide",
+              "widgets_ndb",
+              "pgy_bbc_exp",
+              "brand_max_trailer",
+              "super_activity",
+              "note_nice_guide",
+              "pin_search_highlights",
+              "widgets_enhance",
+              "packed_goods",
+              "packed_buyable_goods",
+              "widgets_ncb",
+              "note_nice_compound",
+              "live_shooting_flag",
+              "widgets_nbb",
+              "poi_declare",
+              "async_group"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "guide_post",
+              "video_foot_bar",
+              "follow_guide",
+              "share_to_msg",
+              "note_share_prompt_v1",
+              "note_share_prompt_v2",
+              "group_share",
+              "share_guide_bubble",
+              "goods_enhance_component",
+              "guide_navigator",
+              "sync_group"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "video",
+      "display_title": "今晚老公不在家，让我去他房间睡觉",
+      "pk_status_info": "{\"ubtsecret\":\"RBXkVDhOfxTi5FogwaQcajmt1YxK6R13ueDxYxOkEsDDvCoYDgTiz2uJ0SjPeqFpZ99bblsYSfHfjlr84O6DWlFAQW1pztXPf5\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 53,
+      "user": {
+        "fstatus": "none",
+        "nickname": "郑家二姐",
+        "userid": "59785df25e87e70ac5fd8bdc",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/1040g2jo31ae2h7m17c0049mr3rev52us7rijgsg?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 88,
+      "likes": 351,
+      "comments_count": 170,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "今晚老公不在家，让我去他房间睡觉",
+      "nice_count": 8,
+      "widgets_context": "{\"video\":true,\"origin_video_key\":\"pre_post/1040g0cg31m9bo06pmg0049mr3rev52us6m8e4uo\",\"flags\":{\"sound_track\":true},\"author_id\":\"59785df25e87e70ac5fd8bdc\",\"author_name\":\"郑家二姐\",\"video_duration\":338}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "video_info_v2": {
+        "capa": {
+          "is_ai_tab": false,
+          "is_user_select": false,
+          "is_upload": false,
+          "frame_ts": 0,
+          "duration": 338
+        },
+        "consumer": {},
+        "image": {
+          "first_frame": "https://sns-na-i1.xhscdn.com/1040g00831m9bo06olm0049mr3rev52usho110d8?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=36daf28f69415b81db45fdc9f5d9693b&t=68c3028d",
+          "thumbnail_dim": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8c23a7e070f7d0010000000019936b814df_0.webp?imageView2/2/w/720/h/720/format/heif/q/46&ap=11&sc=HF_SPRT&sign=fc977539803b4ff283f703a560902ae8&t=68c3028d",
+          "thumbnail": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8c23a7e070f7d0010000000019936b814df_0.webp?imageView2/format/heif/q/46&ap=11&sc=HF_ORG&sign=fc977539803b4ff283f703a560902ae8&t=68c3028d"
+        },
+        "media": {
+          "user_level": 0,
+          "video": {
+            "drm_type": 0,
+            "bbox": {
+              "ocr_v3": [
+                {
+                  "y": 1464,
+                  "w": 806,
+                  "x": 133,
+                  "h": 64
+                }
+              ],
+              "ocr_v4": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v5": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v2": [
+                {
+                  "y": 1461,
+                  "w": 808,
+                  "x": 133,
+                  "h": 69
+                }
+              ]
+            },
+            "subtitles": {
+              "en-US": [
+                {
+                  "language": "en-US",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c23a7e070f7d010370039936b551bf_12.srt?sign=59bd3d9a144d9e05a10363da8f88a7cf&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ],
+              "zh-CN": [
+                {
+                  "language": "zh-CN",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c23a7e070f7d010370039936b54e92_11.srt?sign=845e93d0451974df7168e3dda95628ca&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ],
+              "source": [
+                {
+                  "language": "zh-CN",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8c23a7e070f7d010370039936b54cf3_1.srt?sign=40e33081a6e14437fefa2ad01e40789e&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ]
+            },
+            "biz_id": "281688533196248436",
+            "width": 1080,
+            "opaque1": {
+              "loudnorm": "{\"lra\":6.5,\"htp\":-1.19,\"hldn\":-25.66,\"ldn\":-24.32,\"thr\":-34.59}",
+              "hasHumanVoice": "true",
+              "audioClsInfo": "{\"music_ratio\":0.9994981520310018,\"freesound_ratio\":0.022907749009866425,\"speech_ratio\":0.8949667870259284}",
+              "rightAvgLuma": "91",
+              "weakNetUserFlag": "1",
+              "domestic": "1",
+              "audioLevInfo": "{\"audio_quality_level\":\"G+\",\"mos_overall\":3.693,\"version\":\"3.0\"}",
+              "bottomAvgLuma": "98",
+              "insertSubtitleLanguages": "[\"zh-CN\"]",
+              "videoLanguage": "[\"zh-CN\"]",
+              "isSupportSubtitle": "true",
+              "amend_mobile": "40",
+              "topAvgLuma": "94"
+            },
+            "hdr_type": 0,
+            "height": 1920,
+            "biz_name": 110,
+            "duration": 339,
+            "md5": "6ee60a42f0ed6138ff02b904a1d548c3",
+            "stream_types": [
+              258,
+              178,
+              179,
+              180
+            ],
+            "bound": [
+              {
+                "y": 0,
+                "w": 0,
+                "x": 0,
+                "h": 0
+              }
+            ]
+          },
+          "stream": {
+            "h265": [
+              {
+                "audio_bitrate": 125482,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/178/01e8c23a7e070f7d0103700199370d0c23_178.mp4",
+                "stream_type": 178,
+                "weight": 48,
+                "volume": 0,
+                "video_duration": 338766,
+                "duration": 338767,
+                "vmaf": -1,
+                "psnr": 39.41899871826172,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 1,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/178/01e8c23a7e070f7d0103700199370d0c23_178.mp4"
+                ],
+                "video_bitrate": 402667,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "89.25681966234376"
+                },
+                "size": 22734107,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 338755,
+                "height": 1280,
+                "width": 720,
+                "stream_desc": "R265_MP4_720P_178_IOS",
+                "quality_type": "HD",
+                "avg_bitrate": 536867,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 125482,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/179/01e8c23a7e070f7d0103700199370ab126_179.mp4",
+                "stream_type": 179,
+                "weight": 49,
+                "volume": 0,
+                "video_duration": 338766,
+                "duration": 338767,
+                "vmaf": -1,
+                "psnr": 39.99800109863281,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/179/01e8c23a7e070f7d0103700199370ab126_179.mp4"
+                ],
+                "video_bitrate": 583833,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "92.66333779234375"
+                },
+                "size": 30405724,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 338755,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "R265_MP4_1080P_179_IOS_low",
+                "quality_type": "FHD",
+                "avg_bitrate": 718032,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 125482,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/180/01e8c23a7e070f7d01037001993714791e_180.mp4",
+                "stream_type": 180,
+                "weight": 50,
+                "volume": 0,
+                "video_duration": 338766,
+                "duration": 338767,
+                "vmaf": -1,
+                "psnr": 40.75199890136719,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/180/01e8c23a7e070f7d01037001993714791e_180.mp4"
+                ],
+                "video_bitrate": 702557,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "93.633333894375"
+                },
+                "size": 35433197,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 338755,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "R265_MP4_1080P_180_IOS_high",
+                "quality_type": "FHD",
+                "avg_bitrate": 836756,
+                "hdr_type": 0,
+                "ssim": 0
+              }
+            ],
+            "h266": [],
+            "h264": [
+              {
+                "audio_bitrate": 56024,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/258/01e8c23a7e070f7d010370019936b6cb94_258.mp4",
+                "stream_type": 258,
+                "weight": 47,
+                "volume": 0,
+                "video_duration": 338766,
+                "duration": 338767,
+                "vmaf": -1,
+                "psnr": 0,
+                "audio_channels": 2,
+                "video_codec": "h264",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/258/01e8c23a7e070f7d010370019936b6cb94_258.mp4"
+                ],
+                "video_bitrate": 1958941,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "0",
+                  "pcdn_supplier": "wangxin"
+                },
+                "size": 85603425,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 338754,
+                "height": 1280,
+                "width": 720,
+                "stream_desc": "X264_MP4",
+                "quality_type": "HD",
+                "avg_bitrate": 2021529,
+                "hdr_type": 0,
+                "ssim": 0
+              }
+            ],
+            "av1": []
+          },
+          "video_id": "137573345113083773"
+        }
+      },
+      "cursor_score": "1757610636.9850",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.17114028,
+        "predict_click_ratio": 0.17065074,
+        "category_name": "家居家装",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "es_DSSM_INST@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef9045ed",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "is_tracking_upgrade": false,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.17114028"
+      },
+      "generate_item_index": 14,
+      "desc": "没有沐浴更衣都不好意思躺他床上，我还是回自己屋睡吧#就想这样宅在家[话题]# #就想这样宅在家[话题]# #在家可以这么干[话题]##我家老公的卧室[话题]# #男人的房间应该这样[话题]# #男人的",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "今晚老公不在家，让我去他房间睡觉",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "1040g00831m9bo06olm0049mr3rev52usho110d8",
+          "height": 1920,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/1040g00831m9bo06olm0049mr3rev52usho110d8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=36daf28f69415b81db45fdc9f5d9693b&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/1040g00831m9bo06olm0049mr3rev52usho110d8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=36daf28f69415b81db45fdc9f5d9693b&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/1040g00831m9bo06olm0049mr3rev52usho110d8?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=36daf28f69415b81db45fdc9f5d9693b&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "nRgSFAL3eIeYeHiId4eHb4f2dw==",
+          "width": 1080,
+          "original": "",
+          "rgb": "0xafa798",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/1040g00831m9bo06olm0049mr3rev52usho110d8?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=36daf28f69415b81db45fdc9f5d9693b&t=68c3028d",
+          "trace_id": "1040g00831m9bo06olm0049mr3rev52usho110d8",
+          "url": "https://sns-na-i1.xhscdn.com/1040g00831m9bo06olm0049mr3rev52usho110d8?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=36daf28f69415b81db45fdc9f5d9693b&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757559422
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68c2da25000000001c0112d6",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "cooperate_binds",
+              "note_collection",
+              "rec_next_infos",
+              "image_stickers",
+              "image_filters",
+              "product_review",
+              "related_search",
+              "cooperate_comment_component",
+              "image_goods_cards",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "image_template",
+              "buyable_goods_card_v2",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "guide_post",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "bar_below_image",
+              "aigc_collection",
+              "co_produce",
+              "widgets_ndb",
+              "next_note_guide",
+              "pgy_bbc_exp",
+              "async_group",
+              "super_activity",
+              "widgets_enhance",
+              "music_player",
+              "soundtrack_player"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "share_to_msg",
+              "follow_guide",
+              "note_share_prompt_v1",
+              "sync_group",
+              "group_share",
+              "share_guide_bubble",
+              "widgets_share",
+              "guide_navigator"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "normal",
+      "display_title": "小红书越来越好厕所急疯了！",
+      "pk_status_info": "{\"ubtsecret\":\"RB19Wd7ymKnX6xmYhu2P8vCobaLvf2YGPHGxBZTyzBZUMj4D7Ad0rwA7Jm18JclnlhdYkAockLwCBBIspJESX6KP8cjjiWjZa2\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 4,
+      "user": {
+        "fstatus": "none",
+        "nickname": "..",
+        "userid": "646522b50000000010026617",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/1040g2jo31lo37rag58005p354aqk4pgnijgqt10?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 3,
+      "likes": 596,
+      "comments_count": 85,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "",
+      "widgets_context": "{\"flags\":{},\"author_id\":\"646522b50000000010026617\",\"author_name\":\"..\"}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "cursor_score": "1757610636.9830",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.3464798,
+        "predict_click_ratio": 0.26824132,
+        "category_name": "生活记录",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "onlineswing_onlineswing_simsw_68c2a61c000000001c00ea02##68c2a61c000000001c00ea02##@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef90460a",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "generate_item_index": 16,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.3464798"
+      },
+      "is_tracking_upgrade": false,
+      "desc": "小红书越来越好厕所急疯了！",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "1040g2sg31m9uil8glm705p354aqk4pgnu35nlao",
+          "height": 1600,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/1040g2sg31m9uil8glm705p354aqk4pgnu35nlao?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=4d01c7095662f9f3e24ed8d13396daca&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/1040g2sg31m9uil8glm705p354aqk4pgnu35nlao?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=4d01c7095662f9f3e24ed8d13396daca&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/1040g2sg31m9uil8glm705p354aqk4pgnu35nlao?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=4d01c7095662f9f3e24ed8d13396daca&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "+ecFBQT8aFx1+UbHd3ZXNz5O4PY0",
+          "width": 1200,
+          "original": "",
+          "rgb": "0xf0f7f5",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/1040g2sg31m9uil8glm705p354aqk4pgnu35nlao?imageView2/2/w/1440/format/heif/q/45&redImage/frame/0&ap=11&sc=HF_DTL&sign=4d01c7095662f9f3e24ed8d13396daca&t=68c3028d",
+          "trace_id": "1040g2sg31m9uil8glm705p354aqk4pgnu35nlao",
+          "url": "https://sns-na-i1.xhscdn.com/1040g2sg31m9uil8glm705p354aqk4pgnu35nlao?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=4d01c7095662f9f3e24ed8d13396daca&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757600293
+    },
+    {
+      "rec_params": "{\"isNiceNote\":0,\"hfTrackId\":\"2fbdt4ing091wh54kshyu\"}",
+      "id": "68be470a000000001c00bf6d",
+      "last_update_time": 0,
+      "is_ads": false,
+      "advanced_widgets_groups": {
+        "groups": [
+          {
+            "mode": 1,
+            "fetch_types": [
+              "guos_test",
+              "note_next_step",
+              "second_jump_bar",
+              "note_collection",
+              "cooperate_binds",
+              "rec_next_infos",
+              "video_marks",
+              "product_review",
+              "related_search",
+              "video_goods_cards",
+              "cooperate_comment_component",
+              "ads_goods_cards",
+              "ads_comment_component",
+              "goods_card_v2",
+              "video_recommend_tag",
+              "buyable_goods_card_v2",
+              "cooperate_search_component",
+              "ads_engage_bar",
+              "challenge_card",
+              "cooperate_engage_bar",
+              "pgy_comment_component",
+              "pgy_engage_bar",
+              "related_recommend",
+              "next_note_guide",
+              "widgets_ndb",
+              "pgy_bbc_exp",
+              "brand_max_trailer",
+              "super_activity",
+              "note_nice_guide",
+              "pin_search_highlights",
+              "widgets_enhance",
+              "packed_goods",
+              "packed_buyable_goods",
+              "widgets_ncb",
+              "note_nice_compound",
+              "live_shooting_flag",
+              "widgets_nbb",
+              "poi_declare",
+              "async_group"
+            ]
+          },
+          {
+            "mode": 0,
+            "fetch_types": [
+              "guos_test",
+              "vote_stickers",
+              "bullet_comment_lead",
+              "note_search_box",
+              "interact_pk",
+              "interact_vote",
+              "guide_heuristic",
+              "guide_post",
+              "video_foot_bar",
+              "follow_guide",
+              "share_to_msg",
+              "note_share_prompt_v1",
+              "note_share_prompt_v2",
+              "group_share",
+              "share_guide_bubble",
+              "goods_enhance_component",
+              "guide_navigator",
+              "sync_group"
+            ]
+          }
+        ]
+      },
+      "has_music": false,
+      "type": "video",
+      "display_title": "酷态科cp24充电宝质量堪忧，谨慎选择",
+      "pk_status_info": "{\"ubtsecret\":\"RBmdJrKDHXoVPIw4jdqzVDmz26gX69G/uu+tLtHqS1d7z9myHgL/8/QB33b7P8dvLDz2Zl/cVfmXG4bN1NKD8cEvlwlGY2kZD3\"}",
+      "rec_extra_info": "{\"followConductVideoTime\":\"-1\",\"followConductReason\":\"\",\"needInnerSharePrompt\":\"false\",\"needSharePrompt\":\"false\",\"followConductNoteTime\":\"-1\",\"followConductFlag\":\"false\"}",
+      "collected_count": 6,
+      "user": {
+        "fstatus": "none",
+        "nickname": "秦~",
+        "userid": "6717b5ad000000001d022594",
+        "images": "https://sns-avatar-qc.xhscdn.com/avatar/645b7eecf82b98b5c9349913.jpg?imageView2/2/w/80/format/jpg",
+        "followed": false
+      },
+      "shared_count": 7,
+      "likes": 35,
+      "comments_count": 62,
+      "dislike_optional": {
+        "follow_user": false
+      },
+      "name": "酷态科cp24充电宝质量堪忧，谨慎选择",
+      "widgets_context": "{\"video\":true,\"origin_video_key\":\"pre_post/1040g0cg31m5fp69bm6f05ponmmmnc9cklehma80\",\"flags\":{\"sound_track\":true},\"author_id\":\"6717b5ad000000001d022594\",\"author_name\":\"秦~\",\"video_duration\":13}",
+      "is_top_show_eco_officer_note": false,
+      "inlikes": false,
+      "video_info_v2": {
+        "capa": {
+          "is_ai_tab": false,
+          "is_user_select": false,
+          "is_upload": false,
+          "frame_ts": 0,
+          "duration": 13
+        },
+        "consumer": {},
+        "image": {
+          "first_frame": "https://sns-na-i1.xhscdn.com/110/0/01e8be4247070819001000000001992742e24b_0.jpg?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=6810e079ed8b4e2119fd6fa863ebd409&t=68c3028d",
+          "thumbnail_dim": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8be470407c860001000000001992745d6c2_0.webp?imageView2/2/w/720/h/720/format/heif/q/46&ap=11&sc=HF_SPRT&sign=a5b9efe15482ecf4a82dc2517169cde3&t=68c3028d",
+          "thumbnail": "https://sns-na-i1.xhscdn.com/frame/110/0/01e8be470407c860001000000001992745d6c2_0.webp?imageView2/format/heif/q/46&ap=11&sc=HF_ORG&sign=a5b9efe15482ecf4a82dc2517169cde3&t=68c3028d"
+        },
+        "media": {
+          "user_level": 0,
+          "video": {
+            "drm_type": 0,
+            "bbox": {
+              "ocr_v3": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v4": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v5": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ],
+              "ocr_v2": [
+                {
+                  "y": 0,
+                  "w": 0,
+                  "x": 0,
+                  "h": 0
+                }
+              ]
+            },
+            "subtitles": {
+              "en-US": [
+                {
+                  "language": "en-US",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8be470407c860010370039927459717_12.srt?sign=e83196101dc38c653b35ff792762a2f4&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ],
+              "zh-CN": [
+                {
+                  "language": "zh-CN",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8be470407c86001037003992745973e_11.srt?sign=73085647d233c916790151e2378b7021&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ],
+              "source": [
+                {
+                  "language": "zh-CN",
+                  "url": "https://sns-subtitle-s1.xhscdn.com/subtitle/1/110/1/01e8be470407c860010370039927459695_1.srt?sign=8941f56fdec08bd75dc3964c2d88be1a&t=68c79fcd",
+                  "type": 0,
+                  "format": 0
+                }
+              ]
+            },
+            "biz_id": "281684189037772653",
+            "width": 1080,
+            "opaque1": {
+              "loudnorm": "{\"lra\":16.4,\"htp\":-8.99,\"hldn\":-31.99,\"ldn\":-33.07,\"thr\":-46.18}",
+              "hasHumanVoice": "true",
+              "audioClsInfo": "{\"music_ratio\":0.0,\"freesound_ratio\":0.6954276773283424,\"speech_ratio\":0.25368729692571557}",
+              "rightAvgLuma": "167",
+              "weakNetUserFlag": "1",
+              "domestic": "1",
+              "audioLevInfo": "{\"version\":\"3.0\"}",
+              "bottomAvgLuma": "166",
+              "videoLanguage": "[\"zh-CN\"]",
+              "isSupportSubtitle": "true",
+              "amend_mobile": "40",
+              "topAvgLuma": "121"
+            },
+            "hdr_type": 1,
+            "height": 1920,
+            "biz_name": 110,
+            "duration": 14,
+            "md5": "2677b994f5967afb9b3fa1b36dea9a13",
+            "stream_types": [
+              258,
+              178,
+              180,
+              179,
+              24
+            ],
+            "bound": [
+              {
+                "y": 0,
+                "w": 0,
+                "x": 0,
+                "h": 0
+              }
+            ]
+          },
+          "stream": {
+            "h265": [
+              {
+                "audio_bitrate": 64749,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/178/01e8be470407c8600103700199282b33bd_178.mp4",
+                "stream_type": 178,
+                "weight": 48,
+                "volume": 0,
+                "video_duration": 13566,
+                "duration": 13567,
+                "vmaf": -1,
+                "psnr": 44.64400100708008,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 1,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/178/01e8be470407c8600103700199282b33bd_178.mp4"
+                ],
+                "video_bitrate": 439445,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "95.66765520609376"
+                },
+                "size": 871382,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 13566,
+                "height": 1280,
+                "width": 720,
+                "stream_desc": "R265_MP4_720P_178_IOS",
+                "quality_type": "HD",
+                "avg_bitrate": 513824,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 64749,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/180/01e8be470407c8600103700199282c1434_180.mp4",
+                "stream_type": 180,
+                "weight": 49,
+                "volume": 0,
+                "video_duration": 13566,
+                "duration": 13567,
+                "vmaf": -1,
+                "psnr": 45.784000396728516,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/180/01e8be470407c8600103700199282c1434_180.mp4"
+                ],
+                "video_bitrate": 798215,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "96.52739039859375"
+                },
+                "size": 1479797,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 13566,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "R265_MP4_1080P_180_IOS_high",
+                "quality_type": "FHD",
+                "avg_bitrate": 872586,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 64749,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/179/01e8be470407c8600103700199282c072a_179.mp4",
+                "stream_type": 179,
+                "weight": 50,
+                "volume": 0,
+                "video_duration": 13566,
+                "duration": 13567,
+                "vmaf": -1,
+                "psnr": 45.31100082397461,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/179/01e8be470407c8600103700199282c072a_179.mp4"
+                ],
+                "video_bitrate": 690871,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_supplier": "wangxin",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "roiWeight": "96.538411609375"
+                },
+                "size": 1297759,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 13566,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "R265_MP4_1080P_179_IOS_low",
+                "quality_type": "FHD",
+                "avg_bitrate": 765244,
+                "hdr_type": 0,
+                "ssim": 0
+              },
+              {
+                "audio_bitrate": 129220,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/24/01e8be470407c86001037001992746308e_24.mp4",
+                "stream_type": 24,
+                "weight": 100,
+                "volume": 0,
+                "video_duration": 13566,
+                "duration": 13567,
+                "vmaf": -1,
+                "psnr": 0,
+                "audio_channels": 2,
+                "video_codec": "hevc",
+                "default_stream": 1,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/24/01e8be470407c86001037001992746308e_24.mp4"
+                ],
+                "video_bitrate": 1114381,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "1",
+                  "pcdn_supplier": "wangxin"
+                },
+                "size": 2121363,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 13566,
+                "height": 1920,
+                "width": 1080,
+                "stream_desc": "HDR_Dolby_R265_MP4_24_IOS_multi",
+                "quality_type": "HD",
+                "avg_bitrate": 1250895,
+                "hdr_type": 1,
+                "ssim": 0
+              }
+            ],
+            "h266": [],
+            "h264": [
+              {
+                "audio_bitrate": 56637,
+                "master_url": "http://sns-video-hs.xhscdn.com/stream/1/110/258/01e8be470407c86001037001992745e78e_258.mp4",
+                "stream_type": 258,
+                "weight": 47,
+                "volume": 0,
+                "video_duration": 13566,
+                "duration": 13567,
+                "vmaf": -1,
+                "psnr": 0,
+                "audio_channels": 2,
+                "video_codec": "h264",
+                "default_stream": 0,
+                "backup_urls": [
+                  "http://sns-bak-v1.xhscdn.com/stream/1/110/258/01e8be470407c86001037001992745e78e_258.mp4"
+                ],
+                "video_bitrate": 1222160,
+                "fps": 30,
+                "opaque1": {
+                  "didLoudnorm": "false",
+                  "pcdn_302_flag": "false",
+                  "use_pcdn": "0",
+                  "pcdn_supplier": "wangxin"
+                },
+                "size": 2181504,
+                "audio_codec": "aac",
+                "rotate": 0,
+                "format": "mp4",
+                "sr": 0,
+                "audio_duration": 13566,
+                "height": 1280,
+                "width": 720,
+                "stream_desc": "X264_MP4",
+                "quality_type": "HD",
+                "avg_bitrate": 1286358,
+                "hdr_type": 0,
+                "ssim": 0
+              }
+            ],
+            "av1": []
+          },
+          "video_id": "137569000854374496"
+        }
+      },
+      "cursor_score": "1757610636.9810",
+      "recommend": {
+        "videofeed_lazy_load_score": 0.13481997,
+        "predict_click_ratio": 0.16620225,
+        "category_name": "科技数码",
+        "icon": "",
+        "dark_icon": "",
+        "topic_sub_type": "",
+        "topic_type": "",
+        "topic_name": "",
+        "type": "",
+        "mf_topic_name": "",
+        "track_id": "author_pre_v3_613e1b72000000000201af2c@2fbdt4ing091wh54kshyu",
+        "is_super_topic": false,
+        "topic_id": "",
+        "target_id": "",
+        "is_activate_search": false,
+        "desc": "",
+        "is_followed_topic": false,
+        "category_id": "5ab094be481d26b8ef904606",
+        "target_name": "",
+        "mf_topic_id": ""
+      },
+      "is_tracking_upgrade": false,
+      "model_type": "note",
+      "debug_info": {
+        "videofeedLazyLoadScore": "0.13481997"
+      },
+      "generate_item_index": 18,
+      "desc": "在朋友推荐下购买该品牌充电宝，购买力了这个typec和苹果双线的新型号。第一次用了不到一个月苹果线就不好使了，用外接线还可以充电。换了一次货后，用了不到两周，就彻底打不开了，充也充不上电，用也用不了，",
+      "rec_result_from_inner_cache": false,
+      "corner_tag": [],
+      "title": "酷态科cp24充电宝质量堪忧，谨慎选择",
+      "is_tracking": false,
+      "images_list": [
+        {
+          "fileid": "110/0/01e8be4247070819001000000001992742e24b_0.jpg",
+          "height": 1920,
+          "url_multi_level": {
+            "low": "https://sns-na-i1.xhscdn.com/110/0/01e8be4247070819001000000001992742e24b_0.jpg?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=6810e079ed8b4e2119fd6fa863ebd409&t=68c3028d",
+            "high": "https://sns-na-i1.xhscdn.com/110/0/01e8be4247070819001000000001992742e24b_0.jpg?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=6810e079ed8b4e2119fd6fa863ebd409&t=68c3028d",
+            "medium": "https://sns-na-i1.xhscdn.com/110/0/01e8be4247070819001000000001992742e24b_0.jpg?imageView2/2/w/540/format/heif/q/75%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=6810e079ed8b4e2119fd6fa863ebd409&t=68c3028d"
+          },
+          "need_load_original_image": false,
+          "thumb_hash": "migGFARhBUWYKK51eJbCjxqvmg==",
+          "width": 1080,
+          "original": "",
+          "rgb": "0x7f7269",
+          "url_size_large": "https://sns-na-i1.xhscdn.com/110/0/01e8be4247070819001000000001992742e24b_0.jpg?imageView2/2/w/1440/format/webp&ap=11&sc=HF_DTL&sign=6810e079ed8b4e2119fd6fa863ebd409&t=68c3028d",
+          "trace_id": "110/0/01e8be4247070819001000000001992742e24b_0.jpg",
+          "url": "https://sns-na-i1.xhscdn.com/110/0/01e8be4247070819001000000001992742e24b_0.jpg?imageView2/2/w/540/format/heif/q/46%7CimageMogr2/strip&redImage/frame/0&ap=11&sc=HF_PRV&sign=6810e079ed8b4e2119fd6fa863ebd409&t=68c3028d"
+        }
+      ],
+      "track_id_mix_rank": "2fbdt4ing091wh54kshyu",
+      "timestamp": 1757300490
+    }
+  ],
+  "code": 0
+}

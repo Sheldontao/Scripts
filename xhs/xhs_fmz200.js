@@ -337,9 +337,9 @@ if (url.includes("/v6/homefeed")) {
       try {
         const parsedCounts = JSON.parse(sourceCounts);
         if (Array.isArray(parsedCounts) && parsedCounts.every(num => typeof num === 'number')) {
-          counts.push(...parsedCounts.slice(0, 3));
-          if (parsedCounts.length > 3) {
-            console.warn(`Warning: More than 3 numbers provided for ${key}. Only the first three will be used.`);
+          counts.push(...parsedCounts.slice(0, 5));
+          if (parsedCounts.length > 5) {
+            console.warn(`Warning: More than 5 numbers provided for ${key}. Only the first five will be used.`);
           }
         } else {
           console.error(`Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`);
