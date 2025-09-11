@@ -35,7 +35,7 @@
 xnhsuu_enable = switch,true,false,tag=小红书-脚本开关
 xhs_des_regex = input,"["峰哥", "恋爱", "雪茄", "新闻", "manus", "揽佬", "红十字", "胡锡进"]",tag=小红书_des_regex
 xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=小红书_nickname_regex
-xhs_counts_threshold = input, "[10,10,10]", tag=小红书_counts_threshold_分享最低/点赞最低/评论最低
+xhs_counts_threshold = input, "["10","10","10"]", tag=小红书_counts_threshold_分享最低/点赞最低/评论最低
 
 [Rule]
 DOMAIN, ads-img-qc.xhscdn.com, REJECT
