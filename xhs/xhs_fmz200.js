@@ -1,7 +1,7 @@
 /**
  * @author fmz200
  * @function 小红书去广告、净化、解除下载限制、画质增强等
- * @date 2025-06-18 19:27:00
+ * @date 2025-09-10 11:27:00
  * @quote @RuCu6
  */
 
@@ -42,7 +42,7 @@ if (url.includes("/search/notes?")) {
 
 if (url.includes("/system_service/config?")) {
   // 整体配置
-  const item = ["app_theme", "loading_img", "splash", "store","name_2tab_config"];
+  const item = ["app_theme", "loading_img", "splash", "store"];
   if (obj.data) {
     for (let i of item) {
       delete obj.data[i];
@@ -86,6 +86,10 @@ if (url.includes("/note/imagefeed?") || url.includes("/note/feed?")) {
             item.share_info.function_entries.unshift(addItem);
           }
         }
+        // 处理帖子引用的标签
+        if (item.hash_tag) {
+          item.hash_tag = item.hash_tag.filter(tag => tag.type !== "interact_vote");
+        }
       }
 
       const images_list = obj.data[0].note_list[0].images_list;
@@ -128,7 +132,7 @@ if (url.includes("/note/live_photo/save")) {
 } 
 
 if (url.includes("/note/widgets")) {
-  const item = ["cooperate_binds", "generic", "note_next_step"];
+  const item = ["cooperate_binds", "generic", "note_next_step", "widget_list"];
   if (obj?.data) {
     for (let i of item) {
       delete obj.data[i];
@@ -469,7 +473,7 @@ function replaceUrlContent(collectionA, collectionB) {
   collectionA.forEach(itemA => {
     const itemB = collectionB.find(itemB => itemB.file_id === itemA.file_id);
     if (itemB) {
-      itemA.url = itemA.url !== "" ? itemA.url.replace(/(.*)\.mp4/, `${itemB.url.match(/(.*)\.mp4/)[1]}.mp4`) : itemB.url;
+      itemA.url = itemA.url !== "" ? itemA.url.replace(/^https?:\/\/.*\.mp4(\?[^"]*)?/g, `${itemB.url.match(/(.*)\.mp4/)[1]}.mp4`) : itemB.url;
       itemA.author = "@fmz200"
     }
   });
