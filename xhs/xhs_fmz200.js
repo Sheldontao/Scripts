@@ -337,9 +337,7 @@ if (url.includes("/v6/homefeed")) {
       try {
         const parsedCounts = JSON.parse(sourceCounts);
         if (Array.isArray(parsedCounts) && parsedCounts.every(num => typeof num === 'number')) {
-          counts.push(...parsedCounts.slice(0, 5));
-          if (parsedCounts.length > 5) {
-            console.warn(`Warning: More than 5 numbers provided for ${key}. Only the first five will be used.`);
+          counts.push(...parsedCounts);
           }
         } else {
           console.error(`Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`);
@@ -379,18 +377,35 @@ if (url.includes("/v6/homefeed")) {
       }
 
       // Apply counts threshold filter
-      if (countsThreshold.length === 5) {
-        const [minShared, minLikes, minComments, minCollected, minNice] = countsThreshold;
-        if (
-          (item?.shared_count !== undefined && item.shared_count < minShared) ||
-          (item?.likes !== undefined && item.likes < minLikes) ||
-          (item?.comments_count !== undefined && item.comments_count < minComments) ||
-          (item?.collected_count !== undefined && item.collected_count < minCollected) ||
-          (item?.nice_count !== undefined && item.nice_count < minNice)
-        ) {
-          console.log(`Filtered out item due to low counts: shared_count=${item.shared_count || 0} (min ${minShared}), likes=${item.likes || 0} (min ${minLikes}), comments_count=${item.comments_count || 0} (min ${minComments}), collected_count=${item.collected_count || 0} (min ${minCollected}), nice_count=${item.nice_count || 0} (min ${minNice})`);
-          return false;
-        }
+      const [minLikes, minCollected, minComments, minShared, minNice] = countsThreshold;
+
+      let shouldFilter = false;
+      let logMessage = "Filtered out item due to low counts:";
+
+      if (minShared !== undefined && item?.shared_count !== undefined && item.shared_count < minShared) {
+        shouldFilter = true;
+        logMessage += ` shared_count=${item.shared_count || 0} (min ${minShared}),`;
+      }
+      if (minLikes !== undefined && item?.likes !== undefined && item.likes < minLikes) {
+        shouldFilter = true;
+        logMessage += ` likes=${item.likes || 0} (min ${minLikes}),`;
+      }
+      if (minComments !== undefined && item?.comments_count !== undefined && item.comments_count < minComments) {
+        shouldFilter = true;
+        logMessage += ` comments_count=${item.comments_count || 0} (min ${minComments}),`;
+      }
+      if (minCollected !== undefined && item?.collected_count !== undefined && item.collected_count < minCollected) {
+        shouldFilter = true;
+        logMessage += ` collected_count=${item.collected_count || 0} (min ${minCollected}),`;
+      }
+      if (minNice !== undefined && item?.nice_count !== undefined && item.nice_count < minNice) {
+        shouldFilter = true;
+        logMessage += ` nice_count=${item.nice_count || 0} (min ${minNice}),`;
+      }
+
+      if (shouldFilter) {
+        console.log(logMessage.slice(0, -1)); // Remove trailing comma
+        return false;
       }
 
       // Remove related_ques if it exists
