@@ -379,7 +379,7 @@ if (url.includes("/v6/homefeed")) {
       }
 
       // Apply counts threshold filter
-      if (countsThreshold.length === 3) {
+      if (countsThreshold.length === 5) {
         const [minShared, minLikes, minComments, minCollected, minNice] = countsThreshold;
         if (
           (item?.shared_count !== undefined && item.shared_count < minShared) ||
