@@ -10,7 +10,7 @@
 #!system=iOS, iPadOS
 #!system_version = 18ios
 #!loon_version = 
-#!date=2025-07-29 20:00:00; app_version = v8.93
+#!date=2025-09-11 11:00:00; app_version = v8.93
 #!remark=下方的所有规则都标注了对应的hostname，可能存在错误或者遗漏，欢迎反馈。对于无法/可选MITM的hostname都特别做了“如开启可自行添加主机名”提示，如果提示后面没有标注主机名则包含所有主机名，否则只包含提示语后面的主机名。
 #############################################
 # "reject"        策略返回 HTTP 状态码 404,不附带任何额外内容
@@ -32,48 +32,31 @@
 #############################################
 
 [Argument]
-
-# > xiaohongshu
 xnhsuu_enable = switch,true,false,tag=小红书-脚本开关
 xhs_des_regex = input,"["峰哥", "恋爱", "雪茄", "新闻", "manus", "揽佬", "红十字", "胡锡进"]",tag=小红书_des_regex
 xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=小红书_nickname_regex
 
-
-
 [Rule]
-
-
-# >>>>>>>>>>>>>>> ✅ X ✅ <<<<<<<<<<<<<<
-# > 小红书
+DOMAIN, ads-img-qc.xhscdn.com, REJECT
+DOMAIN, ads-video-al.xhscdn.com, REJECT
+DOMAIN, ads-video-qc.xhscdn.com, REJECT
+DOMAIN, t-ads.xiaohongshu.com, REJECT
 AND, ((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)), REJECT
 
 
-
-
-
 [Rewrite]
-
-
-
-# > 小红书
-# hostname = edith.xiaohongshu.com, www.xiaohongshu.com, ci.xiaohongshu.com, rec.xiaohongshu.com, so.xiaohongshu.com
 # 惊喜弹窗
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/surprisebox\/(?:get_style|open|submit_action) reject-dict
 ^https?:\/\/www\.xiaohongshu\.com\/api\/marketing\/box\/trigger\? reject-dict
 # 信息流
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/note\/guide\? reject-dict
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/note\/detailfeed\/preload\? reject-dict
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/guide\/user_banner reject-dict
 ^https?:\/\/www\.xiaohongshu\.com\/api\/sns\/(v\d\/ads\/resource|v\d\/hey\/\w+\/hey_gallery) reject-dict
 # 评论区图片水印
 ^https?:\/\/ci\.xiaohongshu\.com\/system_config\/watermark reject-img
 
 
-
-
-
-# =====================================
-# 脚本
-# =====================================
 [Script]
 
 
