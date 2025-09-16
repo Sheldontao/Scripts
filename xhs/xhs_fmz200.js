@@ -127,6 +127,7 @@ if (url.includes("/search/trending?")) {
 
 if (url.includes("/search/notes?")) {
   // 搜索结果
+  console.log("Arguments received for search: " + JSON.stringify($argument)); // <--- 我建议增加这一行
   if (obj.data.items?.length > 0) {
     obj.data.items = obj.data.items.filter((i) => i.model_type === "note");
 
