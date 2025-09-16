@@ -12,6 +12,7 @@ if (!rsp_body) {
   $done({});
 }
 let obj = JSON.parse(rsp_body);
+console.log(`[INFO] Processing URL: ${url}`); // <--- 我建议增加这一行
 
 const getCachedRegexes = (key, argValue) => {
   let cachedRegexStrs = $.getdata(key);
