@@ -1,7 +1,7 @@
 /**
  * @author fmz200
  * @function 小红书去广告、净化、解除下载限制、画质增强等
- * @date 2025-09-09 20:10:00
+ * @date 2025-09-10 11:27:00
  * @quote @RuCu6
  */
 
@@ -12,6 +12,7 @@ if (!rsp_body) {
   $done({});
 }
 let obj = JSON.parse(rsp_body);
+console.log(`[INFO] Processing URL: ${url}`); // <--- 我建议增加这一行
 
 const getCachedRegexes = (key, argValue) => {
   let cachedRegexStrs = $.getdata(key);
@@ -127,14 +128,14 @@ if (url.includes("/search/trending?")) {
 
 if (url.includes("/search/notes?")) {
   // 搜索结果
-  //console.log("Arguments received for search: " + JSON.stringify($argument)); // <--- 我建议增加这一行
+  console.log("Arguments received for search: " + JSON.stringify($argument)); // <--- 我建议增加这一行
   if (obj.data.items?.length > 0) {
     obj.data.items = obj.data.items.filter((i) => i.model_type === "note");
 
     const searchDesRegexes = getCachedRegexes("fmz200.xhs_search_des_regex_cache", $argument.xhs_search_des_regex);
-    //console.log(`Loaded searchDesRegexes: ${JSON.stringify(searchDesRegexes.map(r => r.source))}`);
+    console.log(`Loaded searchDesRegexes: ${JSON.stringify(searchDesRegexes.map(r => r.source))}`);
     const searchUserRegexes = getCachedRegexes("fmz200.xhs_search_nickname_regex_cache", $argument.xhs_search_nickname_regex);
-    //console.log(`Loaded searchUserRegexes: ${JSON.stringify(searchUserRegexes.map(r => r.source))}`);
+    console.log(`Loaded searchUserRegexes: ${JSON.stringify(searchUserRegexes.map(r => r.source))}`);
 
     obj.data.items = obj.data.items.filter(item => {
       // Apply description regex filters
