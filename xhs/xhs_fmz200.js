@@ -126,7 +126,7 @@ if (url.includes("/search/trending?")) {
   obj.data.hint_word = {};
 }
 
-if (url.includes("/search/notes")) {
+if (url.includes("/search/notes?")) {
   // 搜索结果
   console.log("Arguments received for search: " + JSON.stringify($argument)); // <--- 我建议增加这一行
   if (obj.data.items?.length > 0) {
