@@ -543,7 +543,7 @@
         "all-auto",
         "Iepl"
       ],
-      "default": "proxy"
+      "default": "Iepl"
     },
     {
       "tag": "cn",
@@ -588,6 +588,16 @@
       "default": "proxy"
     },
     {
+      "tag": "Iepl",
+      "type": "selector",
+      "outbounds":[]
+    },
+    {
+      "tag": "all",
+      "type": "selector",
+      "outbounds": []
+    },
+    {
       "tag": "hk",
       "type": "selector",
       "outbounds": []
@@ -609,11 +619,6 @@
     },
     {
       "tag": "us",
-      "type": "selector",
-      "outbounds": []
-    },
-    {
-      "tag": "all",
       "type": "selector",
       "outbounds": []
     },
@@ -684,7 +689,7 @@
         "all",
         "all-auto"
       ],
-      "default": "direct"
+      "default": "proxy"
     },
     {
       "tag": "direct",
