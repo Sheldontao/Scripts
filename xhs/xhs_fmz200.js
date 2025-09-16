@@ -135,22 +135,22 @@ if (url.includes("/search/notes?")) {
 
     obj.data.items = obj.data.items.filter(item => {
       // Apply description regex filters
-      if (searchDesRegexes.length > 0 && item?.desc) {
+      if (searchDesRegexes.length > 0 && item?.note?.desc) {
         for (const regex of searchDesRegexes) {
-          if (regex.test(item.desc)) {
+          if (regex.test(item.note.desc)) {
             console.log(`Filtered out search item with desc matching regex (Matched by: ${regex.source}): 
-${item.desc}`);
+${item.note.desc}`);
             return false;
           }
         }
       }
 
       // Apply nickname regex filters
-      if (searchUserRegexes.length > 0 && item?.user?.nickname) {
+      if (searchUserRegexes.length > 0 && item?.note?.user?.nickname) {
         for (const regex of searchUserRegexes) {
-          if (regex.test(item.user.nickname)) {
+          if (regex.test(item.note.user.nickname)) {
             console.log(`Filtered out search item with nickname matching regex (Matched by: ${regex.source}): 
-${item.user.nickname}`);
+${item.note.user.nickname}`);
             return false;
           }
         }
