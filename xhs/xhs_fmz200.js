@@ -1,7 +1,7 @@
 /**
- * @author fmz200, leo(tweak)
+ * @author fmz200
  * @function 小红书去广告、净化、解除下载限制、画质增强等
- * @date 2025-09-09 20:10:00；2025-09-10 11:27:00(tweak)
+ * @date 2025-09-09 20:10:00
  * @quote @RuCu6
  */
 
