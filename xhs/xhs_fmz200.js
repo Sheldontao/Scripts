@@ -131,7 +131,9 @@ if (url.includes("/search/notes?")) {
     obj.data.items = obj.data.items.filter((i) => i.model_type === "note");
 
     const searchDesRegexes = getCachedRegexes("fmz200.xhs_search_des_regex_cache", $argument.xhs_search_des_regex);
+    console.log(`Loaded searchDesRegexes: ${JSON.stringify(searchDesRegexes.map(r => r.source))}`);
     const searchUserRegexes = getCachedRegexes("fmz200.xhs_search_nickname_regex_cache", $argument.xhs_search_nickname_regex);
+    console.log(`Loaded searchUserRegexes: ${JSON.stringify(searchUserRegexes.map(r => r.source))}`);
 
     obj.data.items = obj.data.items.filter(item => {
       // Apply description regex filters
