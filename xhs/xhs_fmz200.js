@@ -13,6 +13,98 @@ if (!rsp_body) {
 }
 let obj = JSON.parse(rsp_body);
 
+const getCachedRegexes = (key, argValue) => {
+  let cachedRegexStrs = $.getdata(key);
+  let sourceRegexStrs = "[]";
+  let logSource = "empty";
+
+  if (argValue) {
+    // Argument is present
+    if (argValue !== cachedRegexStrs) {
+      console.log(`Argument for ${key} differs from cache. Updating cache.`);
+      try {
+        $.setdata(argValue, key);
+        logSource = "argument (updated cache)";
+      } catch (e) {
+        console.error(`Error caching regexes for ${key}: ${e}`);
+        logSource = "argument (cache update failed)";
+      }
+    } else {
+      logSource = "argument (same as cache)";
+    }
+    sourceRegexStrs = argValue;
+  } else if (cachedRegexStrs) {
+    // Argument is not present, use cache
+    logSource = "cache";
+    sourceRegexStrs = cachedRegexStrs;
+  } else {
+    // Neither argument nor cache has value
+    logSource = "empty";
+  }
+
+  console.log(`Using regexes for ${key} from: ${logSource}`);
+
+  const regexes = [];
+  try {
+    const parsedRegexStrs = JSON.parse(sourceRegexStrs);
+    if (Array.isArray(parsedRegexStrs)) {
+      for (const str of parsedRegexStrs) {
+        try {
+          regexes.push(new RegExp(str));
+          // Removed the "Added regex filter" log here to reduce verbosity
+        } catch (e) {
+          console.error(`Invalid regex provided: ${str}, Error: ${e}`);
+        }
+      }
+    }
+  } catch (e) {
+    console.error(`Error parsing regex strings for ${key}: ${e}`);
+  }
+  return regexes;
+};
+
+const getCachedCountsThreshold = (key, argValue) => {
+  let cachedCountsStr = $.getdata(key);
+  let sourceCounts = "[]";
+  let logSource = "empty";
+
+  if (argValue) {
+    if (argValue !== cachedCountsStr) {
+      console.log(`Argument for ${key} differs from cache. Updating cache.`);
+      try {
+        $.setdata(argValue, key);
+        logSource = "argument (updated cache)";
+      } catch (e) {
+        console.error(`Error caching counts threshold for ${key}: ${e}`);
+        logSource = "argument (cache update failed)";
+      }
+    } else {
+      logSource = "argument (same as cache)";
+    }
+    sourceCounts = argValue;
+  } else if (cachedCountsStr) {
+    logSource = "cache";
+    sourceCounts = cachedCountsStr;
+  } else {
+    logSource = "empty";
+  }
+
+  console.log(`Using counts threshold for ${key} from: ${logSource}`);
+
+  const counts = [];
+    try {
+      const parsedCounts = JSON.parse(sourceCounts);
+      if (Array.isArray(parsedCounts) && parsedCounts.every(num => typeof num === 'number')) {
+        counts.push(...parsedCounts);
+      } else {
+        console.error(`Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`);
+      }
+    } catch (e) {
+      console.error(`Error parsing counts threshold string for ${key}: ${e}`);
+    }
+  return counts;
+};
+
 if (url.includes("/search/banner_list")) {
   obj.data = {};
 }
@@ -37,6 +129,34 @@ if (url.includes("/search/notes?")) {
   // 搜索结果
   if (obj.data.items?.length > 0) {
     obj.data.items = obj.data.items.filter((i) => i.model_type === "note");
+
+    const searchDesRegexes = getCachedRegexes("fmz200.xhs_search_des_regex_cache", $argument.xhs_search_des_regex);
+    const searchUserRegexes = getCachedRegexes("fmz200.xhs_search_nickname_regex_cache", $argument.xhs_search_nickname_regex);
+
+    obj.data.items = obj.data.items.filter(item => {
+      // Apply description regex filters
+      if (searchDesRegexes.length > 0 && item?.desc) {
+        for (const regex of searchDesRegexes) {
+          if (regex.test(item.desc)) {
+            console.log(`Filtered out search item with desc matching regex (Matched by: ${regex.source}): 
+${item.desc}`);
+            return false;
+          }
+        }
+      }
+
+      // Apply nickname regex filters
+      if (searchUserRegexes.length > 0 && item?.user?.nickname) {
+        for (const regex of searchUserRegexes) {
+          if (regex.test(item.user.nickname)) {
+            console.log(`Filtered out search item with nickname matching regex (Matched by: ${regex.source}): 
+${item.user.nickname}`);
+            return false;
+          }
+        }
+      }
+      return true;
+    });
   }
 }
 
@@ -251,101 +371,10 @@ if (url.includes("/recommend/user/follow_recommend")) {
 if (url.includes("/v6/homefeed")) {
   if (obj?.data?.length > 0) {
     // 信息流广告
-    let newItems = [];
-    const getCachedRegexes = (key, argValue) => {
-      let cachedRegexStrs = $.getdata(key);
-      let sourceRegexStrs = "[]";
-      let logSource = "empty";
-
-      if (argValue) {
-        // Argument is present
-        if (argValue !== cachedRegexStrs) {
-          console.log(`Argument for ${key} differs from cache. Updating cache.`);
-          try {
-            $.setdata(argValue, key);
-            logSource = "argument (updated cache)";
-          } catch (e) {
-            console.error(`Error caching regexes for ${key}: ${e}`);
-            logSource = "argument (cache update failed)";
-          }
-        } else {
-          logSource = "argument (same as cache)";
-        }
-        sourceRegexStrs = argValue;
-      } else if (cachedRegexStrs) {
-        // Argument is not present, use cache
-        logSource = "cache";
-        sourceRegexStrs = cachedRegexStrs;
-      } else {
-        // Neither argument nor cache has value
-        logSource = "empty";
-      }
-
-      console.log(`Using regexes for ${key} from: ${logSource}`);
-
-      const regexes = [];
-      try {
-        const parsedRegexStrs = JSON.parse(sourceRegexStrs);
-        if (Array.isArray(parsedRegexStrs)) {
-          for (const str of parsedRegexStrs) {
-            try {
-              regexes.push(new RegExp(str));
-              // Removed the "Added regex filter" log here to reduce verbosity
-            } catch (e) {
-              console.error(`Invalid regex provided: ${str}, Error: ${e}`);
-            }
-          }
-        }
-      } catch (e) {
-        console.error(`Error parsing regex strings for ${key}: ${e}`);
-      }
-      return regexes;
-    };
-
+    //let newItems = [];
+    
     const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
     const nicknameRegexes = getCachedRegexes("fmz200.xhs_nickname_regex_cache", $argument.xhs_nickname_regex);
-
-    const getCachedCountsThreshold = (key, argValue) => {
-      let cachedCountsStr = $.getdata(key);
-      let sourceCounts = "[]";
-      let logSource = "empty";
-
-      if (argValue) {
-        if (argValue !== cachedCountsStr) {
-          console.log(`Argument for ${key} differs from cache. Updating cache.`);
-          try {
-            $.setdata(argValue, key);
-            logSource = "argument (updated cache)";
-          } catch (e) {
-            console.error(`Error caching counts threshold for ${key}: ${e}`);
-            logSource = "argument (cache update failed)";
-          }
-        } else {
-          logSource = "argument (same as cache)";
-        }
-        sourceCounts = argValue;
-      } else if (cachedCountsStr) {
-        logSource = "cache";
-        sourceCounts = cachedCountsStr;
-      } else {
-        logSource = "empty";
-      }
-
-      console.log(`Using counts threshold for ${key} from: ${logSource}`);
-
-      const counts = [];
-        try {
-          const parsedCounts = JSON.parse(sourceCounts);
-          if (Array.isArray(parsedCounts) && parsedCounts.every(num => typeof num === 'number')) {
-            counts.push(...parsedCounts);
-          } else {
-            console.error(`Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`);
-          }
-        } catch (e) {
-          console.error(`Error parsing counts threshold string for ${key}: ${e}`);
-        }
-      return counts;
-    };
 
     const countsThreshold = getCachedCountsThreshold("fmz200.xhs_counts_threshold_cache", $argument.xhs_counts_threshold);
 

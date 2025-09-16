@@ -33,9 +33,11 @@
 
 [Argument]
 xnhsuu_enable = switch,true,false,tag=小红书-脚本开关
-xhs_des_regex = input,"["峰哥", "恋爱", "雪茄", "新闻", "manus", "揽佬", "红十字", "胡锡进"]",tag=小红书_des_regex
-xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=小红书_nickname_regex
-xhs_counts_threshold = input, "[0,10,10,0,0]", tag=小红书_counts_threshold_点赞最低/收藏/评论/分享/好
+xhs_des_regex = input,"["峰哥", "恋爱", "雪茄", "新闻", "manus", "揽佬", "红十字", "胡锡进"]",tag=xhs_des_regex
+xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=xhs_nickname_regex
+xhs_counts_threshold = input, "[0,10,10,0,0]", tag=xhs_counts_threshold_点赞最低/收藏/评论/分享/好
+xhs_search_des_regex = input, "["填写一个正则表达式"]",tag=xhs_search_des_regex
+xhs_search_nickname_regex = input, "["中介"]", tag=xhs_search_nickname_regex
 
 [Rule]
 DOMAIN, ads-img-qc.xhscdn.com, REJECT
@@ -65,7 +67,7 @@ AND, ((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)), REJECT
 # 搜索页
 http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/search\/(banner|hot)_list script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, timeout=60, tag=小红书搜索页, enable={xnhsuu_enable}
 http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/search\/(hint|trending)\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, timeout=60, tag=小红书搜索页, enable={xnhsuu_enable}
-http-response ^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d\/search\/notes\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, timeout=60, tag=小红书搜索页, enable={xnhsuu_enable}
+http-response ^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d\/search\/notes\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, timeout=60, tag=小红书搜索页, enable={xnhsuu_enable}, argument = [{xhs_search_des_regex},{xhs_search_nickname_regex}]
 # 开屏广告
 http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/system_service\/config\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, timeout=60, tag=小红书开屏广告, enable={xnhsuu_enable}
 http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/system_service\/splash_config script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, timeout=60, tag=小红书开屏广告, enable={xnhsuu_enable}
