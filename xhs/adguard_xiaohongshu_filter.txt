@@ -1,57 +1,88 @@
 ! Title: 小红书去广告及去水印规则 for AdGuard
-! Description: 参照多款插件及脚本规则，旨在去除小红书的图片/视频水印、信息流广告、开屏广告，并解除下载限制。
+! Description: 忠实转换自多款插件脚本，旨在完整覆盖小红书的图片/视频水印、信息流广告、开屏广告，并解除下载限制。
 ! Author: Gemini & contributors
-! Version: 1.1
+! Version: 1.2
 ! Last Updated: 2025-09-17
 
 !----------------------------------------------------------------
-! 1. 解除下载限制 (Unlock Download/Sharing)
+! 规则区块 1: 笔记详情页 (Note Detail Page)
+! 目标路径: /api/sns/v*/note/*
+! 目标域名: edith.xiaohongshu.com, www.xiaohongshu.com, rec.xiaohongshu.com
 !----------------------------------------------------------------
-! 将 "unshareable":true 修改为 "unshareable":false，允许保存和分享笔记。
+! 解除笔记分享/下载限制
 ||edith.xiaohongshu.com/api/sns/v*/note/$replace=/("unshareable":\s*)true/$1false/g,important
+||www.xiaohongshu.com/api/sns/v*/note/$replace=/("unshareable":\s*)true/$1false/g,important
+||rec.xiaohongshu.com/api/sns/v*/note/$replace=/("unshareable":\s*)true/$1false/g,important
+
+! 移除视频水印
+edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('trusted-replace-fetch-response', '"video_watermark":"[^"]*"', '"video_watermark":""', '/api/sns/v\d+/note/')
+! 移除图片水印
+edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('trusted-replace-fetch-response', '"watermark":"[^"]*"', '"watermark":""', '/api/sns/v\d+/note/')
+! 移除评论区水印
+edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('trusted-replace-fetch-response', '"watermark":"[^"]*"', '"watermark":""', '/api/sns/v\d+/note/comment/')
 
 !----------------------------------------------------------------
-! 2. 去除水印 (Remove Watermarks)
+! 规则区块 2: 信息流 (Home & Follow Feeds)
+! 目标路径: /api/sns/v*/homefeed, /api/sns/v*/followfeed
+! 目标域名: edith.xiaohongshu.com, www.xiaohongshu.com, rec.xiaohongshu.com
 !----------------------------------------------------------------
-! 笔记详情页 - 视频水印
-edith.xiaohongshu.com#%#//scriptlet('trusted-replace-fetch-response', '"video_watermark":"[^"]*"', '"video_watermark":""', '/api/sns/v*/note/')
-! 笔记详情页 - 图片水印 (包括单图和图集)
-edith.xiaohongshu.com#%#//scriptlet('trusted-replace-fetch-response', '"watermark":"[^"]*"', '"watermark":""', '/api/sns/v*/note/')
-! 评论区图片水印
-edith.xiaohongshu.com#%#//scriptlet('trusted-replace-fetch-response', '"watermark":"[^"]*"', '"watermark":""', '/api/sns/v*/note/comment/')
+! 按描述过滤信息流内容
+edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('json-prune', 'data.items', 'desc', '/峰哥|恋爱|雪茄|新闻|manus|揽佬|红十字|胡锡进/', '/api/sns/v\d+/(homefeed|followfeed)/')
+! 按用户名过滤信息流内容
+edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('json-prune', 'data.items', 'user.nickname', '/新闻|红十字|日报|晚报|电影|剪辑|影视|峰哥|主播|广播|视频|老兵|ai|AI|新华|区块链/', '/api/sns/v\d+/(homefeed|followfeed)/')
+
+!----------------------------------------------------------------
+! 规则区块 3: 搜索页 (Search Page)
+! 目标路径: /api/sns/v*/search/*
+! 目标域名: edith.xiaohongshu.com, so.xiaohongshu.com
+!----------------------------------------------------------------
+! 移除搜索页横幅广告
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.banner_list', '', '/api/sns/v\d+/search/')
+! 移除搜索页热搜榜广告
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hot_list.*.ads', '', '/api/sns/v\d+/search/')
+! 移除搜索页提示广告
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hint.*.ads', '', '/api/sns/v\d+/search/')
+! 移除搜索页趋势广告
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.trending.*.ads', '', '/api/sns/v\d+/search/')
+! 按描述过滤搜索结果
+edith.xiaohongshu.com,so.xiaohongshu.com#%#//scriptlet('json-prune', 'data.items', 'desc', '/中介|看房|探访|好房|租房/', '/api/sns/v\d+/search/')
+
+!----------------------------------------------------------------
+! 规则区块 4: 全局性广告与配置 (Global Ads & Configs)
+!----------------------------------------------------------------
+! 移除开屏广告
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.splash_config')
+! 移除系统配置中的广告
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.system_config.ads')
+! 移除详情页小部件广告
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.widgets.*.ads')
 ! 拦截静态水印配置请求
 ||ci.xiaohongshu.com/system_config/watermark^$image,important
 
 !----------------------------------------------------------------
-! 3. 广告拦截 (Ad Blocking)
+! 规则区块 5: 广告与追踪域名拦截 (Ad & Tracking Domains)
 !----------------------------------------------------------------
-! ----- 3.1 API (JSON) 级别广告 -----
-! 开屏广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.splash_config')
-! 系统配置中的广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.system_config.ads')
-! 搜索页 - 顶部横幅
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.banner_list')
-! 搜索页 - 热搜榜广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hot_list.*.ads')
-! 搜索页 - 提示广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hint.*.ads')
-! 搜索页 - 趋势广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.trending.*.ads')
-! 详情页小部件广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.widgets.*.ads')
-
-! ----- 3.2 域名级别广告 -----
+! 广告域名
 ||ads-img-qc.xhscdn.com^
 ||ads-video-al.xhscdn.com^
 ||ads-video-qc.xhscdn.com^
 ||t-ads.xiaohongshu.com^
+! 追踪域名
+||apm-native.xiaohongshu.com^
+||apm-fe.xiaohongshu.com^
+||apm-track.xiaohongshu.com^
+||edith-seb.xiaohongshu.com^
+! 追踪 Cookie
+||xiaohongshu.com^$cookie=xhsTrackerId,important
+||xiaohongshu.com^$cookie=xhsTrackerId.sig,important
 
-! ----- 3.3 URL 级别广告/干扰 -----
+!----------------------------------------------------------------
+! 规则区块 6: 其他 URL 拦截 (Misc URL Blocking)
+!----------------------------------------------------------------
 ! 惊喜弹窗
 ||edith.xiaohongshu.com/api/sns/v1/surprisebox/*^
 ||www.xiaohongshu.com/api/marketing/box/trigger^
-! 信息流广告相关API
+! 信息流广告相关
 ||edith.xiaohongshu.com/api/sns/v*/note/guide^
 ||edith.xiaohongshu.com/api/sns/v*/note/detailfeed/preload^
 ||edith.xiaohongshu.com/api/sns/v*/guide/user_banner^
@@ -59,30 +90,7 @@ edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.widgets.*.ads')
 ||www.xiaohongshu.com/api/sns/v*/hey/*/hey_gallery^
 
 !----------------------------------------------------------------
-! 4. 内容过滤 (Content Filtering)
-!----------------------------------------------------------------
-! 首页及关注页信息流内容过滤 (根据描述)
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.items', 'desc', '/峰哥|恋爱|雪茄|新闻|manus|揽佬|红十字|胡锡进/')
-! 首页及关注页信息流内容过滤 (根据用户名)
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.items', 'user.nickname', '/新闻|红十字|日报|晚报|电影|剪辑|影视|峰哥|主播|广播|视频|老兵|ai|AI|新华|区块链/')
-! 搜索结果内容过滤 (根据描述)
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.items', 'desc', '/中介|看房|探访|好房|租房/')
-so.xiaohongshu.com#%#//scriptlet('json-prune', 'data.items', 'desc', '/中介|看房|探访|好房|租房/')
-
-!----------------------------------------------------------------
-! 5. 追踪与隐私 (Tracking & Privacy)
-!----------------------------------------------------------------
-! 拦截追踪 Cookie
-||xiaohongshu.com^$cookie=xhsTrackerId,important
-||xiaohongshu.com^$cookie=xhsTrackerId.sig,important
-! 拦截移动端追踪域名
-||apm-native.xiaohongshu.com^
-||apm-fe.xiaohongshu.com^
-||apm-track.xiaohongshu.com^
-||edith-seb.xiaohongshu.com^
-
-!----------------------------------------------------------------
-! 6. 页面元素隐藏 (CSS Hiding Rules)
+! 规则区块 7: 页面元素隐藏 (CSS Hiding Rules)
 !----------------------------------------------------------------
 ! 隐藏网页版"打开APP"按钮/横幅
 xiaohongshu.com##.open-app-btn
