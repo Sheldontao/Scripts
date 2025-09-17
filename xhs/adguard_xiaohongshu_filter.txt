@@ -45,7 +45,7 @@ edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hint.*.ads', '', '/api/s
 ! 移除搜索页趋势广告
 edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.trending.*.ads', '', '/api/sns/v\d+/search/')
 ! 按描述过滤搜索结果
-edith.xiaohongshu.com,so.xiaohongshu.com,www.xiaohongshu.com#%#//scriptlet('json-prune', '$.data.items', 'note_card.display_title', '/中介|看房|探访|好房|租房/', '/api/sns/web/v\d+/search/notes/')
+edith.xiaohongshu.com,so.xiaohongshu.com,www.xiaohongshu.com#%#//scriptlet('json-prune', '$.data.items', 'note_card.display_title', '/中介|看房|探房|好房|租房/', '/api/sns/web/v\d+/search/notes/')
 
 !----------------------------------------------------------------
 ! 规则区块 4: 全局性广告与配置 (Global Ads & Configs)
