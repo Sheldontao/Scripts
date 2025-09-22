@@ -100,24 +100,14 @@
         "mode": "or",
         "rules": [
           {
-            "protocol": "quic"
-          },
-          {
-            "protocol": "stun"
-          }
-        ],
-        "action": "reject"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
             "port": 853
           },
           {
             "network": "udp",
             "port": 443
+          },
+          {
+            "protocol": "quic"
           },
           {
             "protocol": "stun"
