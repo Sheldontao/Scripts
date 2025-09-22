@@ -35,13 +35,17 @@
       {
         "clash_mode": "Direct",
         "action": "route",
-        "server": "dns_direct",
-        "strategy":"ipv4_only"
+        "server": "dns_direct"
       },
       {
         "clash_mode": "Global",
         "action": "route",
         "server": "dns_proxy"
+      },
+      {
+        "rule_set": "cn_domain",
+        "action": "route",
+        "server": "dns_direct"
       },
       {
         "type": "logical",
@@ -55,16 +59,12 @@
             "rule_set": "cn_ip"
           }
         ],
-        "server": "dns_proxy"
+        "server": "dns_proxy",
+        "client_subnet": "222.17.11.0/24"
       },
       {
         "query_type": "HTTPS",
         "action": "reject"
-      },
-      {
-        "rule_set": "cn_domain",
-        "action": "route",
-        "server": "dns_direct"
       },
       {
         "query_type": [
@@ -100,6 +100,36 @@
         "mode": "or",
         "rules": [
           {
+            "protocol": "quic"
+          },
+          {
+            "protocol": "stun"
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 853
+          },
+          {
+            "network": "udp",
+            "port": 443
+          },
+          {
+            "protocol": "stun"
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
             "protocol": "dns"
           },
           {
@@ -109,12 +139,12 @@
         "action": "hijack-dns"
       },
       {
+        "action": "resolve"
+      },
+      {
         "ip_is_private": true,
         "action": "route",
         "outbound": "direct"
-      },
-      {
-        "action": "resolve"
       },
       {
         "clash_mode": "Global",
@@ -125,19 +155,6 @@
         "clash_mode": "Direct",
         "action": "route",
         "outbound": "direct"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "protocol": "quic"
-          },
-          {
-            "protocol": "stun"
-          }
-        ],
-        "action": "reject"
       },
       {
         "protocol": "bittorrent",
