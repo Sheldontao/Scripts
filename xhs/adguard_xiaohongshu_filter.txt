@@ -23,29 +23,31 @@ edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('tru
 
 !----------------------------------------------------------------
 ! 规则区块 2: 信息流 (Home & Follow Feeds)
-! 目标路径: /api/sns/v*/homefeed, /api/sns/v*/followfeed
+! 目标路径: 
 ! 目标域名: edith.xiaohongshu.com, www.xiaohongshu.com, rec.xiaohongshu.com
 !----------------------------------------------------------------
 ! 按描述过滤信息流内容
-edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('json-prune', '$.feed.feeds', 'noteCard.displayTitle', '/峰哥|恋爱|雪茄|新闻|manus|揽佬|红十字|胡锡进|(京东|淘宝).*白嫖|(张维为|陈平|维维).*不满|(美|中)国.*远超|(美国|乌克兰).*侵略|(日|韩)不.*幸福|(张.*)?菜刀|(果|苹果).*(华为|小米|国产)+|(李承铉.*戚薇|黄仁勋.*中国)|(儿童|教材).*(插图|毒)|(男士|男生).*(沐浴露|香水|洗发水)|(拼多多|PDD).*(砍价|卸载)|(影视|约会|追剧|短剧).*app|(白象|鸿星尔克|蜜雪冰城).*(方便面|泡面|国货|捐款)|(中国|我国).*(第二|断代|足球|男足)|(国家|官方).*(传承|统计|我|我们)|(大专|专科).*(诺贝尔|科学家)|(虎爸|猫妈).*拳?|(钻石|钻戒).*(智商|骗局)|(牛排|西餐).*八分熟|(易烊千玺|四字).*(特权|小镇)|(鸿蒙|HarmonyOS).*(安卓|套壳)|(中医|中药).*(黑|无效)|(反诈|防诈).*(老陈|app)|(全网|爆火).*(大火|盲盒)|郑州.*烧烤|磁器口.*星巴克|^当.*你身边.*其实|如果.*(我.*我会|攻打台湾)|算了.*说不清楚|(QQ|qq|网易云)音乐|(优酷|腾讯视频|爱奇艺)|(华为|鸿蒙|问界|余承东)|(米哈游|原神)|(特斯拉|马斯克)|(百度|Gitee|WPS|京东方|龙芯)|(格力|茅台|五菱|李宁|好丽友|可口可乐|香奈儿|钟薛高)|(新东方|东方甄选)|(懂车帝|汽车之家)|(美团|丰巢|绝味|巴奴|古茗|喜茶)|(人民|光明)日报|环球时报|央视|(清华|港大|武大|同济|哈佛)|(红十字|壹基金)|(塔利班|瓦格纳)|融创|(丁真|甜野男孩|玺子哥)|(嘎子|潘长江|谢孟伟)|(谷爱凌|苏炳添|孙杨|科比|库里|乔丹|梅西)|(胡锡进|金灿荣|艾跃进|波士顿圆脸)|(户晨风|峰哥)|(李佳琦|所有女生|李子柒|罗翔|乌合麒麟)|(刘畊宏|王冰冰|董宇辉)|(张文宏|钟南山|李兰娟)|(姚安娜|王思聪|章泽天|万柳书院)|(杨笠|脱口秀)|(张艺谋|宫崎骏|吴京|周杰伦|刘德华|彭于晏)|(赵丽颖|朱一龙|鹿晗|肖战|鞠婧祎|欧阳娜娜|刘亦菲|景甜)|(韦东奕|施一公|杨振宁)|(陈平|张维为|维维)|(劳荣枝|曲婉婷|霍尊|李云迪|王力宏)|(斗破苍穹|斗罗大陆)|(三体|流浪地球)|(博人传|柯南|灌篮高手|姜子牙|花木兰|夏洛特烦恼)|(魔兽|WOW)|忠犬八公|独行月球|(台湾省|湾湾|钓鱼岛)|(缅甸|缅北|加沙)|(靖国神社|德特里克)|(韩国|印度)|(内卷|卷王|躺平|摆烂|润)|(小镇做题家|寒门贵子|穷孩子)|(彩礼|买房|租房|招聘|社保|福利|升学|专升本)|(健康码|核酸|疫情|方舱)|(网红|主播|猎头|电话销售)|(正能量|爱国者|盛世|国耻|崇洋媚外|排华)|(盲盒|平替|氛围感|松弛感|泼天的富贵)|(科技与狠活|九转大肠|鸡你太美|浇给|很润)|(狼性|PUA|画饼)|(他她|男友|女友|夫妻|师生|家庭)|(仅.*女生|全女|打拳)|就在刚刚/', '/explore\?channel_id=homefeed_recommend/')
+edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('json-prune', '$.feed.feeds', 'noteCard.displayTitle', '/峰哥|恋爱|雪茄|新闻|manus|揽佬|红十字|胡锡进|(京东|淘宝).*白嫖|(张维为|陈平|维维).*不满|(美|中)国.*远超|(美国|乌克兰).*侵略|(日|韩)不.*幸福|(张.*)?菜刀|(果|苹果).*(华为|小米|国产)+|(李承铉.*戚薇|黄仁勋.*中国)|(儿童|教材).*(插图|毒)|(男士|男生).*(沐浴露|香水|洗发水)|(拼多多|PDD).*(砍价|卸载)|(影视|约会|追剧|短剧).*app|(白象|鸿星尔克|蜜雪冰城).*(方便面|泡面|国货|捐款)|(中国|我国).*(第二|断代|足球|男足)|(国家|官方).*(传承|统计|我|我们)|(大专|专科).*(诺贝尔|科学家)|(虎爸|猫妈).*拳?|(钻石|钻戒).*(智商|骗局)|(牛排|西餐).*八分熟|(易烊千玺|四字).*(特权|小镇)|(鸿蒙|HarmonyOS).*(安卓|套壳)|(中医|中药).*(黑|无效)|(反诈|防诈).*(老陈|app)|(全网|爆火).*(大火|盲盒)|郑州.*烧烤|磁器口.*星巴克|^当.*你身边.*其实|如果.*(我.*我会|攻打台湾)|算了.*说不清楚|(QQ|qq|网易云)音乐|(优酷|腾讯视频|爱奇艺)|(华为|鸿蒙|问界|余承东)|(米哈游|原神)|(特斯拉|马斯克)|(百度|Gitee|WPS|京东方|龙芯)|(格力|茅台|五菱|李宁|好丽友|可口可乐|香奈儿|钟薛高)|(新东方|东方甄选)|(懂车帝|汽车之家)|(美团|丰巢|绝味|巴奴|古茗|喜茶)|(人民|光明)日报|环球时报|央视|(清华|港大|武大|同济|哈佛)|(红十字|壹基金)|(塔利班|瓦格纳)|融创|(丁真|甜野男孩|玺子哥)|(嘎子|潘长江|谢孟伟)|(谷爱凌|苏炳添|孙杨|科比|库里|乔丹|梅西)|(胡锡进|金灿荣|艾跃进|波士顿圆脸)|(户晨风|峰哥)|(李佳琦|所有女生|李子柒|罗翔|乌合麒麟)|(刘畊宏|王冰冰|董宇辉)|(张文宏|钟南山|李兰娟)|(姚安娜|王思聪|章泽天|万柳书院)|(杨笠|脱口秀)|(张艺谋|宫崎骏|吴京|周杰伦|刘德华|彭于晏)|(赵丽颖|朱一龙|鹿晗|肖战|鞠婧祎|欧阳娜娜|刘亦菲|景甜)|(韦东奕|施一公|杨振宁)|(陈平|张维为|维维)|(劳荣枝|曲婉婷|霍尊|李云迪|王力宏)|(斗破苍穹|斗罗大陆)|(三体|流浪地球)|(博人传|柯南|灌篮高手|姜子牙|花木兰|夏洛特烦恼)|(魔兽|WOW)|忠犬八公|独行月球|(台湾省|湾湾|钓鱼岛)|(缅甸|缅北|加沙)|(靖国神社|德特里克)|(韩国|印度)|(内卷|卷王|躺平|摆烂|润)|(小镇做题家|寒门贵子|穷孩子)|(彩礼|买房|租房|招聘|社保|福利|升学|专升本)|(健康码|核酸|疫情|方舱)|(网红|主播|猎头|电话销售)|(正能量|爱国者|盛世|国耻|崇洋媚外|排华)|(盲盒|平替|氛围感|松弛感|泼天的富贵)|(科技与狠活|九转大肠|鸡你太美|浇给|很润)|(狼性|PUA|画饼)|(他她|男友|女友|夫妻|师生|家庭)|(仅.*女生|全女|打拳)|就在刚刚/', '/explore\?channel_id=homefeed_recommend($|\?)/')
 ! 按用户名过滤信息流内容
-edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('json-prune', '$.feed.feeds', 'noteCard.user.nickname', '/新闻|红十字|日报|晚报|电影|剪辑|影视|峰哥|主播|广播|视频|老兵|ai|AI|新华|区块链/', '/explore\?channel_id=homefeed_recommend/')
+edith.xiaohongshu.com,www.xiaohongshu.com,rec.xiaohongshu.com#%#//scriptlet('json-prune', '$.feed.feeds', 'noteCard.user.nickname', '/新闻|红十字|日报|晚报|电影|剪辑|影视|峰哥|主播|广播|视频|老兵|ai|AI|新华|区块链/', '/explore\?channel_id=homefeed_recommend($|\?)/')
 
 !----------------------------------------------------------------
 ! 规则区块 3: 搜索页 (Search Page)
-! 目标路径: /api/sns/v*/search/*
+! 目标路径: 
 ! 目标域名: edith.xiaohongshu.com, so.xiaohongshu.com
 !----------------------------------------------------------------
 ! 移除搜索页横幅广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.banner_list', '', '/api/sns/v\d+/search/')
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.banner_list', '', '/api/sns(/web)?/v\d+/search/')
 ! 移除搜索页热搜榜广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hot_list.*.ads', '', '/api/sns/v\d+/search/')
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hot_list.*.ads', '', '/api/sns(/web)?/v\d+/search/')
 ! 移除搜索页提示广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hint.*.ads', '', '/api/sns/v\d+/search/')
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.hint.*.ads', '', '/api/sns(/web)?/v\d+/search/')
 ! 移除搜索页趋势广告
-edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.trending.*.ads', '', '/api/sns/v\d+/search/')
+edith.xiaohongshu.com#%#//scriptlet('json-prune', 'data.trending.*.ads', '', '/api/sns(/web)?/v\d+/search/')
 ! 按描述过滤搜索结果
-edith.xiaohongshu.com,so.xiaohongshu.com,www.xiaohongshu.com#%#//scriptlet('json-prune', '$.data.items', 'note_card.display_title', '/中介|看房|探房|好房|租房/', '/api/sns/web/v\d+/search/notes/')
+edith.xiaohongshu.com,so.xiaohongshu.com,www.xiaohongshu.com#%#//scriptlet('json-prune', '$.data.items', 'note_card.display_title', '/租房中介/', '/api/sns(/web)?/v\d+/search/notes($|\?)/')
+! 按用户名过滤搜索结果
+edith.xiaohongshu.com,so.xiaohongshu.com,www.xiaohongshu.com#%#//scriptlet('json-prune', '$.data.items', 'note_card.user.nickname', '/中介|看房|探房|好房|租房/', '/api/sns(/web)?/v\d+/search/notes($|\?)/')
 
 !----------------------------------------------------------------
 ! 规则区块 4: 全局性广告与配置 (Global Ads & Configs)

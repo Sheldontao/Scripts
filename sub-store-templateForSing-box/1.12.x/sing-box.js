@@ -20,10 +20,10 @@ config.outbounds.map(i => {
     i.outbounds.push(...getTags(proxies))
   }
   if (['hk', 'hk-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /港|hk|hongkong|kong kong|🇭🇰/i))
+    i.outbounds.push(...getTags(proxies, /港|hk|hong.*kong|🇭🇰/i))
   }
   if (['tw', 'tw-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /台|tw|taiwan|🇹🇼/i))
+    i.outbounds.push(...getTags(proxies, /台|tw|tai.*wan|🇹🇼/i))
   }
   if (['jp', 'jp-auto'].includes(i.tag)) {
     i.outbounds.push(...getTags(proxies, /日本|jp|japan|🇯🇵/i))
@@ -35,7 +35,7 @@ config.outbounds.map(i => {
     i.outbounds.push(...getTags(proxies, /美|us|unitedstates|united states|🇺🇸/i))
   }
   if (['Iepl'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /Iepl|iepl/i))
+    i.outbounds.push(...getTags(proxies, /iplc|iepl/i))
 }})
 
 config.outbounds.forEach(outbound => {
