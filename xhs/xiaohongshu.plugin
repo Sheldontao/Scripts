@@ -36,7 +36,7 @@ xhs_des_regex = input,"["峰哥", "恋爱", "雪茄", "新闻", "manus", "揽佬
 xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=xhs_nickname_regex
 xhs_counts_threshold = input, "[0,10,10,0,0]", tag=xhs_counts_threshold_点赞最低/收藏/评论/分享/好
 xhs_search_des_regex = input, "["一个正则表达式",""]",tag=xhs_search_des_regex
-xhs_search_nickname_regex = input, "["(中介|管家|公寓|住宿|房东直租|房.*产|(看|租|好|探|寻|找)房)"]",tag=xhs_search_nickname_regex
+xhs_search_nickname_regex = input, "["中介","看房","租房","好房","探房","管家","房东直租","公寓","房.*产","住宿","寻房","找房"]",tag=xhs_search_nickname_regex
 
 [Rule]
 DOMAIN, ads-img-qc.xhscdn.com, REJECT
