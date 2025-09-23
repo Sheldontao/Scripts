@@ -121,14 +121,6 @@
         "action": "reject"
       },
       {
-        "action": "resolve"
-      },
-      {
-        "ip_is_private": true,
-        "action": "route",
-        "outbound": "direct"
-      },
-      {
         "type": "logical",
         "mode": "or",
         "rules": [
@@ -140,6 +132,14 @@
           }
         ],
         "action": "hijack-dns"
+      },
+      {
+        "action": "resolve"
+      },
+      {
+        "ip_is_private": true,
+        "action": "route",
+        "outbound": "direct"
       },
       {
         "clash_mode": "Global",
