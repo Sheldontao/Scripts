@@ -43,6 +43,11 @@
         "server": "dns_proxy"
       },
       {
+        "rule_set": ["ads"],  
+        "action": "predefined",  
+        "rcode": "NXDOMAIN"  
+      },
+      {
         "rule_set": "cn_domain",
         "action": "route",
         "server": "dns_direct"
@@ -116,6 +121,14 @@
         "action": "reject"
       },
       {
+        "action": "resolve"
+      },
+      {
+        "ip_is_private": true,
+        "action": "route",
+        "outbound": "direct"
+      },
+      {
         "type": "logical",
         "mode": "or",
         "rules": [
@@ -127,14 +140,6 @@
           }
         ],
         "action": "hijack-dns"
-      },
-      {
-        "action": "resolve"
-      },
-      {
-        "ip_is_private": true,
-        "action": "route",
-        "outbound": "direct"
       },
       {
         "clash_mode": "Global",
@@ -251,6 +256,13 @@
       }
     ],
     "rule_set": [
+      {
+        "tag": "ads",
+        "type": "remote",
+        "format": "source",
+        "url": "https://ruleset.skk.moe/sing-box/ip/reject.json",
+        "download_detour": "direct"
+      },
       {
         "tag": "apple_ip",
         "type": "remote",

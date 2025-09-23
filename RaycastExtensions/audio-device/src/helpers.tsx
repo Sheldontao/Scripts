@@ -113,7 +113,7 @@ export function DeviceList({ type, deviceId, deviceName }: DeviceListProps) {
       )}
       {data &&
         data.devices
-          .filter((d) => !hiddenDevices.includes(d.uid))
+          .filter((d) => !(hiddenDevices || []).includes(d.uid))
           .map((d) => {
             const isCurrent = d.uid === data.current.uid;
             return (
@@ -134,7 +134,7 @@ export function DeviceList({ type, deviceId, deviceName }: DeviceListProps) {
       {showHidden && data && (
         <List.Section title="Hidden Devices">
           {data.devices
-            .filter((d) => hiddenDevices.includes(d.uid))
+            .filter((d) => (hiddenDevices || []).includes(d.uid))
             .map((d) => (
               <List.Item
                 key={d.uid}
@@ -294,7 +294,7 @@ async function toggleDeviceVisibility(deviceId: string) {
   await LocalStorage.setItem("hiddenDevices", JSON.stringify(hiddenDevices));
 }
 
-async function getHiddenDevices() {
+async function getHiddenDevices(): Promise<string[]> {
   return JSON.parse((await LocalStorage.getItem("hiddenDevices")) || "[]");
 }
 
