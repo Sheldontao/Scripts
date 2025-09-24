@@ -134,9 +134,6 @@
         "action": "hijack-dns"
       },
       {
-        "action": "resolve"
-      },
-      {
         "ip_is_private": true,
         "action": "route",
         "outbound": "direct"
@@ -159,14 +156,6 @@
         "rule_set": "bilibili_domain",
         "action": "route",
         "outbound": "bilibili"
-      },
-      {
-        "rule_set": [
-          "netflix_ip",
-          "netflix_domain"
-        ],
-        "action": "route",
-        "outbound": "netflix"
       },
       {
         "rule_set": "bahamut_domain",
@@ -205,6 +194,35 @@
         "outbound": "proxy"
       },
       {
+        "domain_suffix": [
+          "imap.qq.com",
+          "smtp.qq.com",
+          "hutaoindex.com",
+          "besttelecom.cc"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "process_name": [
+          "aria2c",
+          "TencentMeeting",
+          "Motrix",
+          "Motrix Helper"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "action": "resolve"
+      },
+      {
+        "rule_set": [
+          "netflix_ip",
+          "netflix_domain"
+        ],
+        "action": "route",
+        "outbound": "netflix"
+      },
+      {
         "rule_set": [
           "telegram_ip",
           "telegram_domain"
@@ -235,24 +253,6 @@
         ],
         "action": "route",
         "outbound": "cn"
-      },
-      {
-        "domain_suffix": [
-          "imap.qq.com",
-          "smtp.qq.com",
-          "hutaoindex.com",
-          "besttelecom.cc"
-        ],
-        "outbound": "direct"
-      },
-      {
-        "process_name": [
-          "aria2c",
-          "TencentMeeting",
-          "Motrix",
-          "Motrix Helper"
-        ],
-        "outbound": "direct"
       }
     ],
     "rule_set": [
