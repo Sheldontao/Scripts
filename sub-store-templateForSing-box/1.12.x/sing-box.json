@@ -194,9 +194,12 @@
         "outbound": "proxy"
       },
       {
-        "domain_suffix": [
+        "domain": [
           "imap.qq.com",
           "smtp.qq.com",
+          "functional.events.data.microsoft.com"
+        ],
+        "domain_suffix": [
           "hutaoindex.com",
           "besttelecom.cc"
         ],
