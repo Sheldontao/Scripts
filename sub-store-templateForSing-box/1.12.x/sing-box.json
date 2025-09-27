@@ -91,13 +91,6 @@
     "rules": [
       {
         "action": "sniff",
-        "sniffer": [
-          "http",
-          "tls",
-          "quic",
-          "dns",
-          "bittorrent"
-        ],
         "timeout": "500ms"
       },
       {
@@ -134,11 +127,6 @@
         "action": "hijack-dns"
       },
       {
-        "ip_is_private": true,
-        "action": "route",
-        "outbound": "direct"
-      },
-      {
         "clash_mode": "Global",
         "action": "route",
         "outbound": "GLOBAL"
@@ -149,7 +137,31 @@
         "outbound": "direct"
       },
       {
+        "domain": [
+          "imap.qq.com",
+          "smtp.qq.com"
+        ],
+        "domain_suffix": [
+          "hutaoindex.com",
+          "besttelecom.cc"
+        ],
+        "ip_is_private": true,
+        "action": "route",
+        "outbound": "direct"
+      },
+      {
         "protocol": "bittorrent",
+        "action":"route",
+        "outbound":"direct"        
+      },
+      {
+        "process_name": [
+          "aria2c",
+          "TencentMeeting",
+          "Motrix",
+          "Motrix Helper"
+        ],
+        "action": "route",
         "outbound": "direct"
       },
       {
@@ -171,48 +183,6 @@
         "rule_set": "ai_domain",
         "action": "route",
         "outbound": "ai"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "rule_set": "proxy_domain"
-          },
-          {
-            "invert": true,
-            "rule_set": [
-              "cn_domain",
-              "apple_domain",
-              "google_domain",
-              "telegram_domain",
-              "netflix_domain"
-            ]
-          }
-        ],
-        "action": "route",
-        "outbound": "proxy"
-      },
-      {
-        "domain": [
-          "imap.qq.com",
-          "smtp.qq.com",
-          "functional.events.data.microsoft.com"
-        ],
-        "domain_suffix": [
-          "hutaoindex.com",
-          "besttelecom.cc"
-        ],
-        "outbound": "direct"
-      },
-      {
-        "process_name": [
-          "aria2c",
-          "TencentMeeting",
-          "Motrix",
-          "Motrix Helper"
-        ],
-        "outbound": "direct"
       },
       {
         "action": "resolve"
@@ -256,6 +226,24 @@
         ],
         "action": "route",
         "outbound": "cn"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "rule_set": "proxy_domain"
+          },
+          {
+            "invert": true,
+            "rule_set": [
+              "cn_domain",
+              "cn_ip"
+            ]
+          }
+        ],
+        "action": "route",
+        "outbound": "proxy"
       }
     ],
     "rule_set": [
