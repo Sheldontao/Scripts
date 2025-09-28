@@ -1,5 +1,6 @@
 # 使用方法
-直接点击xiaohongshu.plugin这个文件，然后点击raw，复制地址栏里的含有raw的url，打开loon“插件”，添加即可。
+Loon: 直接点击xiaohongshu.plugin这个文件，然后点击raw，复制地址栏里的含有raw的url，打开loon“插件”，添加即可。
+Adguard: 在filter里选择订阅，将txt文件的raw url复制。
 ## 说明
 1. 不可在中国大陆内以任何形式传播
 2. 主要功能：
