@@ -40,7 +40,7 @@
       {
         "clash_mode": "Global",
         "action": "route",
-        "server": "dns_proxy"
+        "server": "fakeip"
       },
       {
         "rule_set": ["ads"],  
