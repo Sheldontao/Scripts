@@ -1,0 +1,79 @@
+#!name=xiaohongshuAIfilter
+#!desc=Regex参照默认格式！
+#!author=奶思[https://github.com/fmz200], Leo
+#!icon=https://raw.githubusercontent.com/fmz200/wool_scripts/main/icons/apps/AdblockPlus.png
+#!homepage=https://github.com/Sheldontao/Scripts
+#!raw-url=https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
+#!tg-group=https://t.me/lanjieguanggao
+#!system=iOS, iPadOS
+#!system_version = 18ios
+#!loon_version = 
+#!date=2025-8-21(2025-10-31); app_version = 25.10.31
+#############################################
+当loon关闭时，小红书直连会有quic请求，
+手动添加上AND, ((PROTOCOL, QUIC), (DEST-PORT, 443)), REJECT
+或者自行寻找quic的请求
+
+#############################################
+# 常见问题：
+# 3️⃣：Loon如果在插件里面写了规则，在规则配置里也写了，哪个优先生效？
+# ✅：插件里的规则优先生效。
+#############################################
+
+[Argument]
+xhs_enable = switch,true,false,tag=小红书-脚本开关
+xhs_des_regex = input,"["峰哥", "恋爱", "雪茄", "新闻", "manus", "揽佬", "红十字", "胡锡进"]",tag=xhs_des_regex
+xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=xhs_nickname_regex
+xhs_counts_threshold = input, "[0,10,10,0,0]", tag=xhs_counts_threshold_点赞最低/收藏/评论/分享/好
+xhs_search_des_regex = input, "["一个正则表达式",""]",tag=xhs_search_des_regex
+xhs_search_nickname_regex = input, "["中介","看房","租房","好房","探房","管家","房东直租","公寓","房.*产","住宿","寻房","找房"]",tag=xhs_search_nickname_regex
+
+[Rule]
+DOMAIN, ads-img-qc.xhscdn.com, REJECT
+DOMAIN, ads-video-al.xhscdn.com, REJECT
+DOMAIN, ads-video-qc.xhscdn.com, REJECT
+DOMAIN, t-ads.xiaohongshu.com, REJECT
+AND, ((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)), REJECT
+AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR, 140.207.56.254/32, no-resolve), (IP-CIDR, 119.45.2.92/32, no-resolve), (IP-CIDR, 47.97.66.48/32, no-resolve), (IP-CIDR, 47.97.64.97/32, no-resolve), (IP-CIDR, 81.69.116.0/24, no-resolve), (IP-CIDR, 114.55.236.88/32, no-resolve), (IP-CIDR, 1.13.12.27/32, no-resolve), (IP-CIDR, 119.45.249.52/32, no-resolve)))), REJECT
+
+[Rewrite]
+# 惊喜弹窗
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/surprisebox\/(?:get_style|open|submit_action) reject-dict
+^https?:\/\/www\.xiaohongshu\.com\/api\/marketing\/box\/trigger\? reject-dict
+# 信息流
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/guide\? reject-dict
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/detailfeed\/preload\? reject-dict
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/guide\/user_banner reject-dict
+^https?:\/\/www\.xiaohongshu\.com\/api\/sns\/(v\d+\/ads\/resource|v\d+\/hey\/\w+\/hey_gallery) reject-dict
+# 评论区图片水印
+^https?:\/\/ci\.xiaohongshu\.com\/system_config\/watermark reject-img
+
+
+[Script]
+# 搜索页
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/(banner|hot)_list script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=小红书搜索页, enable={xhs_enable}
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/(hint|trending)\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=小红书搜索页, enable={xhs_enable}
+http-response ^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/notes\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=小红书搜索页, enable={xhs_enable}, argument = [{xhs_search_des_regex},{xhs_search_nickname_regex}]
+
+# 开屏广告
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=小红书开屏广告, enable={xhs_enable}
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=小红书开屏广告, enable={xhs_enable}
+# 详情页,小部件
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=小红书详情页, enable={xhs_enable}
+# 图片水印,视频水印,homefeed regex过滤
+http-response ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/(imagefeed|live_photo\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=图片水印视频水印, enable={xhs_enable}
+http-response ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/(followfeed|homefeed)\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=regex过滤+图片水印视频水印, enable={xhs_enable}, argument = [{xhs_des_regex},{xhs_nickname_regex},{xhs_counts_threshold}]
+http-response ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/(v2\/note\/feed|v3\/note\/videofeed)\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=图片水印视频水印, enable={xhs_enable}
+http-response ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/(v4\/note\/videofeed|v10\/note\/video\/save)\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=图片水印视频水印, enable={xhs_enable}
+# 评论区图片、live图水印，表情包下载
+http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/(v5\/note\/comment\/list|v3\/note\/comment\/sub_comments)\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=小红书评论区去水印存储, enable={xhs_enable}
+http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/interaction\/comment\/video\/download\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_regex_gemini.js, requires-body=true, timeout=60, tag=小红书评论区去水印下载, enable={xhs_enable}
+
+
+
+
+# =====================================
+# MITM：中间人攻击，解密/跳过相关域名的内容，"-"开头为跳过
+# =====================================
+[MITM]
+hostname = edith.xiaohongshu.com, www.xiaohongshu.com, ci.xiaohongshu.com, rec.xiaohongshu.com, so.xiaohongshu.com
