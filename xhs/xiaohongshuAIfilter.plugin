@@ -27,6 +27,8 @@ xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","�
 xhs_counts_threshold = input, "[0,10,10,0,0]", tag=xhs_counts_threshold_点赞最低/收藏/评论/分享/好
 xhs_search_des_regex = input, "["一个正则表达式",""]",tag=xhs_search_des_regex
 xhs_search_nickname_regex = input, "["中介","看房","租房","好房","探房","管家","房东直租","公寓","房.*产","住宿","寻房","找房"]",tag=xhs_search_nickname_regex
+xhs_gemini_key = input, "", tag=xhs_gemini_key
+xhs_gemini_model = input, "gemini-2.5-flash", tag=xhs_gemini_model
 
 [Rule]
 DOMAIN, ads-img-qc.xhscdn.com, REJECT
