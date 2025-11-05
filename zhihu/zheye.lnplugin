@@ -1,5 +1,5 @@
 #!name=哲也同学(minor tweak 10.53.0)
-#!desc=人在蒙古，刚下航母\n需手动在本地分流规则添加以下内容(优先级问题):\nIP-CIDR,103.41.167.237/32,REJECT,no-resolve\nIP-CIDR,118.89.204.198/32,REJECT,no-resolve\nIP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT,no-resolve
+#!desc=人在蒙古，刚下航母(filter consentcount<50;filter “游览”)\n需手动在本地分流规则添加以下内容(优先级问题):\nIP-CIDR,103.41.167.237/32,REJECT,no-resolve\nIP-CIDR,118.89.204.198/32,REJECT,no-resolve\nIP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT,no-resolve
 #!openUrl=https://github.com/blackmatrix7/ios_rule_script
 #!author=blackmatrix7
 #!homepage=https://github.com/blackmatrix7/ios_rule_script
