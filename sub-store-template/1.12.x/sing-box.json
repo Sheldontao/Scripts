@@ -1,4 +1,10 @@
 {
+  "log": {
+    "disabled": false,
+    "level": "trace",
+    "output": "sing-box.log",
+    "timestamp": true
+  },
   "dns": {
     "servers": [
       {
@@ -85,290 +91,40 @@
     "final": "dns_proxy",
     "independent_cache": true
   },
-  "route": {
-    "default_domain_resolver": {
-      "server": "dns_direct"
+  "inbounds": [
+    {
+      "type": "tun",
+      "tag": "tun_in",
+      "address": [
+        "172.19.0.0/30",
+        "fdfe:dcba:9876::0/126"
+      ],
+      "mtu": 9000,
+      "auto_route": true,
+      "strict_route": true,
+      "endpoint_independent_nat": false,
+      "stack": "mixed",
+      "platform": {
+        "http_proxy": {
+          "enabled": true,
+          "server": "127.0.0.1",
+          "server_port": 7890
+        }
+      }
     },
-    "rules": [
-      {
-        "action": "sniff",
-        "timeout": "500ms"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 853
-          },
-          {
-            "network": "udp",
-            "port": 443
-          },
-          {
-            "protocol": "quic"
-          },
-          {
-            "protocol": "stun"
-          }
-        ],
-        "action": "reject"
-      },
-      {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "protocol": "dns"
-          },
-          {
-            "port": 53
-          }
-        ],
-        "action": "hijack-dns"
-      },
-      {
-        "clash_mode": "Global",
-        "action": "route",
-        "outbound": "GLOBAL"
-      },
-      {
-        "clash_mode": "Direct",
-        "action": "route",
-        "outbound": "direct"
-      },
-      {
-        "domain": [
-          "imap.qq.com",
-          "smtp.qq.com"
-        ],
-        "domain_suffix": [
-          "hutaoindex.com",
-          "besttelecom.cc"
-        ],
-        "ip_is_private": true,
-        "action": "route",
-        "outbound": "direct"
-      },
-      {
-        "protocol": "bittorrent",
-        "action":"route",
-        "outbound":"direct"        
-      },
-      {
-        "process_name": [
-          "aria2c",
-          "TencentMeeting",
-          "Motrix",
-          "Motrix Helper"
-        ],
-        "action": "route",
-        "outbound": "direct"
-      },
-      {
-        "rule_set": "bilibili_domain",
-        "action": "route",
-        "outbound": "bilibili"
-      },
-      {
-        "rule_set": "bahamut_domain",
-        "action": "route",
-        "outbound": "bahamut"
-      },
-      {
-        "rule_set": "youtube_domain",
-        "action": "route",
-        "outbound": "youtube"
-      },
-      {
-        "rule_set": "ai_domain",
-        "action": "route",
-        "outbound": "ai"
-      },
-      {
-        "action": "resolve"
-      },
-      {
-        "rule_set": [
-          "netflix_ip",
-          "netflix_domain"
-        ],
-        "action": "route",
-        "outbound": "netflix"
-      },
-      {
-        "rule_set": [
-          "telegram_ip",
-          "telegram_domain"
-        ],
-        "action": "route",
-        "outbound": "telegram"
-      },
-      {
-        "rule_set": [
-          "google_ip",
-          "google_domain"
-        ],
-        "action": "route",
-        "outbound": "google"
-      },
-      {
-        "rule_set": [
-          "apple_ip",
-          "apple_domain"
-        ],
-        "action": "route",
-        "outbound": "apple"
-      },
-      {
-        "rule_set": [
-          "cn_ip",
-          "cn_domain"
-        ],
-        "action": "route",
-        "outbound": "cn"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "rule_set": "proxy_domain"
-          },
-          {
-            "invert": true,
-            "rule_set": [
-              "cn_domain",
-              "cn_ip"
-            ]
-          }
-        ],
-        "action": "route",
-        "outbound": "proxy"
-      }
-    ],
-    "rule_set": [
-      {
-        "tag": "ads",
-        "type": "remote",
-        "format": "source",
-        "url": "https://ruleset.skk.moe/sing-box/ip/reject.json",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "apple_ip",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/apple.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "apple_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/apple.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "bahamut_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/bahamut.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "bilibili_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/bilibili.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "cn_ip",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geoip/cn.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "cn_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/cn.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "google_ip",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/google.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "google_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/google.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "netflix_ip",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/netflix.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "netflix_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/netflix.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "ai_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-chat-!cn.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "proxy_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/geolocation-!cn.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "telegram_ip",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/telegram.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "telegram_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/telegram.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "youtube_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/youtube.srs",
-        "download_detour": "direct"
-      }
-    ],
-    "final": "final",
-    "auto_detect_interface": true
-  },
+    {
+      "type": "mixed",
+      "tag": "mixed_in",
+      "listen": "127.0.0.1",
+      "listen_port": 7890
+    }
+  ],
   "outbounds": [
     {
       "tag": "proxy",
       "type": "selector",
       "outbounds": [
+        "direct",
         "hk",
         "hk-auto",
         "tw",
@@ -381,7 +137,6 @@
         "us-auto",
         "all",
         "all-auto",
-        "direct",
         "Iepl"
       ],
       "default": "jp-auto"
@@ -707,45 +462,299 @@
       "type": "direct"
     }
   ],
-  "inbounds": [
-    {
-      "type": "tun",
-      "address": [
-        "172.19.0.0/30",
-        "fdfe:dcba:9876::0/126"
-      ],
-      "stack": "mixed",
-      "auto_route": true,
-      "platform": {
-        "http_proxy": {
-          "enabled": true,
-          "server": "127.0.0.1",
-          "server_port": 7890
-        }
-      }
+  "route": {
+    "default_domain_resolver": {
+      "server": "dns_direct"
     },
-    {
-      "type": "mixed",
-      "listen": "127.0.0.1",
-      "listen_port": 7890
-    }
-  ],
+    "rules": [
+      {
+        "action": "sniff",
+        "timeout": "500ms"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "protocol": "dns"
+          },
+          {
+            "port": 53
+          }
+        ],
+        "action": "hijack-dns"
+      },
+      {
+        "ip_is_private": true,
+        "action": "route",
+        "outbound": "direct"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 853
+          },
+          {
+            "network": "udp",
+            "port": 443
+          },
+          {
+            "protocol": ["quic","stun"]
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "clash_mode": "Global",
+        "action": "route",
+        "outbound": "GLOBAL"
+      },
+      {
+        "clash_mode": "Direct",
+        "action": "route",
+        "outbound": "direct"
+      },
+      {
+        "domain": [
+          "imap.qq.com",
+          "smtp.qq.com"
+        ],
+        "domain_suffix": [
+          "hutaoindex.com",
+          "besttelecom.cc"
+        ],
+        "action": "route",
+        "outbound": "direct"
+      },
+      {
+        "protocol": "bittorrent",
+        "action":"route",
+        "outbound":"direct"        
+      },
+      {
+        "process_name": [
+          "aria2c",
+          "TencentMeeting",
+          "Motrix",
+          "Motrix Helper"
+        ],
+        "action": "route",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": "bilibili_domain",
+        "action": "route",
+        "outbound": "bilibili"
+      },
+      {
+        "rule_set": "bahamut_domain",
+        "action": "route",
+        "outbound": "bahamut"
+      },
+      {
+        "rule_set": "youtube_domain",
+        "action": "route",
+        "outbound": "youtube"
+      },
+      {
+        "rule_set": "ai_domain",
+        "action": "route",
+        "outbound": "ai"
+      },
+      {
+        "action": "resolve"
+      },
+      {
+        "rule_set": [
+          "netflix_ip",
+          "netflix_domain"
+        ],
+        "action": "route",
+        "outbound": "netflix"
+      },
+      {
+        "rule_set": [
+          "telegram_ip",
+          "telegram_domain"
+        ],
+        "action": "route",
+        "outbound": "telegram"
+      },
+      {
+        "rule_set": [
+          "google_ip",
+          "google_domain"
+        ],
+        "action": "route",
+        "outbound": "google"
+      },
+      {
+        "rule_set": [
+          "apple_ip",
+          "apple_domain"
+        ],
+        "action": "route",
+        "outbound": "apple"
+      },
+      {
+        "rule_set": [
+          "cn_ip",
+          "cn_domain"
+        ],
+        "action": "route",
+        "outbound": "cn"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "rule_set": "proxy_domain"
+          },
+          {
+            "invert": true,
+            "rule_set": [
+              "cn_domain",
+              "cn_ip"
+            ]
+          }
+        ],
+        "action": "route",
+        "outbound": "proxy"
+      }
+    ],
+    "rule_set": [
+      {
+        "tag": "ads",
+        "type": "remote",
+        "format": "source",
+        "url": "https://ruleset.skk.moe/sing-box/ip/reject.json",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "apple_ip",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/apple.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "apple_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/apple.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "bahamut_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/bahamut.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "bilibili_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/bilibili.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "cn_ip",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geoip/cn.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "cn_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/cn.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "google_ip",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/google.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "google_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/google.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "netflix_ip",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/netflix.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "netflix_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/netflix.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "ai_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-chat-!cn.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "proxy_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/geolocation-!cn.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "telegram_ip",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/telegram.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "telegram_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/telegram.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "youtube_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/youtube.srs",
+        "download_detour": "direct"
+      }
+    ],
+    "final": "final",
+    "auto_detect_interface": true
+  },
   "experimental": {
     "clash_api": {
       "external_controller": "127.0.0.1:9090",
       "external_ui": "ui",
-      "external_ui_download_url": "https://ghfast.top/https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip",
+      "external_ui_download_url": "https://ghfast.top/https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip",
       "external_ui_download_detour": "direct",
       "default_mode": "Enhanced"
     },
     "cache_file": {
       "enabled": true,
-      "store_fakeip": true
+      "store_fakeip": false,
+      "store_rdrc": true,
+      "rdrc_timeout": "7d"
     }
-  },
-  "log": {
-    "disabled": false,
-    "level": "trace",
-    "timestamp": true
   }
 }
