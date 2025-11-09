@@ -1,7 +1,7 @@
 {
   "log": {
     "disabled": false,
-    "level": "trace",
+    "level": "info",
     "output": "sing-box.log",
     "timestamp": true
   },
@@ -40,12 +40,10 @@
     "rules": [
       {
         "clash_mode": "Direct",
-        "action": "route",
         "server": "dns_direct"
       },
       {
         "clash_mode": "Global",
-        "action": "route",
         "server": "fakeip"
       },
       {
@@ -55,7 +53,6 @@
       },
       {
         "rule_set": "cn_domain",
-        "action": "route",
         "server": "dns_direct"
       },
       {
@@ -70,7 +67,6 @@
             "rule_set": "cn_ip"
           }
         ],
-        "action": "route",
         "server": "dns_proxy",
         "client_subnet": "222.17.11.0/24"
       },
@@ -83,7 +79,6 @@
           "A",
           "AAAA"
         ],
-        "action": "route",
         "server": "fakeip",
         "rewrite_ttl": 1
       }
@@ -94,15 +89,11 @@
   "inbounds": [
     {
       "type": "tun",
-      "tag": "tun_in",
       "address": [
-        "172.19.0.0/30",
-        "fdfe:dcba:9876::0/126"
+        "172.18.0.1/30",
+        "fdfe:dcba:9876::1/126"
       ],
-      "mtu": 9000,
       "auto_route": true,
-      "strict_route": true,
-      "endpoint_independent_nat": false,
       "stack": "mixed",
       "platform": {
         "http_proxy": {
@@ -114,7 +105,6 @@
     },
     {
       "type": "mixed",
-      "tag": "mixed_in",
       "listen": "127.0.0.1",
       "listen_port": 7890
     }
@@ -463,9 +453,6 @@
     }
   ],
   "route": {
-    "default_domain_resolver": {
-      "server": "dns_direct"
-    },
     "rules": [
       {
         "action": "sniff",
@@ -486,7 +473,6 @@
       },
       {
         "ip_is_private": true,
-        "action": "route",
         "outbound": "direct"
       },
       {
@@ -508,12 +494,10 @@
       },
       {
         "clash_mode": "Global",
-        "action": "route",
         "outbound": "GLOBAL"
       },
       {
         "clash_mode": "Direct",
-        "action": "route",
         "outbound": "direct"
       },
       {
@@ -525,12 +509,10 @@
           "hutaoindex.com",
           "besttelecom.cc"
         ],
-        "action": "route",
         "outbound": "direct"
       },
       {
         "protocol": "bittorrent",
-        "action":"route",
         "outbound":"direct"        
       },
       {
@@ -540,27 +522,22 @@
           "Motrix",
           "Motrix Helper"
         ],
-        "action": "route",
         "outbound": "direct"
       },
       {
         "rule_set": "bilibili_domain",
-        "action": "route",
         "outbound": "bilibili"
       },
       {
         "rule_set": "bahamut_domain",
-        "action": "route",
         "outbound": "bahamut"
       },
       {
         "rule_set": "youtube_domain",
-        "action": "route",
         "outbound": "youtube"
       },
       {
         "rule_set": "ai_domain",
-        "action": "route",
         "outbound": "ai"
       },
       {
@@ -571,7 +548,6 @@
           "netflix_ip",
           "netflix_domain"
         ],
-        "action": "route",
         "outbound": "netflix"
       },
       {
@@ -579,7 +555,6 @@
           "telegram_ip",
           "telegram_domain"
         ],
-        "action": "route",
         "outbound": "telegram"
       },
       {
@@ -587,7 +562,6 @@
           "google_ip",
           "google_domain"
         ],
-        "action": "route",
         "outbound": "google"
       },
       {
@@ -595,7 +569,6 @@
           "apple_ip",
           "apple_domain"
         ],
-        "action": "route",
         "outbound": "apple"
       },
       {
@@ -603,7 +576,6 @@
           "cn_ip",
           "cn_domain"
         ],
-        "action": "route",
         "outbound": "cn"
       },
       {
@@ -621,7 +593,6 @@
             ]
           }
         ],
-        "action": "route",
         "outbound": "proxy"
       }
     ],
@@ -740,7 +711,8 @@
       }
     ],
     "final": "final",
-    "auto_detect_interface": true
+    "auto_detect_interface": true,
+    "default_domain_resolver": "dns_direct"
   },
   "experimental": {
     "clash_api": {
@@ -752,7 +724,7 @@
     },
     "cache_file": {
       "enabled": true,
-      "store_fakeip": false,
+      "store_fakeip": true,
       "store_rdrc": true,
       "rdrc_timeout": "7d"
     }
