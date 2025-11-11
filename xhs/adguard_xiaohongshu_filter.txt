@@ -1,8 +1,8 @@
-! Title: 小红书去广告及去水印规则 for AdGuard
-! Description: 忠实转换自多款插件脚本，旨在完整覆盖小红书的图片/视频水印、信息流广告、开屏广告，并解除下载限制。
+! Title: 小红书去广告及去水印
+! Description: 转换自多款插件脚本，旨在完整覆盖小红书的图片/视频水印、信息流广告、开屏广告，并解除下载限制。
 ! Author: Gemini & contributors
-! Version: 1.2
-! Last Updated: 2025-09-17
+! Version: 1.3
+! Last Updated: 2025-11-01
 
 !----------------------------------------------------------------
 ! 规则区块 1: 笔记详情页 (Note Detail Page)
