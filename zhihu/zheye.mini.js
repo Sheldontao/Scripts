@@ -464,7 +464,7 @@ function isFiltered(e, t, r, n, o) {
         for (const element of child.elements) {
           if (element.text) {
             // Check for "浏览"
-            const promotionWord = ["浏览", "购买", "咨询", "进店"].find(word => element.text.includes(word));
+            const promotionWord = ["浏览", "购买", "咨询", "进店","感兴趣"].find(word => element.text.includes(word));
             if (promotionWord) {
                 logger.debug(`包含推销关键词 "${promotionWord}".`, item);
                 return true;
