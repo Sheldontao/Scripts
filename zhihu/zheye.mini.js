@@ -464,11 +464,11 @@ function isFiltered(e, t, r, n, o) {
         for (const element of child.elements) {
           if (element.text) {
             // Check for "浏览"
-            if (element.text.includes("浏览")) {
-              $.logger.debug(`过滤掉含有“浏览”的父元素: ${JSON.stringify(e)}`);
-              return true;
+            const promotionWord = ["浏览", "购买", "咨询", "进店"].find(word => element.text.includes(word));
+            if (promotionWord) {
+                logger.debug(`包含推销关键词 "${promotionWord}".`, item);
+                return true;
             }
-
             // Check for "（\d+）赞同" and consent_number
             const match = element.text.match(/(\d+)\s*赞同/);
             if (match && parseInt(match[1]) < consent_number) {
