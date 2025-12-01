@@ -2,71 +2,87 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title toggle ms autoupdate
+# @raycast.title Toggle MS AutoUpdate (Safe)
 # @raycast.mode compact
 
 # Optional parameters:
 # @raycast.icon 🤖
 
 # Documentation:
-# @raycast.author LeonardoX
+# @raycast.author LeonardoX (Modified by AI)
 # @raycast.authorURL https://raycast.com/LeonardoX
 
-# Define a state file path inside the script's directory
-STATE_FILE="$(dirname "$0")/.autoupdate_state"
+# ---
+# This script safely toggles Microsoft AutoUpdate by renaming files
+# instead of deleting them, making the process fully reversible.
+# ---
 
-# Check current state
-if [ -f "$STATE_FILE" ]; then
-    CURRENT_STATE=$(cat "$STATE_FILE")
+# Suffix to add to disabled files and folders
+DISABLED_SUFFIX=".disabled"
+
+# Function to check if AutoUpdate is currently disabled
+is_disabled() {
+    # Check for any file/folder with the .disabled suffix in the target locations
+    if ls /Library/{PrivilegedHelperTools,Launch{Agents,Daemons}}/com.microsoft.*update*.plist${DISABLED_SUFFIX} >/dev/null 2>&1 || \
+       ls "$HOME"/Library/Microsoft/*Updater${DISABLED_SUFFIX} >/dev/null 2>&1; then
+        return 0 # 0 means true (is disabled)
+    else
+        return 1 # 1 means false (is not disabled)
+    fi
+}
+
+# --- Main Logic ---
+
+if is_disabled; then
+    # --- ENABLE AUTOUPDATE ---
+    echo "🔓 Enabling Microsoft AutoUpdate..."
+    
+    # Use sudo for system-level files. It will ask for password only once.
+    sudo -v
+    
+    # Restore system-wide files
+    for F in /Library/{PrivilegedHelperTools,Launch{Agents,Daemons}}/com.microsoft.*update*.plist${DISABLED_SUFFIX}; do
+        if [ -e "$F" ]; then
+            ORIGINAL_NAME="${F%${DISABLED_SUFFIX}}"
+            echo "   Restoring ${ORIGINAL_NAME}..."
+            sudo mv "$F" "$ORIGINAL_NAME"
+        fi
+    done
+    
+    # Restore user-specific files
+    for F in "$HOME"/Library/Microsoft/*Updater${DISABLED_SUFFIX}; do
+         if [ -e "$F" ]; then
+            ORIGINAL_NAME="${F%${DISABLED_SUFFIX}}"
+            echo "   Restoring ${ORIGINAL_NAME}..."
+            mv "$F" "$ORIGINAL_NAME"
+        fi
+    done
+
+    echo "✅ Microsoft AutoUpdate has been enabled."
+    echo "   You may need to restart your Mac for changes to take full effect."
+
 else
-    # Default to enabled if state file doesn't exist
-    CURRENT_STATE="enabled"
-fi
-
-if [ "$CURRENT_STATE" = "enabled" ]; then
     # --- DISABLE AUTOUPDATE ---
     echo "🔒 Disabling Microsoft AutoUpdate..."
     
-    # Process system-wide files
+    # Use sudo for system-level files.
+    sudo -v
+
+    # Disable system-wide files
     for F in /Library/{PrivilegedHelperTools,Launch{Agents,Daemons}}/com.microsoft.*update*.plist; do
-        if [ -e "$F" ]; then # Check if file or folder exists
-            echo "Processing ${F}..."
-            rm -rf "${F}" && mkdir "${F}" && chflags uchg "${F}"
+        if [ -e "$F" ]; then
+            echo "   Disabling ${F}..."
+            sudo mv "$F" "$F${DISABLED_SUFFIX}"
         fi
     done
     
-    # Process user-specific files
+    # Disable user-specific files
     for F in "$HOME"/Library/Microsoft/*Updater; do
          if [ -e "$F" ]; then
-            echo "Processing ${F}..."
-            rm -rf "${F}" && mkdir "${F}" && chflags uchg "${F}"
+            echo "   Disabling ${F}..."
+            mv "$F" "$F${DISABLED_SUFFIX}"
         fi
     done
 
-    echo "✅ Microsoft AutoUpdate disabled and locked."
-    echo "disabled" > "$STATE_FILE"
-
-else
-    # --- ENABLE AUTOUPDATE ---
-    echo "🔓 Re-enabling Microsoft AutoUpdate..."
-    
-    # Process system-wide files
-    for F in /Library/{PrivilegedHelperTools,Launch{Agents,Daemons}}/com.microsoft.*update*.plist; do
-        if [ -e "$F" ]; then
-            echo "Unlocking ${F}..."
-            chflags nouchg "${F}" && rm -rf "${F}"
-        fi
-    done
-
-    # Process user-specific files
-    for F in "$HOME"/Library/Microsoft/*Updater; do
-        if [ -e "$F" ]; then
-            echo "Unlocking ${F}..."
-            chflags nouchg "${F}" && rm -rf "${F}"
-        fi
-    done
-
-    echo "✅ Microsoft AutoUpdate unlocked. Re-run the Office installer to restore it."
-    # Remove state file to reset to default on next run
-    rm -f "$STATE_FILE"
+    echo "✅ Microsoft AutoUpdate has been disabled."
 fi

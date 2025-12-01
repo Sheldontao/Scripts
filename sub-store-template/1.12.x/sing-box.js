@@ -34,8 +34,8 @@ config.outbounds.map(i => {
   if (['us', 'us-auto'].includes(i.tag)) {
     i.outbounds.push(...getTags(proxies, /美|us|united.*states|🇺🇸/i))
   }
-  if (['Iepl'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /iplc|iepl/i))
+  if (['NoCN-auto'].includes(i.tag)) {
+    i.outbounds.push(...getTags(proxies, /^(?=.*(港|hk|hongkong|Hong Kong|🇭🇰|台|🇹🇼|TW|Taiwan))/i))
 }})
 
 config.outbounds.forEach(outbound => {

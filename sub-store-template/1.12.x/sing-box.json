@@ -1,40 +1,27 @@
 {
   "log": {
-    "disabled": false,
-    "level": "info",
+    "level": "warn",
     "output": "sing-box.log",
     "timestamp": true
   },
   "dns": {
     "servers": [
       {
-        "type": "udp",
-        "tag": "dns_resolver",
-        "server": "223.5.5.5",
-        "server_port": 53
-      },
-      {
-        "type": "https",
-        "tag": "dns_direct",
-        "domain_resolver": "dns_resolver",
-        "server": "dns.alidns.com",
-        "server_port": 443,
-        "path": "dns-query"
-      },
-      {
-        "type": "https",
+        "type": "tls",
         "tag": "dns_proxy",
-        "domain_resolver": "dns_resolver",
-        "server": "cloudflare-dns.com",
-        "server_port": 443,
-        "path": "dns-query",
+        "server": "8.8.8.8",
         "detour": "proxy"
       },
       {
-        "type": "fakeip",
+        "type": "udp",
+        "tag": "dns_direct",
+        "server": "223.5.5.5"
+      },
+      {
         "tag": "fakeip",
+        "type": "fakeip",
         "inet4_range": "198.18.0.0/15",
-        "inet6_range": "fdec:ba98:7654:3210::/64"
+        "inet6_range": "fc00::/18"
       }
     ],
     "rules": [
@@ -44,12 +31,15 @@
       },
       {
         "clash_mode": "Global",
-        "server": "fakeip"
+        "server": "dns_proxy"
       },
       {
-        "rule_set": ["ads"],  
-        "action": "predefined",  
-        "rcode": "NXDOMAIN"  
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "rule_set": "cn_domain",
+        "server": "fakeip"
       },
       {
         "rule_set": "cn_domain",
@@ -71,26 +61,20 @@
         "client_subnet": "222.17.11.0/24"
       },
       {
-        "query_type": "HTTPS",
-        "action": "reject"
-      },
-      {
         "query_type": [
           "A",
           "AAAA"
         ],
-        "server": "fakeip",
-        "rewrite_ttl": 1
+        "server": "fakeip"
       }
     ],
-    "final": "dns_proxy",
     "independent_cache": true
   },
   "inbounds": [
     {
       "type": "tun",
       "address": [
-        "172.18.0.1/30",
+        "172.19.0.1/30", 
         "fdfe:dcba:9876::1/126"
       ],
       "auto_route": true,
@@ -127,7 +111,7 @@
         "us-auto",
         "all",
         "all-auto",
-        "Iepl"
+        "NoCN-auto"
       ],
       "default": "jp-auto"
     },
@@ -149,7 +133,7 @@
         "us-auto",
         "all",
         "all-auto",
-        "Iepl"
+        "NoCN-auto"
       ],
       "default": "jp-auto"
     },
@@ -297,9 +281,9 @@
         "us-auto",
         "all",
         "all-auto",
-        "Iepl"
+        "NoCN-auto"
       ],
-      "default": "Iepl"
+      "default": "NoCN-auto"
     },
     {
       "tag": "cn",
@@ -323,30 +307,12 @@
       "default": "direct"
     },
     {
-      "tag": "final",
-      "type": "selector",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk",
-        "hk-auto",
-        "tw",
-        "tw-auto",
-        "jp",
-        "jp-auto",
-        "sg",
-        "sg-auto",
-        "us",
-        "us-auto",
-        "all",
-        "all-auto"
-      ],
-      "default": "proxy"
-    },
-    {
-      "tag": "Iepl",
-      "type": "selector",
-      "outbounds":[]
+      "tag": "NoCN-auto",
+      "type": "urltest",
+      "outbounds": [],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "2m",
+      "tolerance": 50
     },
     {
       "tag": "all",
@@ -383,7 +349,7 @@
       "type": "urltest",
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m",
+      "interval": "2m",
       "tolerance": 50
     },
     {
@@ -391,7 +357,7 @@
       "type": "urltest",
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m",
+      "interval": "2m",
       "tolerance": 50
     },
     {
@@ -399,7 +365,7 @@
       "type": "urltest",
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m",
+      "interval": "2m",
       "tolerance": 50
     },
     {
@@ -407,7 +373,7 @@
       "type": "urltest",
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m",
+      "interval": "2m",
       "tolerance": 50
     },
     {
@@ -415,7 +381,7 @@
       "type": "urltest",
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m",
+      "interval": "2m",
       "tolerance": 50
     },
     {
@@ -423,7 +389,7 @@
       "type": "urltest",
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
-      "interval": "1m",
+      "interval": "2m",
       "tolerance": 50
     },
     {
@@ -472,10 +438,6 @@
         "action": "hijack-dns"
       },
       {
-        "ip_is_private": true,
-        "outbound": "direct"
-      },
-      {
         "type": "logical",
         "mode": "or",
         "rules": [
@@ -494,7 +456,7 @@
       },
       {
         "clash_mode": "Global",
-        "outbound": "GLOBAL"
+        "outbound": "proxy"
       },
       {
         "clash_mode": "Direct",
@@ -509,19 +471,11 @@
           "hutaoindex.com",
           "besttelecom.cc"
         ],
+        "ip_is_private": true,
         "outbound": "direct"
       },
       {
         "protocol": "bittorrent",
-        "outbound":"direct"        
-      },
-      {
-        "process_name": [
-          "aria2c",
-          "TencentMeeting",
-          "Motrix",
-          "Motrix Helper"
-        ],
         "outbound": "direct"
       },
       {
@@ -537,11 +491,9 @@
         "outbound": "youtube"
       },
       {
-        "rule_set": "ai_domain",
+        "domain":["api.deerapi.com"],
+        "rule_set": ["ai_domain", "microsoft_domain"],
         "outbound": "ai"
-      },
-      {
-        "action": "resolve"
       },
       {
         "rule_set": [
@@ -572,13 +524,6 @@
         "outbound": "apple"
       },
       {
-        "rule_set": [
-          "cn_ip",
-          "cn_domain"
-        ],
-        "outbound": "cn"
-      },
-      {
         "type": "logical",
         "mode": "and",
         "rules": [
@@ -594,16 +539,16 @@
           }
         ],
         "outbound": "proxy"
+      },
+      {
+        "rule_set": [
+          "cn_ip",
+          "cn_domain"
+        ],
+        "outbound": "cn"
       }
     ],
     "rule_set": [
-      {
-        "tag": "ads",
-        "type": "remote",
-        "format": "source",
-        "url": "https://ruleset.skk.moe/sing-box/ip/reject.json",
-        "download_detour": "direct"
-      },
       {
         "tag": "apple_ip",
         "type": "remote",
@@ -708,25 +653,30 @@
         "format": "binary",
         "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/youtube.srs",
         "download_detour": "direct"
+      },
+      {
+        "tag": "microsoft_domain",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/microsoft.srs",
+        "download_detour": "direct"
       }
     ],
-    "final": "final",
     "auto_detect_interface": true,
     "default_domain_resolver": "dns_direct"
   },
   "experimental": {
     "clash_api": {
       "external_controller": "127.0.0.1:9090",
-      "external_ui": "ui",
+      "external_ui": "ClashUIforSingbox",
       "external_ui_download_url": "https://ghfast.top/https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip",
       "external_ui_download_detour": "direct",
-      "default_mode": "Enhanced"
+      "default_mode": "Rule"
     },
     "cache_file": {
       "enabled": true,
       "store_fakeip": true,
-      "store_rdrc": true,
-      "rdrc_timeout": "7d"
+      "store_rdrc": true
     }
   }
 }
