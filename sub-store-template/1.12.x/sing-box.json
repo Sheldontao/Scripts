@@ -111,9 +111,9 @@
         "us-auto",
         "all",
         "all-auto",
-        "NoCN-auto"
+        "noCN-auto"
       ],
-      "default": "jp-auto"
+      "default": "hk-auto"
     },
     {
       "tag": "google",
@@ -133,9 +133,9 @@
         "us-auto",
         "all",
         "all-auto",
-        "NoCN-auto"
+        "noCN-auto"
       ],
-      "default": "jp-auto"
+      "default": "proxy"
     },
     {
       "tag": "apple",
@@ -281,9 +281,9 @@
         "us-auto",
         "all",
         "all-auto",
-        "NoCN-auto"
+        "noCN-auto"
       ],
-      "default": "NoCN-auto"
+      "default": "noCN-auto"
     },
     {
       "tag": "cn",
@@ -307,12 +307,13 @@
       "default": "direct"
     },
     {
-      "tag": "NoCN-auto",
+      "tag": "noCN-auto",
       "type": "urltest",
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
       "interval": "2m",
-      "tolerance": 50
+      "tolerance": 50,
+      "interrupt_exist_connections": true
     },
     {
       "tag": "all",
@@ -350,7 +351,8 @@
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
       "interval": "2m",
-      "tolerance": 50
+      "tolerance": 50,
+      "interrupt_exist_connections": true
     },
     {
       "tag": "tw-auto",
@@ -358,7 +360,8 @@
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
       "interval": "2m",
-      "tolerance": 50
+      "tolerance": 50,
+      "interrupt_exist_connections": true
     },
     {
       "tag": "jp-auto",
@@ -366,7 +369,8 @@
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
       "interval": "2m",
-      "tolerance": 50
+      "tolerance": 50,
+      "interrupt_exist_connections": true
     },
     {
       "tag": "sg-auto",
@@ -374,7 +378,8 @@
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
       "interval": "2m",
-      "tolerance": 50
+      "tolerance": 50,
+      "interrupt_exist_connections": true
     },
     {
       "tag": "us-auto",
@@ -382,7 +387,8 @@
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
       "interval": "2m",
-      "tolerance": 50
+      "tolerance": 50,
+      "interrupt_exist_connections": true
     },
     {
       "tag": "all-auto",
@@ -390,28 +396,8 @@
       "outbounds": [],
       "url": "https://www.gstatic.com/generate_204",
       "interval": "2m",
-      "tolerance": 50
-    },
-    {
-      "tag": "GLOBAL",
-      "type": "selector",
-      "outbounds": [
-        "direct",
-        "proxy",
-        "hk",
-        "hk-auto",
-        "tw",
-        "tw-auto",
-        "jp",
-        "jp-auto",
-        "sg",
-        "sg-auto",
-        "us",
-        "us-auto",
-        "all",
-        "all-auto"
-      ],
-      "default": "proxy"
+      "tolerance": 50,
+      "interrupt_exist_connections": true
     },
     {
       "tag": "direct",
@@ -492,7 +478,7 @@
       },
       {
         "domain":["api.deerapi.com"],
-        "rule_set": ["ai_domain", "microsoft_domain"],
+        "rule_set": ["ai_domain", "microsoft_non_ip"],
         "outbound": "ai"
       },
       {
@@ -655,10 +641,10 @@
         "download_detour": "direct"
       },
       {
-        "tag": "microsoft_domain",
+        "tag": "microsoft_non_ip",
         "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/microsoft.srs",
+        "format": "source",
+        "url": "https://ruleset.skk.moe/sing-box/non_ip/microsoft.json",
         "download_detour": "direct"
       }
     ],
@@ -670,8 +656,7 @@
       "external_controller": "127.0.0.1:9090",
       "external_ui": "ClashUIforSingbox",
       "external_ui_download_url": "https://ghfast.top/https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip",
-      "external_ui_download_detour": "direct",
-      "default_mode": "Rule"
+      "external_ui_download_detour": "direct"
     },
     "cache_file": {
       "enabled": true,
