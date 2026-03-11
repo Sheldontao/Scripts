@@ -99,18 +99,12 @@
       "type": "selector",
       "outbounds": [
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
         "all",
-        "all-auto",
         "noCN-auto"
       ],
       "default": "hk-auto"
@@ -121,18 +115,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
         "all",
-        "all-auto",
         "noCN-auto"
       ],
       "default": "proxy"
@@ -143,18 +131,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
-        "all",
-        "all-auto"
+        "all"
       ],
       "default": "direct"
     },
@@ -164,18 +146,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
-        "all",
-        "all-auto"
+        "all"
       ],
       "default": "proxy"
     },
@@ -185,18 +161,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
-        "all",
-        "all-auto"
+        "all"
       ],
       "default": "direct"
     },
@@ -206,18 +176,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
-        "all",
-        "all-auto"
+        "all"
       ],
       "default": "proxy"
     },
@@ -227,18 +191,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
-        "all",
-        "all-auto"
+        "all"
       ],
       "default": "proxy"
     },
@@ -248,18 +206,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
-        "all",
-        "all-auto"
+        "all"
       ],
       "default": "proxy"
     },
@@ -269,18 +221,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
         "all",
-        "all-auto",
         "noCN-auto"
       ],
       "default": "noCN-auto"
@@ -291,18 +237,12 @@
       "outbounds": [
         "proxy",
         "direct",
-        "hk",
         "hk-auto",
-        "tw",
         "tw-auto",
-        "jp",
         "jp-auto",
-        "sg",
         "sg-auto",
-        "us",
         "us-auto",
-        "all",
-        "all-auto"
+        "all"
       ],
       "default": "direct"
     },
@@ -314,36 +254,6 @@
       "interval": "2m",
       "tolerance": 50,
       "interrupt_exist_connections": true
-    },
-    {
-      "tag": "all",
-      "type": "selector",
-      "outbounds": []
-    },
-    {
-      "tag": "hk",
-      "type": "selector",
-      "outbounds": []
-    },
-    {
-      "tag": "tw",
-      "type": "selector",
-      "outbounds": []
-    },
-    {
-      "tag": "jp",
-      "type": "selector",
-      "outbounds": []
-    },
-    {
-      "tag": "sg",
-      "type": "selector",
-      "outbounds": []
-    },
-    {
-      "tag": "us",
-      "type": "selector",
-      "outbounds": []
     },
     {
       "tag": "hk-auto",
@@ -391,13 +301,9 @@
       "interrupt_exist_connections": true
     },
     {
-      "tag": "all-auto",
-      "type": "urltest",
-      "outbounds": [],
-      "url": "https://www.gstatic.com/generate_204",
-      "interval": "2m",
-      "tolerance": 50,
-      "interrupt_exist_connections": true
+      "tag": "all",
+      "type": "selector",
+      "outbounds": []
     },
     {
       "tag": "direct",
