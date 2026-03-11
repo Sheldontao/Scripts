@@ -20,22 +20,22 @@ config.outbounds.map(i => {
     i.outbounds.push(...getTags(proxies))
   }
   if (['hk', 'hk-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /港|hk|hong.*kong|🇭🇰/i))
+    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量)).*(港|hk|hong.*kong|🇭🇰)/i))
   }
   if (['tw', 'tw-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /台|tw|tai.*wan|🇹🇼/i))
+    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量)).*(台|tw|tai.*wan|🇹🇼)/i))
   }
   if (['jp', 'jp-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /日本|jp|japan|🇯🇵/i))
+    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量)).*(日本|jp|japan|🇯🇵)/i))
   }
   if (['sg', 'sg-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /^(?!.*(?:us)).*(新|sg|singapore|🇸🇬)/i))
+    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量)).*(新|sg|singapore|🇸🇬)/i))
   }
   if (['us', 'us-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /美|us|united.*states|🇺🇸/i))
+    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量)).*(美|us|united.*states|🇺🇸)/i))
   }
   if (['noCN-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /^(?=.*(港|hk|hongkong|Hong Kong|🇭🇰|台|🇹🇼|TW|Taiwan))/i))
+    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|港|hk|hongkong|Hong Kong|🇭🇰|台|🇹🇼|TW|Taiwan))/i))
 }})
 
 config.outbounds.forEach(outbound => {
