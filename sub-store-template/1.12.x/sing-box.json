@@ -171,7 +171,7 @@
       "default": "direct"
     },
     {
-      "tag": "netflix",
+      "tag": "streaming",
       "type": "selector",
       "outbounds": [
         "proxy",
@@ -359,12 +359,15 @@
           "imap.qq.com",
           "smtp.qq.com"
         ],
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
         "domain_suffix": [
           "hutaoindex.com",
           "besttelecom.cc"
         ],
-        "ip_is_private": true,
-        "outbound": "direct"
+        "outbound": "streaming"
       },
       {
         "protocol": "bittorrent",
@@ -392,7 +395,7 @@
           "netflix_ip",
           "netflix_domain"
         ],
-        "outbound": "netflix"
+        "outbound": "streaming"
       },
       {
         "rule_set": [
