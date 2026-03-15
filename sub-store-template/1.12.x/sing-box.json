@@ -386,8 +386,7 @@
         "outbound": "youtube"
       },
       {
-        "domain":["api.deerapi.com"],
-        "rule_set": ["ai_domain", "microsoft_non_ip"],
+        "rule_set": ["ai_domain", "microsoft"],
         "outbound": "ai"
       },
       {
@@ -438,7 +437,8 @@
       {
         "rule_set": [
           "cn_ip",
-          "cn_domain"
+          "cn_domain",
+          "microsoft_cdn"
         ],
         "outbound": "cn"
       }
@@ -550,10 +550,17 @@
         "download_detour": "direct"
       },
       {
-        "tag": "microsoft_non_ip",
+        "tag": "microsoft",
         "type": "remote",
         "format": "source",
         "url": "https://ruleset.skk.moe/sing-box/non_ip/microsoft.json",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "microsoft_cdn",
+        "type": "remote",
+        "format": "source",
+        "url": "https://ruleset.skk.moe/sing-box/non_ip/microsoft_cdn.json",
         "download_detour": "direct"
       }
     ],
