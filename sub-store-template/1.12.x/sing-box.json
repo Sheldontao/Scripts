@@ -126,7 +126,7 @@
       "default": "proxy"
     },
     {
-      "tag": "apple",
+      "tag": "apple_cn",
       "type": "selector",
       "outbounds": [
         "proxy",
@@ -412,10 +412,9 @@
       },
       {
         "rule_set": [
-          "apple_ip",
-          "apple_domain"
+          "apple_cn"
         ],
-        "outbound": "apple"
+        "outbound": "apple_cn"
       },
       {
         "type": "logical",
@@ -438,24 +437,17 @@
         "rule_set": [
           "cn_ip",
           "cn_domain",
-          "microsoft_cdn"
+          "microsoft_cdn_cn"
         ],
         "outbound": "cn"
       }
     ],
     "rule_set": [
       {
-        "tag": "apple_ip",
+        "tag": "apple_cn",
         "type": "remote",
         "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/apple.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "apple_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/apple.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/apple-cn.srs",
         "download_detour": "direct"
       },
       {
@@ -557,7 +549,7 @@
         "download_detour": "direct"
       },
       {
-        "tag": "microsoft_cdn",
+        "tag": "microsoft_cdn_cn",
         "type": "remote",
         "format": "source",
         "url": "https://ruleset.skk.moe/sing-box/non_ip/microsoft_cdn.json",
