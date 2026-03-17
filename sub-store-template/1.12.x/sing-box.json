@@ -50,7 +50,7 @@
         "mode": "and",
         "rules": [
           {
-            "rule_set": "proxy_domain",
+            "rule_set": ["proxy_domain", "gfw"],
             "invert": true
           },
           {
@@ -421,7 +421,7 @@
         "mode": "and",
         "rules": [
           {
-            "rule_set": "proxy_domain"
+            "rule_set": ["proxy_domain", "gfw"]
           },
           {
             "invert": true,
@@ -511,6 +511,13 @@
         "type": "remote",
         "format": "binary",
         "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-chat-!cn.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "gfw",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/blob/sing-box-ruleset/gfw.srs",
         "download_detour": "direct"
       },
       {
