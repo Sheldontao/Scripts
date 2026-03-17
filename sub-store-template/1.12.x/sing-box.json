@@ -517,7 +517,7 @@
         "tag": "gfw",
         "type": "remote",
         "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/blob/sing-box-ruleset/gfw.srs",
+        "url": "https://ghfast.top/https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/gfw.srs",
         "download_detour": "direct"
       },
       {
