@@ -34,6 +34,10 @@
         "server": "dns_proxy"
       },
       {
+        "rule_set": "ads",
+        "action": "predefined"
+      },
+      {
         "query_type": [
           "A",
           "AAAA"
@@ -122,8 +126,7 @@
         "us-auto",
         "all",
         "noCN-auto"
-      ],
-      "default": "proxy"
+      ]
     },
     {
       "tag": "apple_cn",
@@ -152,8 +155,7 @@
         "sg-auto",
         "us-auto",
         "all"
-      ],
-      "default": "proxy"
+      ]
     },
     {
       "tag": "bilibili",
@@ -183,7 +185,7 @@
         "us-auto",
         "all"
       ],
-      "default": "proxy"
+      "default": "direct"
     },
     {
       "tag": "bahamut",
@@ -197,8 +199,7 @@
         "sg-auto",
         "us-auto",
         "all"
-      ],
-      "default": "proxy"
+      ]
     },
     {
       "tag": "youtube",
@@ -212,8 +213,7 @@
         "sg-auto",
         "us-auto",
         "all"
-      ],
-      "default": "proxy"
+      ]
     },
     {
       "tag": "ai",
@@ -245,6 +245,22 @@
         "all"
       ],
       "default": "direct"
+    },
+    {
+      "tag": "ads",
+      "type": "selector",
+      "outbounds": [
+        "block",
+        "direct"
+      ]
+    },
+    {
+      "tag": "direct",
+      "type": "direct"
+    },
+    {
+      "tag": "block",
+      "type": "block"
     },
     {
       "tag": "noCN-auto",
@@ -304,10 +320,6 @@
       "tag": "all",
       "type": "selector",
       "outbounds": []
-    },
-    {
-      "tag": "direct",
-      "type": "direct"
     }
   ],
   "route": {
@@ -328,6 +340,10 @@
           }
         ],
         "action": "hijack-dns"
+      },
+      {
+        "rule_set": "ads",
+        "outbound": "ads"
       },
       {
         "type": "logical",
@@ -359,6 +375,12 @@
           "imap.qq.com",
           "smtp.qq.com"
         ],
+        "domain_suffix": [
+          "smtp"
+        ],
+        "domain_keyword": [
+          "aria2"
+        ],
         "ip_is_private": true,
         "outbound": "direct"
       },
@@ -386,27 +408,27 @@
         "outbound": "youtube"
       },
       {
-        "rule_set": ["ai_domain", "microsoft"],
+        "rule_set": ["ai_domain"],
         "outbound": "ai"
       },
       {
         "rule_set": [
-          "netflix_ip",
-          "netflix_domain"
+          "netflix_domain",
+          "netflix_ip"
         ],
         "outbound": "streaming"
       },
       {
         "rule_set": [
-          "telegram_ip",
-          "telegram_domain"
+          "telegram_domain",
+          "telegram_ip"
         ],
         "outbound": "telegram"
       },
       {
         "rule_set": [
-          "google_ip",
-          "google_domain"
+          "google_domain",
+          "google_ip"
         ],
         "outbound": "google"
       },
@@ -435,9 +457,9 @@
       },
       {
         "rule_set": [
-          "cn_ip",
           "cn_domain",
-          "microsoft_cdn_cn"
+          "cn_ip",
+          "microsoft_cn"
         ],
         "outbound": "cn"
       }
@@ -549,17 +571,17 @@
         "download_detour": "direct"
       },
       {
-        "tag": "microsoft",
+        "tag": "microsoft_cn",
         "type": "remote",
-        "format": "source",
-        "url": "https://ruleset.skk.moe/sing-box/non_ip/microsoft.json",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/microsoft@cn.srs",
         "download_detour": "direct"
       },
       {
-        "tag": "microsoft_cdn_cn",
+        "tag": "ads",
         "type": "remote",
         "format": "source",
-        "url": "https://ruleset.skk.moe/sing-box/non_ip/microsoft_cdn.json",
+        "url": "https://ruleset.skk.moe/sing-box/domainset/reject.json",
         "download_detour": "direct"
       }
     ],
