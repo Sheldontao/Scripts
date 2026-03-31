@@ -4,6 +4,12 @@
     "output": "sing-box.log",
     "timestamp": true
   },
+  "ntp": {
+    "enabled": true,
+    "server": "ntp.aliyun.com",
+    "server_port": 123,
+    "interval": "30m"
+  },
   "dns": {
     "servers": [
       {
@@ -247,14 +253,6 @@
       "default": "direct"
     },
     {
-      "tag": "ads",
-      "type": "selector",
-      "outbounds": [
-        "block",
-        "direct"
-      ]
-    },
-    {
       "tag": "direct",
       "type": "direct"
     },
@@ -342,8 +340,18 @@
         "action": "hijack-dns"
       },
       {
-        "rule_set": "ads",
-        "outbound": "ads"
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "clash_mode": "AllowAds",
+            "invert": true
+          },
+          {
+            "rule_set": "ads"
+          }
+        ],
+        "action": "reject"
       },
       {
         "type": "logical",
