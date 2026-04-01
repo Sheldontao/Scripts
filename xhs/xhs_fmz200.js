@@ -105,26 +105,6 @@ const getCachedCountsThreshold = (key, argValue) => {
   return counts;
 };
 
-if (url.includes("/search/banner_list")) {
-  obj.data = {};
-}
-
-if (url.includes("/search/hot_list")) {
-  // 热搜列表
-  obj.data.items = [];
-}
-
-if (url.includes("/search/hint")) {
-  // 搜索栏填充词
-  obj.data.hint_words = [];
-}
-
-if (url.includes("/search/trending?")) {
-  // 搜索栏
-  obj.data.queries = [];
-  obj.data.hint_word = {};
-}
-
 if (url.includes("/search/notes?")) {
   // 搜索结果
   //console.log("Arguments received for search: " + JSON.stringify($argument)); // <--- 我建议增加这一行
@@ -160,42 +140,6 @@ ${item.note.user.nickname}`);
       }
       return true;
     });
-  }
-}
-
-if (url.includes("/system_service/config?")) {
-  // 整体配置
-  const item = ["app_theme", "loading_img", "splash", "store"];
-  if (obj.data) {
-    for (let i of item) {
-      delete obj.data[i];
-    }
-  }
-}
-
-if (url.includes("/system/service/ui/config")) {
-  // 整体 UI 配置
-  if (obj?.data?.sideConfigHomepage?.componentConfig?.sidebar_config_cny_2025) {
-    obj.data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025 = {};
-  }
-  if (obj?.data?.sideConfigPersonalPage?.componentConfig?.sidebar_config_cny_2025) {
-    obj.data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025 = {};
-  }
-}
-
-if (url.includes("/system_service/splash_config")) {
-  // 开屏广告
-  if (obj?.data?.ads_groups?.length > 0) {
-    for (let i of obj.data.ads_groups) {
-      i.start_time = 3818332800; // Unix 时间戳 2090-12-31 00:00:00
-      i.end_time = 3818419199; // Unix 时间戳 2090-12-31 23:59:59
-      if (i?.ads?.length > 0) {
-        for (let ii of i.ads) {
-          ii.start_time = 3818332800; // Unix 时间戳 2090-12-31 00:00:00
-          ii.end_time = 3818419199; // Unix 时间戳 2090-12-31 23:59:59
-        }
-      }
-    }
   }
 }
 
@@ -262,15 +206,6 @@ if (url.includes("/note/live_photo/save")) {
     obj = {"code": 0, "success": true, "msg": "成功", "data": {"datas": new_data}};
   }
   console.log('新body：' + JSON.stringify(obj));
-}
-
-if (url.includes("/note/widgets")) {
-  const item = ["cooperate_binds", "generic", "note_next_step", "widget_list"];
-  if (obj?.data) {
-    for (let i of item) {
-      delete obj.data[i];
-    }
-  }
 }
 
 if (url.includes("/v3/note/videofeed?")) {
@@ -386,29 +321,6 @@ if (url.includes("/v10/note/video/save")) {
     delete obj.data.disable;
     delete obj.data.msg;
     obj.data.status = 2;
-  }
-}
-
-if (url.includes("/user/followings/followfeed")) {
-  // 关注页信息流 可能感兴趣的人
-  if (obj?.data?.items?.length > 0) {
-    // 白名单
-    obj.data.items = obj.data.items.filter((i) => i?.recommend_reason === "friend_post");
-  }
-}
-
-if (url.includes("/v4/followfeed")) {
-  // 关注列表
-  if (obj?.data?.items?.length > 0) {
-    // recommend_user 可能感兴趣的人
-    obj.data.items = obj.data.items.filter((i) => !["recommend_user"].includes(i.recommend_reason));
-  }
-}
-
-if (url.includes("/recommend/user/follow_recommend")) {
-  // 用户详情页 你可能感兴趣的人
-  if (obj?.data?.title === "你可能感兴趣的人" && obj?.data?.rec_users?.length > 0) {
-    obj.data = {};
   }
 }
 

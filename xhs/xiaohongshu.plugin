@@ -37,6 +37,21 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 # 搜索页
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/banner_list$ response-body-json-replace data {}
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/hot_list$ response-body-json-replace data.items []
+^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/hint\? response-body-json-replace data.hint_words []
+^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/trending\? response-body-json-jq 'if .data != null then .data.queries = [] | .data.hint_word = {} else . end'
+
+# 整体配置
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config\? response-body-json-jq 'del(.data.app_theme?, .data.loading_img?, .data.splash?, .data.store?)'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/system\/service\/ui\/config\? response-body-json-jq 'if .data != null and .data.sideConfigHomepage != null and .data.sideConfigHomepage.componentConfig != null and .data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025 != null then .data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025 = {} else . end | if .data != null and .data.sideConfigPersonalPage != null and .data.sideConfigPersonalPage.componentConfig != null and .data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025 != null then .data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025 = {} else . end'
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config response-body-json-jq 'if .data != null and .data.ads_groups != null then .data.ads_groups |= map(.start_time = 3818332800 | .end_time = 3818419199 | if .ads != null then .ads |= map(.start_time = 3818332800 | .end_time = 3818419199) else . end) else . end'
+
+# 详情页,小部件
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets response-body-json-jq 'del(.data.cooperate_binds?, .data.generic?, .data.note_next_step?, .data.widget_list?)'
+
+# 关注列表/推荐
+^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/user\/followings\/followfeed response-body-json-jq 'if .data != null and .data.items != null then .data.items |= map(select(.recommend_reason == "friend_post")) else . end'
+^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v4\/followfeed response-body-json-jq 'if .data != null and .data.items != null then .data.items |= map(select(.recommend_reason != "recommend_user")) else . end'
+^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/recommend\/user\/follow_recommend response-body-json-jq 'if .data != null and .data.title == "你可能感兴趣的人" and (.data.rec_users | length) > 0 then .data = {} else . end'
 
 
 # 笔记创作推荐
@@ -49,15 +64,20 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 # ^https:\/\/rec\.xiaohongshu\.com\/api\/sns\/v\d+\/homefeed response-body-json-jq '.data |= map(select((((.recommend.type // "") == "hot_reason") or ((.recommend.desc // "") == "热点") or (((.recommend.track_id // "") | test("(^|_)hotspot|hotspoti2i"; "i"))) or (((.rec_extra_info // "") | test("\"hotEventId\"")))) | not))'
 
 [Script]
+# 关注列表/推荐
+# http-response ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/user\/followings\/followfeed script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书关注页信息流
+# http-response ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v4\/followfeed script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书关注列表
+# http-response ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/recommend\/user\/follow_recommend script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书你可能感兴趣的人
+
 # 移除整体配置
-http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/system\/service\/ui\/config\? script-path =https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body = true, tag = 小红书移除整体配置
+# http-response ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/system\/service\/ui\/config\? script-path =https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body = true, tag = 小红书移除整体配置
 
 # 开屏广告
-http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书开屏广告
-http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书开屏广告
+# http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书开屏广告
+# http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书开屏广告
 
 # 详情页,小部件
-http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书详情页
+# http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书详情页
 
 # 信息流,homefeed regex过滤，图片水印
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/(followfeed|homefeed)\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书首页流regex过滤, argument = [{xhs_des_regex},{xhs_nickname_regex},{xhs_counts_threshold}]
@@ -66,6 +86,7 @@ http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/(
 # http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/(banner|hot)_list script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书搜索页
 # http-response ^https?:\/\/(?:so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/(hint|trending)\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书搜索页
 http-response ^https?:\/\/(?:so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/notes\? script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书搜索页, argument = [{xhs_search_des_regex},{xhs_search_nickname_regex}]
+
 
 # 实况、图片、视频水印
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/(imagefeed|live_photo\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=图片水印视频水印
