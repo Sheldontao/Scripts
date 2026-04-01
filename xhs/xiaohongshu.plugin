@@ -1,7 +1,7 @@
 #!name=xiaohongshu
 #!desc=Regex参照默认格式！当loon关闭时，小红书直连会有quic请求，手动添加上AND, ((PROTOCOL, QUIC), (DEST-PORT, 443)), REJECT或者自行寻找quic的ip请求
 #!author=奶思[https://github.com/fmz200], Leo
-#!icon=https://raw.githubusercontent.com/sooyaaabo/Loon/main/Icon/App-Icon/RedNote.png
+#!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png
 #!homepage=https://github.com/Sheldontao/Scripts
 #!raw-url=https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
 #!tg-group=https://t.me/lanjieguanggao
