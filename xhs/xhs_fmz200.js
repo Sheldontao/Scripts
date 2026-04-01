@@ -420,7 +420,16 @@ if (url.includes("/homefeed")) {
       ) {
         return false;
       }
-      // 2. 正则过滤描述
+      // 2. 移除首页热点 (由原 jq 转化而来)
+      if (
+        item?.recommend?.type === "hot_reason" || 
+        item?.recommend?.desc === "热点" || 
+        (item?.recommend?.track_id && /(^|_)hotspot|hotspoti2i/i.test(item.recommend.track_id)) ||
+        (item?.rec_extra_info && item.rec_extra_info.includes('"hotEventId"'))
+      ) {
+        return false;
+      }
+      // 3. 正则过滤描述
       // 首页流的描述可能在 item.desc 或 item.note.desc
       const currentDesc = item?.desc || item?.note?.desc;
       if (descRegexes.length > 0 && currentDesc) {
@@ -431,7 +440,7 @@ if (url.includes("/homefeed")) {
           }
         }
       }
-      // 3. 正则过滤昵称
+      // 4. 正则过滤昵称
       // 首页流的昵称可能在 item.user.nickname 或 item.note.user.nickname
       const currentNickname = item?.user?.nickname || item?.note?.user?.nickname;
       if (nicknameRegexes.length > 0 && currentNickname) {
@@ -442,7 +451,7 @@ if (url.includes("/homefeed")) {
           }
         }
       }
-      // 4. 数值阈值过滤
+      // 5. 数值阈值过滤
       if (countsThreshold.length === 5) {
         const [minLikes, minCollected, minComments, minShared, minNice] = countsThreshold;
         if (
