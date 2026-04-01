@@ -173,6 +173,16 @@ if (url.includes("/system_service/config?")) {
   }
 }
 
+if (url.includes("/system/service/ui/config")) {
+  // 整体 UI 配置
+  if (obj?.data?.sideConfigHomepage?.componentConfig?.sidebar_config_cny_2025) {
+    obj.data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025 = {};
+  }
+  if (obj?.data?.sideConfigPersonalPage?.componentConfig?.sidebar_config_cny_2025) {
+    obj.data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025 = {};
+  }
+}
+
 if (url.includes("/system_service/splash_config")) {
   // 开屏广告
   if (obj?.data?.ads_groups?.length > 0) {
