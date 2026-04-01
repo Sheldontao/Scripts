@@ -402,43 +402,47 @@ if (url.includes("/recommend/user/follow_recommend")) {
   }
 }
 
-if (url.includes("/v6/homefeed")) {
+// 修改 /v6/homefeed 的匹配逻辑
+if (url.includes("/homefeed")) {
   if (obj?.data?.length > 0) {
-    // 信息流广告
-    //let newItems = [];
-    
     const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
     const nicknameRegexes = getCachedRegexes("fmz200.xhs_nickname_regex_cache", $argument.xhs_nickname_regex);
-
     const countsThreshold = getCachedCountsThreshold("fmz200.xhs_counts_threshold_cache", $argument.xhs_counts_threshold);
-
     obj.data = obj.data.filter(item => {
-      // Filter out known ad/sponsored content types
-      if (item?.model_type === "live_v2" || item?.ads_info || item?.card_icon || item?.note_attributes?.includes("goods")) {
+      // 1. 核心过滤：识别直播、广告、带货笔记
+      // 针对你说的字典结构，直接判断 item 下的属性
+      if (
+        (item?.model_type && String(item.model_type).includes("live")) || 
+        item?.live || 
+        item?.ads_info || 
+        item?.card_icon || 
+        item?.note_attributes?.includes("goods")
+      ) {
         return false;
       }
-
-      // Apply description regex filters
-      if (descRegexes.length > 0 && item?.desc) {
+      // 2. 正则过滤描述
+      // 首页流的描述可能在 item.desc 或 item.note.desc
+      const currentDesc = item?.desc || item?.note?.desc;
+      if (descRegexes.length > 0 && currentDesc) {
         for (const regex of descRegexes) {
-          if (regex.test(item.desc)) {
-            console.log(`Filtered out item with desc matching regex \n(Matched by: ${regex.source}): \n${item.desc}`);
+          if (regex.test(currentDesc)) {
+            console.log(`Filtered out item with desc matching regex: ${currentDesc}`);
             return false;
           }
         }
       }
-
-      // Apply nickname regex filters
-      if (nicknameRegexes.length > 0 && item?.user?.nickname) {
+      // 3. 正则过滤昵称
+      // 首页流的昵称可能在 item.user.nickname 或 item.note.user.nickname
+      const currentNickname = item?.user?.nickname || item?.note?.user?.nickname;
+      if (nicknameRegexes.length > 0 && currentNickname) {
         for (const regex of nicknameRegexes) {
-          if (regex.test(item.user.nickname)) {
-            console.log(`Filtered out item with nickname matching regex \n(Matched by: ${regex.source}): \n${item.user.nickname}`);
+          if (regex.test(currentNickname)) {
+            console.log(`Filtered out item with nickname matching regex: ${currentNickname}`);
             return false;
           }
         }
       }
-
-      // Apply counts threshold filter
+      // 4. 数值阈值过滤
       if (countsThreshold.length === 5) {
         const [minLikes, minCollected, minComments, minShared, minNice] = countsThreshold;
         if (
@@ -448,16 +452,13 @@ if (url.includes("/v6/homefeed")) {
           (item?.collected_count !== undefined && item.collected_count < minCollected) ||
           (item?.nice_count !== undefined && item.nice_count < minNice)
         ) {
-          console.log(`Filtered out item due to low counts: likes=${item.likes || 0} (min ${minLikes}), collected_count=${item.collected_count || 0} (min ${minCollected}), comments_count=${item.comments_count || 0} (min ${minComments}), shared_count=${item.shared_count || 0} (min ${minShared}), nice_count=${item.nice_count || 0} (min ${minNice})`);
           return false;
         }
       }
-
-      // Remove related_ques if it exists
+      // 移除相关问题
       if (item?.related_ques) {
         delete item.related_ques;
       }
-
       return true;
     });
   }
