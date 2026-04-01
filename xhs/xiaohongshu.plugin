@@ -4,10 +4,9 @@
 #!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png
 #!homepage=https://github.com/Sheldontao/Scripts
 #!raw-url=https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
-#!tg-group=https://t.me/lanjieguanggao
 
 #!loon_version = 3.3.7(921)
-#!date = 2025-12-20 09:00; app_version = 25.10.31
+#!date = 2026-4-01 18:00; app_version = 25.10.31
 
 
 [Argument]
