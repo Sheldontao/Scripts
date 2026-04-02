@@ -942,9 +942,18 @@ function MagicJS(e = "MagicJS", t = "INFO") {
           "function" == typeof MagicQingLong
             ? MagicQingLong(this.env, this.data, this.logger)
             : void 0),
-        void 0 !== this.data)
-      ) {
-        let e = this.data.read("magic_loglevel");
+      if (void 0 !== this.data) {
+        let e =
+          this.data.read("zhihu_settings_loglevel") ||
+          this.data.read("magic_loglevel");
+        if (this.argument) {
+          if ("string" == typeof this.argument) {
+            const t = this.argument.match(/LogLevel=([^&,]*)/i);
+            t && (e = t[1]);
+          } else if ("object" == typeof this.argument) {
+            e = this.argument.LogLevel || e;
+          }
+        }
         const t = this.data.read("magic_bark_url");
         (e && this.logger.setLevel(e.toUpperCase()),
           t && this.notification.setBark(t));
@@ -957,7 +966,10 @@ function MagicJS(e = "MagicJS", t = "INFO") {
       return "undefined" != typeof $response;
     }
     get isDebug() {
-      return "DEBUG" === this.logger.level;
+      return "DEBUG" === this.logger.getLevel();
+    }
+    get argument() {
+      return "undefined" != typeof $argument ? $argument : void 0;
     }
     get request() {
       return "undefined" != typeof $request ? $request : void 0;
