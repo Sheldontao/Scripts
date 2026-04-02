@@ -1,2 +1,0 @@
-#!/bin/bash
-echo '{"data": {}}' | jq '(if .data != null and .data.cooperate_binds != null then del(.data.cooperate_binds) else . end) | (if .data != null and .data.generic != null then del(.data.generic) else . end) | (if .data != null and .data.note_next_step != null then del(.data.note_next_step) else . end) | (if .data != null and .data.widget_list != null then del(.data.widget_list) else . end)'
