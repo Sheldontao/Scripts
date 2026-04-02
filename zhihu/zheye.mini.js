@@ -942,7 +942,8 @@ function MagicJS(e = "MagicJS", t = "INFO") {
           "function" == typeof MagicQingLong
             ? MagicQingLong(this.env, this.data, this.logger)
             : void 0),
-      if (void 0 !== this.data) {
+        void 0 !== this.data)
+      ) {
         let e =
           this.data.read("zhihu_settings_loglevel") ||
           this.data.read("magic_loglevel");
