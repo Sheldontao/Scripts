@@ -24,7 +24,7 @@ function modifyAppTabConfig() {
   try {
     if (!1 === $.data.read("zhihu_settings_app_conf", !1)) return null;
     const e = JSON.parse($.response.body),
-      t = ["follow", "recommend", "hot"];
+      t = ["follow", "recommend"];
     return (
       (e.tab_list = e.tab_list?.filter((e) => t.includes(e.tab_type)) || []),
       $.logger.debug(`修改推荐页Tab：${JSON.stringify(e)}`),
@@ -466,13 +466,18 @@ function isFiltered(e, t, r, n, o) {
             // Check for "浏览"
             const promotionWord = ["浏览", "购买", "咨询", "进店","感兴趣"].find(word => element.text.includes(word));
             if (promotionWord) {
-                logger.debug(`包含推销关键词 "${promotionWord}".`, item);
+                $.logger.debug(`包含推销关键词 "${promotionWord}".`, element.text);
                 return true;
+            }
+            // Check for "\d小时前"
+            if (/^\d+小时前$/.test(element.text)) {
+              $.logger.debug(`匹配到时间广告: ${element.text}`);
+              return true;
             }
             // Check for "（\d+）赞同" and consent_number
             const match = element.text.match(/(\d+)\s*赞同/);
             if (match && parseInt(match[1]) < consent_number) {
-              $.logger.debug(`过滤掉赞同数低于 ${consent_number} 的元素: ${JSON.stringify(e)}`);
+              $.logger.debug(`过滤掉赞同数低于 ${consent_number} 的元素: ${element.text}`);
               return true;
             }
           }
