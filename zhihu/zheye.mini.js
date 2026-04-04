@@ -457,27 +457,50 @@ function isFiltered(e, t, r, n, o) {
 
 
   // 2 new logic for filtering
-  const consent_number = 50;
+  let thresholds = {
+    "Vote": 50,      // Minimum votes
+    "Collect": 0,     // Minimum collects
+    "Comment": 0      // Minimum comments
+  };
+
+  if ($.threshold) {
+    const parts = $.threshold.split(",");
+    if (parts.length === 3) {
+      thresholds["Vote"] = parseInt(parts[0]);
+      thresholds["Collect"] = parseInt(parts[1]);
+      thresholds["Comment"] = parseInt(parts[2]);
+    }
+  }
+
   if (e.children && Array.isArray(e.children)) {
     for (const child of e.children) {
       if (child.elements && Array.isArray(child.elements)) {
         for (const element of child.elements) {
-          if (element.text) {
-            // Check for "浏览"
-            const promotionWord = ["浏览", "购买", "咨询", "进店","感兴趣"].find(word => element.text.includes(word));
-            if (promotionWord) {
-                $.logger.debug(`包含推销关键词 "${promotionWord}".`, element.text);
-                return true;
+          // 1. Check structured reaction counts (Vote, Collect, Comment)
+          if (element.reaction && element.count !== undefined) {
+            const threshold = thresholds[element.reaction];
+            if (threshold !== undefined && element.count < threshold) {
+              $.logger.debug(`过滤低质量内容: ${element.reaction}数(${element.count})低于阈值(${threshold})`);
+              return true;
             }
-            // Check for "\d小时前"
+          }
+
+          if (element.text) {
+            // 2. Check for promotion keywords
+            const promotionWord = ["浏览", "购买", "咨询", "进店", "感兴趣"].find(word => element.text.includes(word));
+            if (promotionWord) {
+              $.logger.debug(`包含推销关键词 "${promotionWord}".`, element.text);
+              return true;
+            }
+            // 3. Check for time-based ads
             if (/^\d+小时前$/.test(element.text)) {
               $.logger.debug(`匹配到时间广告: ${element.text}`);
               return true;
             }
-            // Check for "（\d+）赞同" and consent_number
+            // 4. Check for text-based "Vote" counts (e.g. "195 赞同")
             const match = element.text.match(/(\d+)\s*赞同/);
-            if (match && parseInt(match[1]) < consent_number) {
-              $.logger.debug(`过滤掉赞同数低于 ${consent_number} 的元素: ${element.text}`);
+            if (match && parseInt(match[1]) < thresholds["Vote"]) {
+              $.logger.debug(`过滤掉赞同数低于 ${thresholds["Vote"]} 的元素: ${element.text}`);
               return true;
             }
           }
@@ -947,16 +970,21 @@ function MagicJS(e = "MagicJS", t = "INFO") {
         let e =
           this.data.read("zhihu_settings_loglevel") ||
           this.data.read("magic_loglevel");
+        let threshold = this.data.read("zhihu_settings_threshold") || "50,0,0";
         if (this.argument) {
           if ("string" == typeof this.argument) {
             const t = this.argument.match(/LogLevel=([^&,]*)/i);
             t && (e = t[1]);
+            const s = this.argument.match(/Threshold=([^&,]*)/i);
+            s && (threshold = s[1]);
           } else if ("object" == typeof this.argument) {
             e = this.argument.LogLevel || e;
+            threshold = this.argument.Threshold || threshold;
           }
         }
         const t = this.data.read("magic_bark_url");
         (e && this.logger.setLevel(e.toUpperCase()),
+          this.threshold = threshold,
           t && this.notification.setBark(t));
       }
     }
