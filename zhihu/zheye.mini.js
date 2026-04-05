@@ -235,19 +235,24 @@ function autoInsertBlackList() {
 function removeMoments() {
   try {
     const e = $.data.read("zhihu_settings_blocked_users", !1);
-    if (!1 === e) return null;
     let t = JSON.parse($.response?.body || "{}");
     const r = getUserInfo();
     let n = {};
-    return (
-      (n = $.data.read(blockedUsersKey, {}, r.id) || {}),
-      (t.data =
-        t.data?.filter((t) => {
-          const r = t.target?.author;
-          return !(e && r && n.hasOwnProperty(r));
-        }) || []),
-      { body: JSON.stringify(t) }
-    );
+    if (e) n = $.data.read(blockedUsersKey, {}, r.id) || {};
+
+    if (t.data) {
+      t.data = t.data.filter((t) => {
+        // 1. 深度嗅探广告
+        if (sniffAd(t, { recommend_stream: true })) return false;
+
+        // 2. 黑名单用户过滤
+        const author = t.target?.author?.name || t.target?.author;
+        if (e && author && n[author]) return false;
+
+        return true;
+      });
+    }
+    return { body: JSON.stringify(t) };
   } catch (e) {
     $.logger.error(`关注列表去广告出现异常：${e}`);
   }
