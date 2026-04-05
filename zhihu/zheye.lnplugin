@@ -1,10 +1,11 @@
-#!name=哲也同学(version 10.88.0)
-#!desc=人在蒙古，刚下航母\n10.88.0版本(最近的无横幅图标)\n minimum vote/collect/comment count; filter “游览”tag; filter "1小时前"tag; add loglevel\n\n需手动在本地分流规则添加以下内容(优先级问题):\nIP-CIDR,103.41.167.237/32,REJECT,no-resolve\nIP-CIDR,118.89.204.198/32,REJECT,no-resolve\nIP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT,no-resolve
+#!name=知乎
+#!desc=人在蒙古，刚下航母\njq重写\n10.88.0版本(最近的无横幅图标)\n minimum vote/collect/comment count; filter “游览”tag; filter "1小时前"tag; add loglevel\n\n需手动在本地分流规则添加以下内容(优先级问题):\nIP-CIDR,103.41.167.237/32,REJECT,no-resolve\nIP-CIDR,118.89.204.198/32,REJECT,no-resolve\nIP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT,no-resolve
 #!openUrl=https://github.com/blackmatrix7/ios_rule_script
 #!author=blackmatrix7, leo
 #!homepage=https://github.com/blackmatrix7/ios_rule_script
 #!icon=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/script/zheye/zheye.png
-#!date=2026.04.02
+#!date=2026.04.05
+#!version= zhihu: 10.88.0
 
 [Argument]
 LogLevel = select, "INFO", "WARN", "ERROR", "DEBUG", tag=zheye日志等级
