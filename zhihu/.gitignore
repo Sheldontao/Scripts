@@ -1,3 +1,6 @@
-zh_response_body.json
-copyzheye.lnplugin
-copyzhe.mini.js
+./docs
+*.js
+*plugin
+*.json
+!zheye.mini.js
+!zheye.lnplugin
