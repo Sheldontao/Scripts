@@ -421,28 +421,43 @@ async function removeRecommend() {
     return ($.logger.error(`推荐列表去广告出现异常：${e}`), null);
   }
 }
-const AD_TYPE_RE = /(zvideo|BIG_IMAGE|drama|StyleVideo|app_ad|ad_card)/i;
+const AD_TYPE_RE = /(zvideo|Video|BIG_IMAGE|drama|StyleVideo|app_ad|ad_card|FeedVideo)/i;
 const PAID_MARKERS = ["paid", "vip", "km_paid_answer"];
 const PROMOTION_WORDS = ["浏览", "购买", "咨询", "进店", "感兴趣"];
 
 function sniffAd(e, r) {
-  // 1. 基础标识层 (命中即广告)
+  // 1. 基础标识层
   if (e.ad || e.ad_info || e.adjson || e.common_card?.feed_content?.video?.ad_info) return true;
   if (e.type === "market_card" || e.type === "feed_advert") return true;
   if (e.extra?.type === "SvipActivity") return true;
 
-  // 2. 流媒体/大图/视频 (受 recommend_stream 开关控制)
+  // 2. 穿透扫描 (针对 ComponentCard 等复杂结构)
+  const typesToCheck = [
+    e.common_card?.style,
+    e.target?.type,
+    e.target?.content_type,
+    e.extra?.type,
+    e.extra?.content_type,
+    e.common_card?.feed_content?.video?.type,
+    e.common_card?.feed_content?.content?.type,
+    e.target?.style?.type
+  ];
+
+  // 检查 Video 相关
   if (r.recommend_stream) {
-    const streamPaths = [
-      e.common_card?.style,
-      e.target?.type,
-      e.target?.content_type,
-      e.extra?.type,
-      e.common_card?.feed_content?.video?.type,
-      e.common_card?.feed_content?.content?.type,
-      e.target?.style?.type
-    ];
-    if (streamPaths.some(p => p && AD_TYPE_RE.test(p))) return true;
+    if (typesToCheck.some(p => p && AD_TYPE_RE.test(p))) return true;
+    // 深度检查子节点
+    if (e.children?.some(c => c.type === "Video" || c.video_data)) return true;
+  }
+
+  // 检查 Pin (想法) - 找回漏掉的路径
+  if (r.remove_pin) {
+    if (e.target?.type === "pin" || e.extra?.content_type === "pin") return true;
+  }
+
+  // 检查 Article (文章)
+  if (r.remove_article) {
+    if (e.target?.type === "article" || e.extra?.content_type === "article") return true;
   }
 
   // 3. 付费内容嗅探
@@ -459,17 +474,13 @@ function sniffAd(e, r) {
 }
 
 function isFiltered(e, r, n, o) {
-  // 1. 深度嗅探广告与拦截类型
+  // 1. 深度嗅探广告与拦截类型 (已包含 pin/video/article 的路径检查)
   if (sniffAd(e, r)) return true;
 
   // 2. 软文过滤
   if (r.remove_advertorial && (e.promotion_extra || e.common_card?.footline?.elements?.[0]?.text?.includes("商品介绍"))) return true;
 
-  // 3. 类型显式过滤 (保持原有的配置灵活性)
-  if (r.remove_article && e.target?.type === "article") return true;
-  if (r.remove_pin && e.target?.type === "pin") return true;
-
-  // 4. 关键词过滤 (性能保留：仅在开启时进行序列化)
+  // 3. 关键词过滤 (性能保留：仅在开启时进行序列化)
   if (r.blocked_keywords && n.length > 0) {
     const contentStr = JSON.stringify(e);
     if (n.some(k => contentStr.includes(k))) return true;
