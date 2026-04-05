@@ -446,11 +446,14 @@ function sniffAd(e, r) {
   // 检查 Video 相关
   if (r.recommend_stream) {
     if (typesToCheck.some(p => p && AD_TYPE_RE.test(p))) return true;
-    // 深度检查子节点
     if (e.children?.some(c => c.type === "Video" || c.video_data)) return true;
   }
 
-  // 检查 Pin (想法) - 找回漏掉的路径
+  // 检查图片展示卡片 (新增：去除所有展示中包含图片的字典)
+  if (e.extra?.business_ext_map?.images?.length > 0 || e.extra?.business_ext_map?.isRefreshImageInfo) return true;
+  if (e.children?.some(c => c.type === "Images")) return true;
+
+  // 检查 Pin (想法)
   if (r.remove_pin) {
     if (e.target?.type === "pin" || e.extra?.content_type === "pin") return true;
   }
