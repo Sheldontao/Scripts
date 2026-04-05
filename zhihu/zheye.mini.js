@@ -449,8 +449,8 @@ function sniffAd(e, r) {
     if (e.children?.some(c => c.type === "Video" || c.video_data)) return true;
   }
 
-  // 检查图片展示卡片 (新增：去除所有展示中包含图片的字典)
-  if (e.extra?.business_ext_map?.images?.length > 0 || e.extra?.business_ext_map?.isRefreshImageInfo) return true;
+  // 检查图片展示卡片 (精准拦截：仅拦截带有 images 数组或明确 Images UI 组件的卡片)
+  if (e.extra?.business_ext_map?.images?.length > 0) return true;
   if (e.children?.some(c => c.type === "Images")) return true;
 
   // 检查 Pin (想法)
