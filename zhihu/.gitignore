@@ -1,4 +1,5 @@
-./docs
+zhihu_response/
+docs/
 *.js
 *plugin
 *.json

@@ -449,9 +449,9 @@ function sniffAd(e, r) {
     if (e.children?.some(c => c.type === "Video" || c.video_data)) return true;
   }
 
-  // 检查图片展示卡片 (精准拦截：仅拦截带有 images 数组或明确 Images UI 组件的卡片)
+  // 检查图片展示卡片 (精准拦截内容配图，放行头像和反馈图标)
   if (e.extra?.business_ext_map?.images?.length > 0) return true;
-  if (e.children?.some(c => c.type === "Images")) return true;
+  if (e.children?.some(c => (c.type === "Images" || c.id === "Images_pin_id") && !c.id?.includes("Avatar"))) return true;
 
   // 检查 Pin (想法)
   if (r.remove_pin) {
