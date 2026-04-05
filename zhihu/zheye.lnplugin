@@ -1,5 +1,5 @@
 #!name=哲也同学(version 10.88.0)
-#!desc=人在蒙古，刚下航母\n10.88.0版本——最近的无横幅图标\n(minimum vote/collect/comment count; filter “游览”tag; filter "1小时前"tag; add loglevel)\n需手动在本地分流规则添加以下内容(优先级问题):\nIP-CIDR,103.41.167.237/32,REJECT,no-resolve\nIP-CIDR,118.89.204.198/32,REJECT,no-resolve\nIP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT,no-resolve
+#!desc=人在蒙古，刚下航母\n10.88.0版本(最近的无横幅图标)\n minimum vote/collect/comment count; filter “游览”tag; filter "1小时前"tag; add loglevel\n\n需手动在本地分流规则添加以下内容(优先级问题):\nIP-CIDR,103.41.167.237/32,REJECT,no-resolve\nIP-CIDR,118.89.204.198/32,REJECT,no-resolve\nIP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT,no-resolve
 #!openUrl=https://github.com/blackmatrix7/ios_rule_script
 #!author=blackmatrix7, leo
 #!homepage=https://github.com/blackmatrix7/ios_rule_script
@@ -71,7 +71,10 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 ^https:\/\/api\.zhihu\.com\/comment_v5\/(?:articles|answers)\/\d+\/list-headers reject-dict
 ^https:\/\/api\.zhihu\.com\/prague\/related_suggestion_native\/feed\? reject-dict
 ^https:\/\/api\.zhihu\.com\/v5\.1\/topics\/answer\/\d+\/relation reject-dict
-^https:\/\/api\.zhihu\.com\/questions\/\d+(?:\/answers|\/feeds|\?include=) response-body-json-jq 'del(.ad_info, .data.ad_info?, .query_info) | if (.data | type) == "array" then .data |= map(select(.target?.answer_type? // "" | tostring | contains("paid") | not)) else . end'
+^https:\/\/api\.zhihu\.com\/questions\/\d+(?:\/answers|\?include=) response-body-json-jq 'del(.ad_info, .data.ad_info?, .query_info) | if (.data | type) == "array" then .data |= map(select(.target?.answer_type? // "" | tostring | contains("paid") | not)) else . end'
+^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists response-body-json-jq '.data |= map(select(.type == "hot_list_feed" or .type == "hot_list_feed_video"))'
+^https?:\/\/api\.zhihu\.com\/search\/preset_words response-body-json-jq '.preset_words.words |= map(select(.type == "general"))'
+^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries |= map(select(has("ad_commercial_json") | not))'
 
 # 其他 - 服务器推送配置
 ^https:\/\/api\.zhihu\.com\/ab\/api\/v1\/products\/zhihu\/platforms\/ios\/config reject-dict
@@ -107,7 +110,7 @@ http-response ^https:\/\/api\.zhihu\.com\/questions\/\d+\/feeds? requires-body=1
 http-response ^https?:\/\/api\.zhihu\.com\/next-render requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_回答信息流优化,argument=[{LogLevel},{Threshold}]
 
 # 消息页 - 折叠官方消息、屏蔽营销消息
-http-response ^https?:\/\/api\.zhihu\.com\/notifications\/v3\/(message|timeline\/entry\/system_message) requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_消息优化
+^https?:\/\/api\.zhihu\.com\/notifications\/v3\/(message|timeline\/entry\/system_message) response-body-json-jq '(if .column_head then .column_head |= map(if .id == "column_head_entry_invite" then .text = "您有\(.unread_count)条新的邀请回答" | .unread_count = 0 else . end) else . end) | (if .data then .data |= map(if (.content.title // .detail_title) == "官方账号消息" then .content.text = (if (.unread_count // 0) > 0 then "未读消息\(.unread_count)条" else "全部消息已读" end) | .is_read = true | .unread_count = 0 else . end) | .data |= map(select((.content.title // .detail_title) as $t | ["超赞包小助手", "知乎活动助手", "考研记事本", "创作者小助手"] | index($t) | not)) else . end)'
 
 # 评论页 - 去除黑名单用户发表的评论
 http-response ^https?:\/\/api\.zhihu\.com\/(comment_v5\/)?(answers|comments?|articles|pins)\/\d+\/(root_|child_)?comments? requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_评论优化
@@ -122,13 +125,13 @@ http-response ^https:\/\/api\.zhihu\.com\/articles\/v\d\/\d+ requires-body=1,scr
 http-response ^https?:\/\/api\.zhihu\.com\/moments_v3\? requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_关注列表优化
 
 # 热榜页 - 去除广告
-http-response ^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists(\?|\/) requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_热榜优化
+# http-response ^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists(\?|\/) requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_热榜优化
 
 # 搜索页 - 去除预置广告
-http-response ^https?:\/\/api\.zhihu\.com\/search\/preset_words\? requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_预置关键词优化
+# http-response ^https?:\/\/api\.zhihu\.com\/search\/preset_words\? requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_预置关键词优化
 
 # 搜索页 - 猜你想搜去广告
-http-response ^https?:\/\/api\.zhihu\.com\/search\/recommend_query requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_猜你想搜去广告
+# http-response ^https?:\/\/api\.zhihu\.com\/search\/recommend_query requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_猜你想搜去广告
 
 # 黑名单页 - 同步黑名单数据
 http-response ^https:\/\/api\.zhihu\.com\/settings\/blocked_users requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_同步黑名单

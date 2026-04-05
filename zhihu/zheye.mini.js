@@ -391,9 +391,22 @@ async function removeRecommend() {
           ? new TextDecoder().decode($.response.body)
           : $.response.body,
       s = JSON.parse(o);
+    
+    // 解析并预存阈值设置
+    let thresholds = { Vote: 50, Collect: 0, Comment: 0 };
+    if ($.threshold) {
+      const parts = $.threshold.split(",");
+      if (parts.length === 3) {
+        thresholds.Vote = parseInt(parts[0]) || 0;
+        thresholds.Collect = parseInt(parts[1]) || 0;
+        thresholds.Comment = parseInt(parts[2]) || 0;
+      }
+    }
+    e.thresholds = thresholds;
+
     if (
       ((s.data = s.data.filter(
-        (t) => !isFiltered(t, JSON.stringify(t), e, r, n),
+        (t) => !isFiltered(t, e, r, n),
       )),
       s.fresh_text)
     ) {
@@ -408,108 +421,63 @@ async function removeRecommend() {
     return ($.logger.error(`推荐列表去广告出现异常：${e}`), null);
   }
 }
-function isFiltered(e, t, r, n, o) {
-  if (
-    "market_card" === e.type ||
-    "feed_advert" === e.type ||
-    "SvipActivity" === e.extra?.type ||
-    t.includes("盐选推荐") ||
-    e.hasOwnProperty("ad")
-  )
-    return ($.logger.debug(`${t}匹配到广告`), !0);
-  if (
-    r.remove_advertorial &&
-    (e.hasOwnProperty("promotion_extra") || t.includes(" · 商品介绍"))
-  )
-    return ($.logger.debug(`${t}匹配到软文`), !0);
-  if (r.remove_article && t.search(/"type"\s*:\s*"article"/i) >= 0)
-    return ($.logger.debug(`${t}匹配到文章`), !0);
-  if (
-    r.recommend_stream &&
-    t.search(
-      /"(type|style|content_type)"\s*:\s*"(zvideo|BIG_IMAGE|drama|StyleVideo)"/i,
-    ) >= 0
-  )
-    return ($.logger.debug(`${t}匹配到流媒体`), !0);
-  if (r.remove_pin && t.search(/type"\s*:\s*"pin"/i) >= 0)
-    return ($.logger.debug(`${t}匹配到想法`), !0);
+const AD_TYPE_RE = /^(zvideo|BIG_IMAGE|drama|StyleVideo)$/i;
+const PROMOTION_WORDS = ["浏览", "购买", "咨询", "进店", "感兴趣"];
+
+function isFiltered(e, r, n, o) {
+  // 1. 基础广告过滤 (最快)
+  if (e.ad || e.ad_info || e.common_card?.feed_content?.video?.ad_info) return true;
+  if (e.type === "market_card" || e.type === "feed_advert") return true;
+  if (e.extra?.type === "SvipActivity") return true;
+
+  // 2. 软文过滤
+  if (r.remove_advertorial && (e.promotion_extra || e.common_card?.footline?.elements?.[0]?.text?.includes("商品介绍"))) return true;
+
+  // 3. 类型过滤 (使用预编译正则)
+  if (r.remove_article && e.target?.type === "article") return true;
+  if (r.remove_pin && e.target?.type === "pin") return true;
+  if (r.recommend_stream) {
+    const style = e.common_card?.style || e.target?.type;
+    if (AD_TYPE_RE.test(style)) return true;
+  }
+
+  // 4. 关键词过滤 (仅在必要时序列化)
   if (r.blocked_keywords && n.length > 0) {
-    if (
-      n.some((r) => {
-        const n = t.search(r) >= 0;
-        if (n && $.isDebug && Array.isArray(e.children)) {
-          const t = e.children.find((e) => "Text" === e.id)?.text,
-            n = e.children.find((e) => "text_pin_summary" === e.id)?.text;
-          $.logger.debug(`匹配关键字：\n${r}\n标题：\n${t}\n内容：\n${n}`);
-        }
-        return n;
-      })
-    )
-      return !0;
+    const contentStr = JSON.stringify(e);
+    if (n.some(k => contentStr.includes(k))) return true;
   }
+
+  // 5. 黑名单用户过滤
   if (r.blocked_users && Object.keys(o).length > 0) {
-    const t =
-      e.children
-        ?.find((e) => "Line" === e.type && "LineAuthor_default" === e.style)
-        ?.elements.find((e) => "Text" === e.type)?.text || "";
-    if (o.hasOwnProperty(t)) return !0;
+    const author = e.common_card?.feed_content?.author?.name || e.target?.author?.name;
+    if (author && o[author]) return true;
   }
 
-
-  // 2 new logic for filtering
-  let thresholds = {
-    "Vote": 50,      // Minimum votes
-    "Collect": 0,     // Minimum collects
-    "Comment": 0      // Minimum comments
-  };
-
-  if ($.threshold) {
-    const parts = $.threshold.split(",");
-    if (parts.length === 3) {
-      thresholds["Vote"] = parseInt(parts[0]);
-      thresholds["Collect"] = parseInt(parts[1]);
-      thresholds["Comment"] = parseInt(parts[2]);
-    }
-  }
-
+  // 6. 阈值与低质量内容过滤
+  const thresholds = r.thresholds || { Vote: 50, Collect: 0, Comment: 0 };
+  
   if (e.children && Array.isArray(e.children)) {
     for (const child of e.children) {
-      if (child.elements && Array.isArray(child.elements)) {
-        for (const element of child.elements) {
-          // 1. Check structured reaction counts (Vote, Collect, Comment)
-          if (element.reaction && element.count !== undefined) {
-            const threshold = thresholds[element.reaction];
-            if (threshold !== undefined && element.count < threshold) {
-              $.logger.debug(`过滤低质量内容: ${element.reaction}数(${element.count})低于阈值(${threshold})`);
-              return true;
-            }
-          }
-
-          if (element.text) {
-            // 2. Check for promotion keywords
-            const promotionWord = ["浏览", "购买", "咨询", "进店", "感兴趣"].find(word => element.text.includes(word));
-            if (promotionWord) {
-              $.logger.debug(`包含推销关键词 "${promotionWord}".`, element.text);
-              return true;
-            }
-            // 3. Check for time-based ads
-            if (/^\d+小时前$/.test(element.text)) {
-              $.logger.debug(`匹配到时间广告: ${element.text}`);
-              return true;
-            }
-            // 4. Check for text-based "Vote" counts (e.g. "195 赞同")
-            const match = element.text.match(/(\d+)\s*赞同/);
-            if (match && parseInt(match[1]) < thresholds["Vote"]) {
-              $.logger.debug(`过滤掉赞同数低于 ${thresholds["Vote"]} 的元素: ${element.text}`);
-              return true;
-            }
-          }
+      if (!child.elements) continue;
+      for (const el of child.elements) {
+        // 阈值检查
+        if (el.reaction && el.count !== undefined) {
+          if (el.count < (thresholds[el.reaction] || 0)) return true;
+        }
+        if (el.text) {
+          // 营销词匹配
+          if (PROMOTION_WORDS.some(w => el.text.includes(w))) return true;
+          // 时间广告
+          if (/^\d+小时前$/.test(el.text)) return true;
+          // 赞同数文本检查
+          const match = el.text.match(/(\d+)\s*赞同/);
+          if (match && parseInt(match[1]) < thresholds.Vote) return true;
         }
       }
     }
   }
-  //
-  return !1;
+
+  return false;
 }
 function removeQuestions() {
   try {
@@ -640,81 +608,6 @@ function removeComment() {
     $.logger.error(`去除评论广告出现异常：${e}`);
   }
 }
-function removeMarketingMsg() {
-  try {
-    if (!1 === $.data.read("zhihu_settings_marketing_msg", !0)) return null;
-    const e = JSON.parse($.response?.body || "{}");
-    e?.column_head?.forEach((e) => {
-      "column_head_entry_invite" === e?.id &&
-        ((e.text = `您有${e.unread_count}条新的邀请回答`),
-        (e.unread_count = 0));
-    });
-    const t = ["超赞包小助手", "知乎活动助手", "考研记事本", "创作者小助手"];
-    return (
-      (e.data =
-        e?.data?.reduce((e, r) => {
-          const n = r?.content?.title || r?.detail_title;
-          if ("官方账号消息" === n) {
-            const e = r?.unread_count || 0;
-            ((r.content.text = e > 0 ? `未读消息${e}条` : "全部消息已读"),
-              (r.is_read = !0),
-              (r.unread_count = 0));
-          }
-          return (t.includes(n) || e.push(r), e);
-        }, []) || []),
-      { body: JSON.stringify(e) }
-    );
-  } catch (e) {
-    return ($.logger.error(`屏蔽官方营销消息出现异常：${e}`), null);
-  }
-}
-function removeHotListAds() {
-  let e = null;
-  try {
-    if (!1 === $.data.read("zhihu_settings_hot_list", !0)) return null;
-    if ($.response.body) {
-      let t = JSON.parse($.response.body);
-      ("data" in t &&
-        (t.data = t.data.filter(
-          (e) => "hot_list_feed" === e.type || "hot_list_feed_video" === e.type,
-        )),
-        (e = { body: JSON.stringify(t) }));
-    }
-  } catch (e) {
-    $.logger.error(`去除热榜广告出现异常：${e}`);
-  }
-  return e;
-}
-function removeKeywordAds() {
-  try {
-    if (!1 === $.data.read("zhihu_settings_preset_words", !0)) return null;
-    const e = $.response?.body;
-    if (!e) return null;
-    const t = JSON.parse(e),
-      r = t?.preset_words?.words;
-    return r
-      ? ((t.preset_words.words = r.filter((e) => "general" === e.type)),
-        { body: JSON.stringify(t) })
-      : null;
-  } catch (e) {
-    return ($.logger.error(`去除预置关键字广告异常：${e}`), null);
-  }
-}
-function removeQueryAds() {
-  try {
-    const e = $.response?.body;
-    if (!e) return null;
-    const t = JSON.parse(e);
-    return t?.recommend_queries?.queries
-      ? ((t.recommend_queries.queries = t.recommend_queries.queries.filter(
-          (e) => !e.hasOwnProperty("ad_commercial_json"),
-        )),
-        { body: JSON.stringify(t) })
-      : null;
-  } catch (e) {
-    return ($.logger.error(`去除猜你想搜广告异常：${e}`), null);
-  }
-}
 function modifyAnswersNextRender() {
   try {
     const e = $.response?.body;
@@ -778,8 +671,6 @@ const urlHandlers = {
     "^https:\\/\\/api\\.zhihu\\.com\\/questions\\/\\d+\\/feeds":
       removeQuestions,
     "^https:\\/\\/api\\.zhihu\\.com\\/next-render\\?": modifyAnswersNextRender,
-    "^https:\\/\\/api\\.zhihu\\.com\\/notifications\\/v3\\/message":
-      removeMarketingMsg,
     "^https:\\/\\/api\\.zhihu\\.com\\/comment_v5\\/(answers|pins|comments?|articles)\\/\\d+\\/(root|child)_comment":
       removeComment,
     "^https:\\/\\/(page-info|api)\\.zhihu\\.com\\/(answers|articles)\\/v2\\/\\d+":
@@ -788,9 +679,6 @@ const urlHandlers = {
       removeAnswerOrArticleAd,
     "^https:\\/\\/api\\.zhihu\\.com\\/people\\/\\d+": autoInsertBlackList,
     "^https:\\/\\/api\\.zhihu\\.com\\/moments_v3\\?": removeMoments,
-    "^https?:\\/\\/api\\.zhihu\\.com\\/topstory\\/hot-lists": removeHotListAds,
-    "^https:\\/\\/api\\.zhihu\\.com\\/search\\/preset_words": removeKeywordAds,
-    "^https:\\/\\/api\\.zhihu\\.com\\/search\\/recommend_query": removeQueryAds,
     "^https:\\/\\/api\\.zhihu\\.com\\/settings\\/blocked_users":
       manageBlackUser,
   },
