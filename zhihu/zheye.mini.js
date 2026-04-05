@@ -408,8 +408,33 @@ async function removeRecommend() {
       ((s.data = s.data.filter(
         (t) => !isFiltered(t, e, r, n),
       )),
-      s.fresh_text)
+      s.data.length === 0)
     ) {
+      // 注入占位符以保持刷新功能
+      const placeholder = {
+        id: "placeholder_zheye_" + Date.now(),
+        type: "ComponentCard",
+        children: [
+          {
+            id: "Text",
+            text: "💡 哲也：已为您拦截本页所有带图/视频内容",
+            type: "Text",
+            style: "TextStyle01A_MapText02A_V3",
+            visible: true
+          },
+          {
+            id: "text_pin_summary",
+            text: "知乎当前批次推荐内容均不符合您的纯文字设置。请继续下拉尝试加载下一页。",
+            type: "Text",
+            style: "TextStyle03A_MapText04A_v6",
+            visible: true
+          }
+        ]
+      };
+      s.data.push(placeholder);
+    }
+
+    if (s.fresh_text) {
       const e = parseInt((s.fresh_text.match(/\d+/) || ["0"])[0]);
       s.fresh_text =
         e > 0
