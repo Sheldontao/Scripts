@@ -44,10 +44,7 @@
         "action": "predefined"
       },
       {
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
+        "query_type": ["A", "AAAA"],
         "rule_set": "cn_domain",
         "server": "fakeip"
       },
@@ -71,10 +68,7 @@
         "client_subnet": "222.17.11.0/24"
       },
       {
-        "query_type": [
-          "A",
-          "AAAA"
-        ],
+        "query_type": ["A", "AAAA"],
         "server": "fakeip"
       }
     ],
@@ -83,10 +77,7 @@
   "inbounds": [
     {
       "type": "tun",
-      "address": [
-        "172.19.0.1/30", 
-        "fdfe:dcba:9876::1/126"
-      ],
+      "address": ["172.19.0.1/30", "fdfe:dcba:9876::1/126"],
       "auto_route": true,
       "stack": "mixed",
       "platform": {
@@ -365,7 +356,7 @@
             "port": 443
           },
           {
-            "protocol": ["quic","stun"]
+            "protocol": ["quic", "stun"]
           }
         ],
         "action": "reject"
@@ -379,24 +370,18 @@
         "outbound": "direct"
       },
       {
-        "domain": [
-          "imap.qq.com",
-          "smtp.qq.com"
-        ],
-        "domain_suffix": [
-          "smtp"
-        ],
-        "domain_keyword": [
-          "aria2"
-        ],
+        "domain": ["imap.qq.com", "smtp.qq.com"],
+        "domain_suffix": ["smtp"],
+        "domain_keyword": ["aria2"],
         "ip_is_private": true,
         "outbound": "direct"
       },
       {
-        "domain_suffix": [
-          "hutaoindex.com",
-          "besttelecom.cc"
-        ],
+        "rule_set": ["apple_cn"],
+        "outbound": "apple_cn"
+      },
+      {
+        "domain_suffix": ["hutaoindex.com", "besttelecom.cc"],
         "outbound": "streaming"
       },
       {
@@ -408,10 +393,6 @@
         "outbound": "bilibili"
       },
       {
-        "rule_set": "bahamut_domain",
-        "outbound": "bahamut"
-      },
-      {
         "rule_set": "youtube_domain",
         "outbound": "youtube"
       },
@@ -420,31 +401,16 @@
         "outbound": "ai"
       },
       {
-        "rule_set": [
-          "netflix_domain",
-          "netflix_ip"
-        ],
+        "rule_set": ["netflix_domain", "netflix_ip"],
         "outbound": "streaming"
       },
       {
-        "rule_set": [
-          "telegram_domain",
-          "telegram_ip"
-        ],
+        "rule_set": ["telegram_domain", "telegram_ip"],
         "outbound": "telegram"
       },
       {
-        "rule_set": [
-          "google_domain",
-          "google_ip"
-        ],
+        "rule_set": ["google_domain", "google_ip"],
         "outbound": "google"
-      },
-      {
-        "rule_set": [
-          "apple_cn"
-        ],
-        "outbound": "apple_cn"
       },
       {
         "type": "logical",
@@ -455,20 +421,13 @@
           },
           {
             "invert": true,
-            "rule_set": [
-              "cn_domain",
-              "cn_ip"
-            ]
+            "rule_set": ["cn_domain", "cn_ip"]
           }
         ],
         "outbound": "proxy"
       },
       {
-        "rule_set": [
-          "cn_domain",
-          "cn_ip",
-          "microsoft_cn"
-        ],
+        "rule_set": ["cn_domain", "cn_ip", "microsoft_cn"],
         "outbound": "cn"
       }
     ],
@@ -478,13 +437,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/apple-cn.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "bahamut_domain",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geosite/bahamut.srs",
         "download_detour": "direct"
       },
       {
