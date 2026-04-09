@@ -55,7 +55,7 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 
 # 会员页面 - 弹窗、悬浮动图
 ^https:\/\/api\.zhihu\.com\/(?:bazaar\/float_window|market\/popovers_v2) reject-dict
-^https:\/\/api\.zhihu\.com\/bazaar\/vip_tab\/header\? response-body-json-del activity_banner activity_window vip_tip
+^https:\/\/api\.zhihu\.com\/bazaar\/vip_tab\/header\? response-body-json-del activity_banner\x20activity_window\x20vip_tip
 
 # 我的页面 - 项目列表、会员卡片
 ^https:\/\/api\.zhihu\.com\/me\/guides reject-dict
@@ -65,17 +65,17 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 
 # 搜索页 - 关键词、猜你想搜
 ^https:\/\/api\.zhihu\.com\/search\/(hot_search|preset_words) reject-dict
-^https:\/\/api\.zhihu\.com\/search\/recommend_query\/v2\? response-body-replace-regex "recommend_queries":\{.+\} "recommend_queries":{}
+^https:\/\/api\.zhihu\.com\/search\/recommend_query\/v2\? response-body-replace-regex "recommend_queries":\{.+\}\x20"recommend_queries":{}
 ^https:\/\/www\.zhihu\.com\/api\/v4\/search\/related_queries\/(?:article|answer)\/\d+ reject-dict
 
 # 回答详情页 - 评论区顶部、下一个回答
 ^https:\/\/api\.zhihu\.com\/comment_v5\/(?:articles|answers)\/\d+\/list-headers reject-dict
 ^https:\/\/api\.zhihu\.com\/prague\/related_suggestion_native\/feed\? reject-dict
 ^https:\/\/api\.zhihu\.com\/v5\.1\/topics\/answer\/\d+\/relation reject-dict
-^https:\/\/api\.zhihu\.com\/questions\/\d+(?:\/answers|\?include=) response-body-json-jq 'del(.ad_info, .data.ad_info?, .query_info) | if (.data | type) == "array" then .data |= map(select(.target?.answer_type? // "" | tostring | contains("paid") | not)) else . end'
-^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists response-body-json-jq '.data |= map(select(.type == "hot_list_feed" or .type == "hot_list_feed_video"))'
-^https?:\/\/api\.zhihu\.com\/search\/preset_words response-body-json-jq '.preset_words.words |= map(select(.type == "general"))'
-^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries |= map(select(has("ad_commercial_json") | not))'
+^https:\/\/api\.zhihu\.com\/questions\/\d+(?:\/answers|\?include=) response-body-json-jq 'del(.ad_info,\x20.data.ad_info?,\x20.query_info)\x20|\x20if\x20(.data\x20|\x20type)\x20==\x20"array"\x20then\x20.data\x20|=\x20map(select(.target?.answer_type?\x20//\x20""\x20|\x20tostring\x20|\x20contains("paid")\x20|\x20not))\x20else\x20.\x20end'
+^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists response-body-json-jq '.data\x20|=\x20map(select(.type\x20==\x20"hot_list_feed"\x20or\x20.type\x20==\x20"hot_list_feed_video"))'
+^https?:\/\/api\.zhihu\.com\/search\/preset_words response-body-json-jq '.preset_words.words\x20|=\x20map(select(.type\x20==\x20"general"))'
+^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries\x20|=\x20map(select(has("ad_commercial_json")\x20|\x20not))'
 
 # 其他 - 服务器推送配置
 ^https:\/\/api\.zhihu\.com\/ab\/api\/v1\/products\/zhihu\/platforms\/ios\/config reject-dict
@@ -92,7 +92,7 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 ^https:\/\/zhuanlan\.zhihu\.com\/api\/articles\/\d+\/recommendation reject-dict
 
 # 消息页 - 折叠官方消息、屏蔽营销消息
-^https?:\/\/api\.zhihu\.com\/notifications\/v3\/(message|timeline\/entry\/system_message) response-body-json-jq '(if .column_head then .column_head |= map(if .id == "column_head_entry_invite" then .text = "您有\(.unread_count)条新的邀请回答" | .unread_count = 0 else . end) else . end) | (if .data then .data |= map(if (.content.title // .detail_title) == "官方账号消息" then .content.text = (if (.unread_count // 0) > 0 then "未读消息\(.unread_count)条" else "全部消息已读" end) | .is_read = true | .unread_count = 0 else . end) | .data |= map(select((.content.title // .detail_title) as $t | ["超赞包小助手", "知乎活动助手", "考研记事本", "创作者小助手"] | index($t) | not)) else . end)'
+^https?:\/\/api\.zhihu\.com\/notifications\/v3\/(message|timeline\/entry\/system_message) response-body-json-jq '(if\x20.column_head\x20then\x20.column_head\x20|=\x20map(if\x20.id\x20==\x20"column_head_entry_invite"\x20then\x20.text\x20=\x20"您有\(.unread_count)条新的邀请回答"\x20|\x20.unread_count\x20=\x200\x20else\x20.\x20end)\x20else\x20.\x20end)\x20|\x20(if\x20.data\x20then\x20.data\x20|=\x20map(if\x20(.content.title\x20//\x20.detail_title)\x20==\x20"官方账号消息"\x20then\x20.content.text\x20=\x20(if\x20(.unread_count\x20//\x200)\x20>\x200\x20then\x20"未读消息\(.unread_count)条"\x20else\x20"全部消息已读"\x20end)\x20|\x20.is_read\x20=\x20true\x20|\x20.unread_count\x20=\x200\x20else\x20.\x20end)\x20|\x20.data\x20|=\x20map(select((.content.title\x20//\x20.detail_title)\x20as\x20$t\x20|\x20["超赞包小助手",\x20"知乎活动助手",\x20"考研记事本",\x20"创作者小助手"]\x20|\x20index($t)\x20|\x20not))\x20else\x20.\x20end)'
 
 
 [Script]
