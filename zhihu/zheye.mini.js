@@ -422,7 +422,7 @@ async function removeRecommend() {
         children: [
           {
             id: "Text",
-            text: "💡 哲也：已为您拦截本页所有带图/视频内容",
+            text: "💡 哲野：已为您拦截本页所有带图/视频内容",
             type: "Text",
             style: "TextStyle01A_MapText02A_V3",
             visible: true
@@ -1550,6 +1550,6 @@ function MagicHttp(e, t) {
       : ($.data.del(currentUserInfoKey),
         $.data.del(blockedUsersKey),
         $.data.del(keywordBlockKey),
-        $.notification.post("哲也同学数据清理完毕")),
+        $.notification.post("哲野同学数据清理完毕")),
     e ? $.done(e) : $.done());
 })();

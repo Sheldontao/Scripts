@@ -1,4 +1,6 @@
-xhs/xiaohongshuAIfilter.plugin
-xhs/xhs_response_body.json
-xhs/test_hutao_sign.js
-xhs/xhs_regex_gemini.js
+xhs/*
+hutao_sign.js
+DS_Store
+!xhs/xhs_fmz200.js
+!xhs/xiaohongshu.plugin
+!xhs/Readme.md
