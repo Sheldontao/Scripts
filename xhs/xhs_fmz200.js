@@ -105,6 +105,11 @@ const getCachedCountsThreshold = (key, argValue) => {
   return counts;
 };
 
+if (url.includes("/system_service/splash_config") || url.includes("/httpdns") || url.includes("/o_live_p2p_mobilesdk")) {
+  console.log("拦截到直连/配置请求: " + url);
+  $done({body: JSON.stringify({code: 0, success: true, msg: "Blocked", data: {}})});
+}
+
 if (url.includes("/search/notes?")) {
   // 搜索结果
   //console.log("Arguments received for search: " + JSON.stringify($argument)); // <--- 我建议增加这一行
@@ -338,7 +343,9 @@ if (url.includes("/homefeed")) {
         item?.live || 
         item?.ads_info || 
         item?.card_icon || 
-        item?.note_attributes?.includes("goods")
+        item?.note_attributes?.includes("goods") ||
+        item?.type === "live" ||
+        item?.card_type === "live"
       ) {
         return false;
       }
