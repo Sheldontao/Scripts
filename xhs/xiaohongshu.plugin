@@ -45,10 +45,10 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 # 整体配置
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config\? response-body-json-jq 'del(.data.app_theme?, .data.loading_img?, .data.splash?, .data.store?)'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/system\/service\/ui\/config\? response-body-json-jq 'if .data != null and .data.sideConfigHomepage != null and .data.sideConfigHomepage.componentConfig != null and .data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025 != null then .data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025 = {} else . end | if .data != null and .data.sideConfigPersonalPage != null and .data.sideConfigPersonalPage.componentConfig != null and .data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025 != null then .data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025 = {} else . end'
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config reject-200
-^https?:\/\/.*\.xiaohongshu\.com\/api\/sns\/v\d+\/httpdns reject-200
-^https?:\/\/.*\.xhscdn\.com\/.*\/httpdns reject-200
-^https?:\/\/.*\.xhscdn\.com\/o_live_p2p_mobilesdk reject-200
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config reject-dict
+^https?:\/\/.*\.xiaohongshu\.com\/api\/sns\/v\d+\/httpdns reject-dict
+^https?:\/\/.*\.xhscdn\.com\/.*\/httpdns reject-dict
+^https?:\/\/.*\.xhscdn\.com\/o_live_p2p_mobilesdk reject-dict
 
 # 详情页,小部件
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets response-body-json-jq 'del(.data.cooperate_binds?, .data.generic?, .data.note_next_step?, .data.widget_list?)'
@@ -99,4 +99,4 @@ http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/interaction\/co
 # MITM：中间人攻击，解密/跳过相关域名的内容，"-"开头为跳过
 # =====================================
 [MITM]
-hostname = edith.xiaohongshu.com, www.xiaohongshu.com, ci.xiaohongshu.com, rec.xiaohongshu.com, so.xiaohongshu.com
+hostname = edith.xiaohongshu.com, www.xiaohongshu.com, ci.xiaohongshu.com, rec.xiaohongshu.com, so.xiaohongshu.com, api.xiaohongshu.com, *.xhscdn.com
