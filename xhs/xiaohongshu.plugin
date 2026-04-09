@@ -45,7 +45,10 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 # 整体配置
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config\? response-body-json-jq 'del(.data.app_theme?, .data.loading_img?, .data.splash?, .data.store?)'
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/system\/service\/ui\/config\? response-body-json-jq 'if .data != null and .data.sideConfigHomepage != null and .data.sideConfigHomepage.componentConfig != null and .data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025 != null then .data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025 = {} else . end | if .data != null and .data.sideConfigPersonalPage != null and .data.sideConfigPersonalPage.componentConfig != null and .data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025 != null then .data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025 = {} else . end'
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config response-body-json-jq 'if .data != null and .data.ads_groups != null then .data.ads_groups |= map(.start_time = 3818332800 | .end_time = 3818419199 | if .ads != null then .ads |= map(.start_time = 3818332800 | .end_time = 3818419199) else . end) else . end'
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config reject-200
+^https?:\/\/.*\.xiaohongshu\.com\/api\/sns\/v\d+\/httpdns reject-200
+^https?:\/\/.*\.xhscdn\.com\/.*\/httpdns reject-200
+^https?:\/\/.*\.xhscdn\.com\/o_live_p2p_mobilesdk reject-200
 
 # 详情页,小部件
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets response-body-json-jq 'del(.data.cooperate_binds?, .data.generic?, .data.note_next_step?, .data.widget_list?)'
@@ -55,15 +58,11 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v4\/followfeed response-body-json-jq 'if .data != null and .data.items != null then .data.items |= map(select(.recommend_reason != "recommend_user")) else . end'
 ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/recommend\/user\/follow_recommend response-body-json-jq 'if .data != null and .data.title == "你可能感兴趣的人" and (.data.rec_users | length) > 0 then .data = {} else . end'
 
-
 # 笔记创作推荐
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/guide\/user_banner reject-dict
 
 # 评论区图片水印
 ^https?:\/\/ci\.xiaohongshu\.com\/system_config\/watermark reject-img
-
-# 移除小红书首页热点已整合至下方 JS 逻辑中
-# ^https:\/\/rec\.xiaohongshu\.com\/api\/sns\/v\d+\/homefeed response-body-json-jq '.data |= map(select((((.recommend.type // "") == "hot_reason") or ((.recommend.desc // "") == "热点") or (((.recommend.track_id // "") | test("(^|_)hotspot|hotspoti2i"; "i"))) or (((.rec_extra_info // "") | test("\"hotEventId\"")))) | not))'
 
 [Script]
 # 关注列表/推荐
