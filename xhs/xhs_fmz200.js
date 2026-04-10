@@ -337,7 +337,6 @@ if (url.includes("/homefeed")) {
     const countsThreshold = getCachedCountsThreshold("fmz200.xhs_counts_threshold_cache", $argument.xhs_counts_threshold);
     obj.data = obj.data.filter(item => {
       // 1. 核心过滤：识别直播、广告、带货笔记
-      // 针对你说的字典结构，直接判断 item 下的属性
       if (
         (item?.model_type && String(item.model_type).includes("live")) || 
         item?.live || 
@@ -348,6 +347,39 @@ if (url.includes("/homefeed")) {
         item?.card_type === "live"
       ) {
         return false;
+      }
+      // 2. 移除首页热点
+      if (
+        item?.recommend?.type === "hot_reason" || 
+        item?.recommend?.desc === "热点" || 
+        (item?.recommend?.track_id && /(^|_)hotspot|hotspoti2i/i.test(item.recommend.track_id)) ||
+        (item?.rec_extra_info && item.rec_extra_info.includes('"hotEventId"'))
+      ) {
+        return false;
+      }
+      // 3. 正则过滤内容 (标题 + 描述 + 标签)
+      const title = item?.title || item?.note?.title || "";
+      const desc = item?.desc || item?.note?.desc || "";
+      const tags = item?.note?.hash_tag ? item.note.hash_tag.map(t => t.name).join(" ") : "";
+      const contentToMatch = `${title} ${desc} ${tags}`.trim();
+      
+      if (descRegexes.length > 0 && contentToMatch) {
+        for (const regex of descRegexes) {
+          if (regex.test(contentToMatch)) {
+            console.log(`[Homefeed] Filtered (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`);
+            return false;
+          }
+        }
+      }
+      // 4. 正则过滤昵称
+      const currentNickname = item?.user?.nickname || item?.note?.user?.nickname;
+      if (nicknameRegexes.length > 0 && currentNickname) {
+        for (const regex of nicknameRegexes) {
+          if (regex.test(currentNickname)) {
+            console.log(`[Homefeed] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`);
+            return false;
+          }
+        }
       }
       // 2. 移除首页热点 (由原 jq 转化而来)
       if (
@@ -507,6 +539,38 @@ if (url.includes("/api/sns/v1/interaction/comment/video/download?")) {
     }
   } else {
     console.log(`没有[${obj.data?.video.video_id}]的无水印地址`);
+  }
+}
+
+// 详情页过滤逻辑 (全能版)
+if (url.includes("/api/sns/v2/note/feed") || url.includes("/api/sns/v2/note/imagefeed") || url.includes("/api/sns/v10/note/video/save")) {
+  const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
+  if (descRegexes.length > 0 && obj.data) {
+    // 兼容数组和单个对象结构
+    const noteList = Array.isArray(obj.data) ? obj.data : [obj.data];
+    for (let noteItem of noteList) {
+      // 视频流可能在 note_list 里，或者直接就是 noteItem
+      const notes = noteItem?.note_list || [noteItem];
+      for (let note of notes) {
+        const title = note?.title || "";
+        const desc = note?.desc || "";
+        const tags = note?.hash_tag ? note.hash_tag.map(t => t.name).join(" ") : "";
+        const contentToMatch = `${title} ${desc} ${tags}`.trim();
+
+        for (const regex of descRegexes) {
+          if (regex.test(contentToMatch)) {
+            console.log(`[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`);
+            // 拦截表现：抹除数据，返回 404/错误
+            obj.data = {};
+            obj.code = -1;
+            obj.msg = "内容已被正则过滤";
+            break;
+          }
+        }
+        if (obj.code === -1) break;
+      }
+      if (obj.code === -1) break;
+    }
   }
 }
 
