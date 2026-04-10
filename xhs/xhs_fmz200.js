@@ -110,35 +110,36 @@ if (url.includes("/system_service/splash_config") || url.includes("/httpdns") ||
   $done({body: JSON.stringify({code: 0, success: true, msg: "Blocked", data: {}})});
 }
 
-if (url.includes("/search/notes?")) {
+if (url.includes("/search/notes")) {
   // 搜索结果
-  //console.log("Arguments received for search: " + JSON.stringify($argument)); // <--- 我建议增加这一行
   if (obj.data.items?.length > 0) {
     obj.data.items = obj.data.items.filter((i) => i.model_type === "note");
 
     const searchDesRegexes = getCachedRegexes("fmz200.xhs_search_des_regex_cache", $argument.xhs_search_des_regex);
-    //console.log(`Loaded searchDesRegexes: ${JSON.stringify(searchDesRegexes.map(r => r.source))}`);
     const searchUserRegexes = getCachedRegexes("fmz200.xhs_search_nickname_regex_cache", $argument.xhs_search_nickname_regex);
-    //console.log(`Loaded searchUserRegexes: ${JSON.stringify(searchUserRegexes.map(r => r.source))}`);
 
     obj.data.items = obj.data.items.filter(item => {
-      // Apply description regex filters
-      if (searchDesRegexes.length > 0 && item?.note?.desc) {
+      // 1. 正则过滤内容 (标题 + 描述 + 标签)
+      const title = item?.note?.title || "";
+      const desc = item?.note?.desc || "";
+      const tags = item?.note?.hash_tag ? item.note.hash_tag.map(t => t.name).join(" ") : "";
+      const contentToMatch = `${title} ${desc} ${tags}`.trim();
+
+      if (searchDesRegexes.length > 0 && contentToMatch) {
         for (const regex of searchDesRegexes) {
-          if (regex.test(item.note.desc)) {
-            console.log(`Filtered out search item with desc matching regex (Matched by: ${regex.source}): 
-${item.note.desc}`);
+          if (regex.test(contentToMatch)) {
+            console.log(`[Search] Filtered (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`);
             return false;
           }
         }
       }
 
-      // Apply nickname regex filters
-      if (searchUserRegexes.length > 0 && item?.note?.user?.nickname) {
+      // 2. 正则过滤昵称
+      const currentNickname = item?.note?.user?.nickname;
+      if (searchUserRegexes.length > 0 && currentNickname) {
         for (const regex of searchUserRegexes) {
-          if (regex.test(item.note.user.nickname)) {
-            console.log(`Filtered out search item with nickname matching regex (Matched by: ${regex.source}): 
-${item.note.user.nickname}`);
+          if (regex.test(currentNickname)) {
+            console.log(`[Search] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`);
             return false;
           }
         }
@@ -148,38 +149,36 @@ ${item.note.user.nickname}`);
   }
 }
 
-if (url.includes("/note/imagefeed?") || url.includes("/note/feed?")) {
-  // 信息流 图片
+if (url.includes("/note/imagefeed") || url.includes("/note/feed") || url.includes("/note/videofeed")) {
+  // 信息流/详情页 通用处理 (非拦截逻辑，先处理画质和保存)
   if (obj?.data?.length > 0) {
-    if (obj.data[0]?.note_list?.length > 0) {
-      for (let item of obj.data[0].note_list) {
+    const note_list = obj.data[0]?.note_list || obj.data;
+    if (Array.isArray(note_list) && note_list.length > 0) {
+      for (let item of note_list) {
         if (item?.media_save_config) {
-          // 水印开关
           item.media_save_config.disable_save = false;
           item.media_save_config.disable_watermark = true;
           item.media_save_config.disable_weibo_cover = true;
         }
         if (item?.share_info?.function_entries?.length > 0) {
-          // 下载限制
           const addItem = {type: "video_download"};
           let func = item.share_info.function_entries[0];
           if (func?.type !== "video_download") {
-            // 向数组开头添加对象
             item.share_info.function_entries.unshift(addItem);
           }
         }
-        // 处理帖子引用的标签
         if (item.hash_tag) {
           item.hash_tag = item.hash_tag.filter(tag => tag.type !== "interact_vote");
         }
       }
 
-      const images_list = obj.data[0].note_list[0].images_list;
-      // 画质增强
-      obj.data[0].note_list[0].images_list = imageEnhance(JSON.stringify(images_list));
-      // 保存无水印信息
-      $.setdata(JSON.stringify(images_list), "fmz200.xiaohongshu.feed.rsp");
-      console.log('已存储无水印信息♻️');
+      // 画质增强 (仅针对图文)
+      if (note_list[0]?.images_list) {
+        const images_list = note_list[0].images_list;
+        note_list[0].images_list = imageEnhance(JSON.stringify(images_list));
+        $.setdata(JSON.stringify(images_list), "fmz200.xiaohongshu.feed.rsp");
+        console.log('已存储无水印信息♻️');
+      }
     }
   }
 } 
@@ -213,8 +212,8 @@ if (url.includes("/note/live_photo/save")) {
   console.log('新body：' + JSON.stringify(obj));
 }
 
-if (url.includes("/v3/note/videofeed?")) {
-  // 信息流 视频
+if (url.includes("/v3/note/videofeed")) {
+  // 信息流 视频 (旧版兼容)
   if (obj?.data?.length > 0) {
     for (let item of obj.data) {
       if (item?.media_save_config) {
@@ -512,7 +511,12 @@ if (url.includes("/api/sns/v1/interaction/comment/video/download?")) {
 }
 
 // 详情页过滤逻辑 (全能版)
-if (url.includes("/api/sns/v2/note/feed") || url.includes("/api/sns/v2/note/imagefeed") || url.includes("/api/sns/v10/note/video/save")) {
+if (
+  url.includes("/note/feed") || 
+  url.includes("/note/imagefeed") || 
+  url.includes("/note/videofeed") || 
+  url.includes("/note/video/save")
+) {
   const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
   if (descRegexes.length > 0 && obj.data) {
     // 兼容数组和单个对象结构
@@ -521,19 +525,21 @@ if (url.includes("/api/sns/v2/note/feed") || url.includes("/api/sns/v2/note/imag
       // 视频流可能在 note_list 里，或者直接就是 noteItem
       const notes = noteItem?.note_list || [noteItem];
       for (let note of notes) {
-        const title = note?.title || "";
-        const desc = note?.desc || "";
-        const tags = note?.hash_tag ? note.hash_tag.map(t => t.name).join(" ") : "";
+        const title = note?.title || note?.note?.title || "";
+        const desc = note?.desc || note?.note?.desc || "";
+        const tags = note?.hash_tag ? note.hash_tag.map(t => t.name).join(" ") : 
+                     (note?.note?.hash_tag ? note.note.hash_tag.map(t => t.name).join(" ") : "");
         const contentToMatch = `${title} ${desc} ${tags}`.trim();
 
-        for (const regex of descRegexes) {
-          if (regex.test(contentToMatch)) {
-            console.log(`[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`);
-            // 拦截表现：抹除数据，返回 404/错误
-            obj.data = {};
-            obj.code = -1;
-            obj.msg = "内容已被正则过滤";
-            break;
+        if (contentToMatch) {
+          for (const regex of descRegexes) {
+            if (regex.test(contentToMatch)) {
+              console.log(`[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`);
+              obj.data = {};
+              obj.code = -1;
+              obj.msg = "内容已被正则过滤";
+              break;
+            }
           }
         }
         if (obj.code === -1) break;
