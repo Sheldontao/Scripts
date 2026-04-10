@@ -28,7 +28,7 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 
 [Rewrite]
 # 惊喜弹窗
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/surprisebox\/(?:get_style|open|submit_action) reject-dict
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/surprisebox\/(?:get_style|open|submit_action) reject-dict
 ^https?:\/\/www\.xiaohongshu\.com\/api\/marketing\/box\/trigger reject-dict
 
 # 信息流
@@ -37,14 +37,14 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 ^https:\/\/www\.xiaohongshu\.com\/api\/sns\/v\d+\/(?:ads\/resource|hey\/\w+\/hey_gallery) reject-dict
 
 # 搜索页
-^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/banner_list$ response-body-json-replace data {}
-^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/search\/hot_list$ response-body-json-replace data.items []
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/banner_list$ response-body-json-replace data {}
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/hot_list$ response-body-json-replace data.items []
 ^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/hint response-body-json-replace data.hint_words []
 ^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/trending response-body-json-jq 'if\x20.data\x20!=\x20null\x20then\x20.data.queries\x20=\x20[]\x20|\x20.data.hint_word\x20=\x20{}\x20else\x20.\x20end'
 
 # 整体配置
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config response-body-json-jq 'del(.data.app_theme?,\x20.data.loading_img?,\x20.data.splash?,\x20.data.store?)'
-^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/system\/service\/ui\/config response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.sideConfigHomepage\x20!=\x20null\x20and\x20.data.sideConfigHomepage.componentConfig\x20!=\x20null\x20and\x20.data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025\x20!=\x20null\x20then\x20.data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025\x20=\x20{}\x20else\x20.\x20end\x20|\x20if\x20.data\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage.componentConfig\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025\x20!=\x20null\x20then\x20.data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025\x20=\x20{}\x20else\x20.\x20end'
+^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system\/service\/ui\/config response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.sideConfigHomepage\x20!=\x20null\x20and\x20.data.sideConfigHomepage.componentConfig\x20!=\x20null\x20and\x20.data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025\x20!=\x20null\x20then\x20.data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025\x20=\x20{}\x20else\x20.\x20end\x20|\x20if\x20.data\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage.componentConfig\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025\x20!=\x20null\x20then\x20.data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025\x20=\x20{}\x20else\x20.\x20end'
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config reject-dict
 ^https?:\/\/.*\.xiaohongshu\.com\/api\/sns\/v\d+\/httpdns reject-dict
 ^https?:\/\/.*\.xhscdn\.com\/.*\/httpdns reject-dict
@@ -55,11 +55,11 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 
 # 关注列表/推荐
 ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/user\/followings\/followfeed response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.items\x20!=\x20null\x20then\x20.data.items\x20|=\x20map(select(.recommend_reason\x20==\x20"friend_post"))\x20else\x20.\x20end'
-^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v4\/followfeed response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.items\x20!=\x20null\x20then\x20.data.items\x20|=\x20map(select(.recommend_reason\x20!=\x20"recommend_user"))\x20else\x20.\x20end'
+^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/followfeed response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.items\x20!=\x20null\x20then\x20.data.items\x20|=\x20map(select(.recommend_reason\x20!=\x20"recommend_user"))\x20else\x20.\x20end'
 ^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/recommend\/user\/follow_recommend response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.title\x20==\x20"你可能感兴趣的人"\x20and\x20(.data.rec_users\x20|\x20length)\x20>\x200\x20then\x20.data\x20=\x20{}\x20else\x20.\x20end'
 
 # 笔记创作推荐
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/guide\/user_banner reject-dict
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/guide\/user_banner reject-dict
 
 # 评论区图片水印
 ^https?:\/\/ci\.xiaohongshu\.com\/system_config\/watermark reject-img
@@ -74,8 +74,8 @@ http-response ^https?:\/\/(?:so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search
 # 实况、图片、视频水印
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note(\/imagefeed|\/live_photo\/save|\/feed|\/videofeed|\/video\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=图片水印视频水印
 # 评论区图片、live图水印，表情包下载
-http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d\/note\/comment(\/list|\/sub_comments) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印存储
-http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v1\/interaction\/comment\/video\/download script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印下载
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/comment(\/list|\/sub_comments) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印存储
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/interaction\/comment\/video\/download script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印下载
 
 # =====================================
 # MITM：中间人攻击，解密/跳过相关域名的内容，"-"开头为跳过
