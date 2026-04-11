@@ -1,12 +1,12 @@
-#!name=xiaohongshu
-#!desc=Regex参照默认格式\n 1.增加4个regex筛选和1个信息等级筛选\n 2.添加信息流热点删除\n 3.添加首页live删除\n （ps当loon关闭时，小红书直连会有quic请求，手动添加上AND, ((PROTOCOL, QUIC), (DEST-PORT, 443)), REJECT或者自行寻找quic的ip请求.）
+#!name=小红书Plus
+#!desc=如果还有广告直连，重装清除cache\n一定参照默认格式\n 1.增加4个regex筛选和1个信息等级筛选\n 2.添加信息流热点删除\n 3.添加首页live删除\n （ps当loon关闭时，小红书直连会有quic请求，手动添加上AND, ((PROTOCOL, QUIC), (DEST-PORT, 443)), REJECT或者自行寻找quic的ip请求.）
 #!author=奶思[https://github.com/fmz200], Leo
 #!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png
 #!homepage=https://github.com/Sheldontao/Scripts
 #!raw-url=https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
 
 #!loon_version = 3.3.7(921)
-#!date = 2026-4-01 18:00
+#!date = 2026-4-11 18:00
 #!app_version = 8.3.9
 #!system_version = 18
 
