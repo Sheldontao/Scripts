@@ -329,7 +329,7 @@ if (url.includes("/v10/note/video/save")) {
 }
 
 // 修改 /v6/homefeed 的匹配逻辑
-if (url.includes("/homefeed")) {
+if (url.includes("/homefeed") || url.includes("/followfeed")) {
   if (obj?.data?.length > 0) {
     const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
     const nicknameRegexes = getCachedRegexes("fmz200.xhs_nickname_regex_cache", $argument.xhs_nickname_regex);
@@ -337,10 +337,11 @@ if (url.includes("/homefeed")) {
     obj.data = obj.data.filter(item => {
       // 1. 核心过滤：识别直播、广告、带货笔记
       if (
-        (item?.model_type && String(item.model_type).includes("live")) || 
-        item?.live || 
-        item?.ads_info || 
-        item?.card_icon || 
+        (item?.model_type && String(item.model_type).includes("live")) ||
+        item?.model_type === "live_v2" ||
+        item?.live ||
+        item?.ads_info ||
+        item?.card_icon ||
         item?.note_attributes?.includes("goods") ||
         item?.type === "live" ||
         item?.card_type === "live"
