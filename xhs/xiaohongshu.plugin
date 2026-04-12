@@ -1,5 +1,5 @@
 #!name=小红书Plus
-#!desc=如果还有广告直连，必须重装清除cache\n一定参照默认格式\n 1.增加4个regex筛选和1个信息等级筛选\n 2.添加推荐页热点删除\n 3.添加推荐页live删除\n新增对detailfeed/preload的判断，如果你点不开某个卡片，就说明被屏蔽了\n(ps:当loon关闭时，小红书直连会有httpdns请求，之后即使开启loon规则，已经读取的ip直连仍然会导致部分去广告失败。可以shortcuts设置一个automation，点击小红书后立即启动loon规则代理)
+#!desc=如果还有广告直连，必须重装清除cache\n一定参照默认格式\n 1.增加4个regex筛选和1个信息等级筛选\n 2.添加推荐页热点删除\n 3.添加推荐页live删除\n 4.新增对detailfeed/preload的判断，如果你点不开某个卡片，就说明被屏蔽了\n(ps:当loon关闭时，小红书直连会有httpdns请求，之后即使开启loon规则，已经读取的ip直连仍然会导致部分去广告失败。可以shortcuts设置一个automation，点击小红书后立即启动loon规则代理)
 #!author=奶思[https://github.com/fmz200], Leo
 #!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png
 #!homepage=https://github.com/Sheldontao/Scripts
