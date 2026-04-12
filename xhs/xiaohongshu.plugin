@@ -33,7 +33,7 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 
 # 信息流
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/(?:guide\/user_banner|note\/guide) reject-dict
-^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/detailfeed\/preload reject-dict
+# ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/detailfeed\/preload reject-dict
 ^https:\/\/www\.xiaohongshu\.com\/api\/sns\/v\d+\/(?:ads\/resource|hey\/\w+\/hey_gallery) reject-dict
 
 # 搜索页
@@ -65,6 +65,9 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 ^https?:\/\/ci\.xiaohongshu\.com\/system_config\/watermark reject-img
 
 [Script]
+# 详情预加载屏蔽词过滤
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/detailfeed\/preload script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=preload屏蔽词过滤, argument = [{xhs_des_regex}]
+
 # 信息流,homefeed regex过滤，图片水印
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/(followfeed|homefeed) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书首页流regex过滤, argument = [{xhs_des_regex},{xhs_nickname_regex},{xhs_counts_threshold}]
 

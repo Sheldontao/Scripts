@@ -550,6 +550,24 @@ if (
   }
 }
 
+// 详情预加载过滤 (preload_map 结构: data.preload_map[note_id] = { desc, type, ... })
+if (url.includes("/note/detailfeed/preload")) {
+  const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
+  if (descRegexes.length > 0 && obj.data?.preload_map) {
+    for (const noteId of Object.keys(obj.data.preload_map)) {
+      const note = obj.data.preload_map[noteId];
+      const desc = note?.desc || "";
+      for (const regex of descRegexes) {
+        if (regex.test(desc)) {
+          console.log(`[Preload] Filtered (${regex.source}): ${desc.substring(0, 50)}...`);
+          delete obj.data.preload_map[noteId];
+          break;
+        }
+      }
+    }
+  }
+}
+
 $done({body: JSON.stringify(obj)});
 
 // 小红书画质增强：加载2K分辨率的图片
