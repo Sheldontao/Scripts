@@ -4,13 +4,13 @@
 #!author=blackmatrix7, leo
 #!homepage=https://github.com/blackmatrix7/ios_rule_script
 #!icon=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/script/zheye/zheye.png
-#!date=2026.04.05
+#!date=2026.04.13
 #!version= zhihu: 10.88.0
 
 [Argument]
 LogLevel = select, "INFO", "WARN", "ERROR", "DEBUG", tag=zheye日志等级
 Threshold = input, "10,10,0", tag="minimum count vote,collect,comment"
-KeywordBlock = input, "[\"吴京\",\"华为\"]", tag="推荐页关键词列表(对应zhihu_keyword_block)"
+KeywordBlock = input, "["吴京","华为"]", tag="推荐页关键词列表(对应zhihu_keyword_block)"
 
 [Rule]
 # 拦截HTTP DNS
