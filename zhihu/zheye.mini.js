@@ -61,9 +61,12 @@ function unlockBlockedKeywords() {
         };
   };
   try {
+    null == $.data.read("zhihu_settings_blocked_keywords", null) &&
+      $.data.write("zhihu_settings_blocked_keywords", !0);
     if (!1 === $.data.read("zhihu_settings_blocked_keywords", !0)) return null;
-    const t = getUserInfo(),
-      r = $.data.read(keywordBlockKey, null, t.id) || [];
+    const t = getUserInfo();
+    let r = $.data.read(keywordBlockKey, null, t.id) || [];
+    r = syncKeywordBlockFromArgument(t.id, r);
     let n = decodeURIComponent($.request.body).match(/keyword=(.*)/),
       o = n ? n[1] : "";
     if (
@@ -74,7 +77,7 @@ function unlockBlockedKeywords() {
         is_vip: !0,
         kw_min_length: 2,
         kw_max_length: 100,
-        kw_max_count: 1e3,
+        kw_max_count: keywordMaxCount,
         data: r,
       });
       return (
@@ -113,6 +116,8 @@ function unlockBlockedKeywords() {
 }
 function processUserInfo() {
   try {
+    null == $.data.read("zhihu_settings_blocked_keywords", null) &&
+      $.data.write("zhihu_settings_blocked_keywords", !0);
     const e = JSON.parse($.response.body);
     if (
       ($.data.write(blackAnswersIdKey, []),
@@ -263,6 +268,44 @@ function _setRecommendTag(e, t) {
       tag: { color: "MapText06A", text: t, type: "MASK_BORDER" },
     });
 }
+function decodeArgumentValue(e) {
+  if ("string" != typeof e) return "";
+  try {
+    return decodeURIComponent(e);
+  } catch {
+    return e;
+  }
+}
+function parseKeywordBlockArgument(e) {
+  const t = decodeArgumentValue("string" == typeof e ? e.trim() : "");
+  if (!t) return [];
+  if (t.startsWith("[") && t.endsWith("]"))
+    try {
+      const e = JSON.parse(t);
+      if (Array.isArray(e))
+        return e
+          .map((e) => ("string" == typeof e ? e.trim() : ""))
+          .filter((e) => !!e);
+    } catch (e) {
+      $.logger.warning(`KeywordBlock参数解析失败，将按分号/逗号解析：${e}`);
+    }
+  return t
+    .split(/[;,]/)
+    .map((e) => e.trim())
+    .filter((e) => !!e);
+}
+function syncKeywordBlockFromArgument(e, t = []) {
+  const r = parseKeywordBlockArgument($.keywordBlockArg || "");
+  if (r.length > t.length)
+    return (
+      $.data.write(keywordBlockKey, r, e),
+      $.logger.info(
+        `关键词列表已由插件参数覆盖并写入持久化：argument=${r.length}, local=${t.length}`,
+      ),
+      r
+    );
+  return t;
+}
 function getAllTagConfigs() {
   let e = {};
   try {
@@ -388,15 +431,17 @@ async function removeRecommend() {
         ),
         request_content: $.data.read("zhihu_settings_request_content", "local"),
       },
-      t = getUserInfo(),
-      r = (e.blocked_keywords && $.data.read(keywordBlockKey, "", t.id)) || [],
-      n = (e.blocked_users && $.data.read(blockedUsersKey, "", t.id)) || {},
+      t = getUserInfo();
+    let r =
+      (e.blocked_keywords && $.data.read(keywordBlockKey, "", t.id)) || [];
+    r = syncKeywordBlockFromArgument(t.id, r);
+    const n = (e.blocked_users && $.data.read(blockedUsersKey, "", t.id)) || {},
       o =
         $.response.body instanceof Uint8Array
           ? new TextDecoder().decode($.response.body)
           : $.response.body,
       s = JSON.parse(o);
-    
+
     // 解析并预存阈值设置
     let thresholds = { Vote: 50, Collect: 0, Comment: 0 };
     if ($.threshold) {
@@ -410,9 +455,7 @@ async function removeRecommend() {
     e.thresholds = thresholds;
 
     if (
-      ((s.data = s.data.filter(
-        (t) => !isFiltered(t, e, r, n),
-      )),
+      ((s.data = s.data.filter((t) => !isFiltered(t, e, r, n))),
       s.data.length === 0)
     ) {
       // 注入占位符以保持刷新功能
@@ -425,16 +468,16 @@ async function removeRecommend() {
             text: "💡 哲野：已为您拦截本页所有带图/视频内容",
             type: "Text",
             style: "TextStyle01A_MapText02A_V3",
-            visible: true
+            visible: true,
           },
           {
             id: "text_pin_summary",
             text: "知乎当前批次推荐内容均不符合您的纯文字设置。请继续下拉尝试加载下一页。",
             type: "Text",
             style: "TextStyle03A_MapText04A_v6",
-            visible: true
-          }
-        ]
+            visible: true,
+          },
+        ],
       };
       s.data.push(placeholder);
     }
@@ -451,13 +494,20 @@ async function removeRecommend() {
     return ($.logger.error(`推荐列表去广告出现异常：${e}`), null);
   }
 }
-const AD_TYPE_RE = /(zvideo|Video|BIG_IMAGE|drama|StyleVideo|app_ad|ad_card|FeedVideo)/i;
+const AD_TYPE_RE =
+  /(zvideo|Video|BIG_IMAGE|drama|StyleVideo|app_ad|ad_card|FeedVideo)/i;
 const PAID_MARKERS = ["paid", "vip", "km_paid_answer"];
 const PROMOTION_WORDS = ["浏览", "购买", "咨询", "进店", "感兴趣"];
 
 function sniffAd(e, r) {
   // 1. 基础标识层
-  if (e.ad || e.ad_info || e.adjson || e.common_card?.feed_content?.video?.ad_info) return true;
+  if (
+    e.ad ||
+    e.ad_info ||
+    e.adjson ||
+    e.common_card?.feed_content?.video?.ad_info
+  )
+    return true;
   if (e.type === "market_card" || e.type === "feed_advert") return true;
   if (e.extra?.type === "SvipActivity") return true;
 
@@ -470,27 +520,37 @@ function sniffAd(e, r) {
     e.extra?.content_type,
     e.common_card?.feed_content?.video?.type,
     e.common_card?.feed_content?.content?.type,
-    e.target?.style?.type
+    e.target?.style?.type,
   ];
 
   // 检查 Video 相关
   if (r.recommend_stream) {
-    if (typesToCheck.some(p => p && AD_TYPE_RE.test(p))) return true;
-    if (e.children?.some(c => c.type === "Video" || c.video_data)) return true;
+    if (typesToCheck.some((p) => p && AD_TYPE_RE.test(p))) return true;
+    if (e.children?.some((c) => c.type === "Video" || c.video_data))
+      return true;
   }
 
   // 检查图片展示卡片 (精准拦截内容配图，放行头像和反馈图标)
   if (e.extra?.business_ext_map?.images?.length > 0) return true;
-  if (e.children?.some(c => (c.type === "Images" || c.id === "Images_pin_id") && !c.id?.includes("Avatar"))) return true;
+  if (
+    e.children?.some(
+      (c) =>
+        (c.type === "Images" || c.id === "Images_pin_id") &&
+        !c.id?.includes("Avatar"),
+    )
+  )
+    return true;
 
   // 检查 Pin (想法)
   if (r.remove_pin) {
-    if (e.target?.type === "pin" || e.extra?.content_type === "pin") return true;
+    if (e.target?.type === "pin" || e.extra?.content_type === "pin")
+      return true;
   }
 
   // 检查 Article (文章)
   if (r.remove_article) {
-    if (e.target?.type === "article" || e.extra?.content_type === "article") return true;
+    if (e.target?.type === "article" || e.extra?.content_type === "article")
+      return true;
   }
 
   // 3. 付费内容嗅探
@@ -498,9 +558,9 @@ function sniffAd(e, r) {
     const paidPaths = [
       e.target?.answer_type,
       e.target?.business_type,
-      e.target?.tag_spec
+      e.target?.tag_spec,
     ];
-    if (paidPaths.some(p => p && PAID_MARKERS.includes(p))) return true;
+    if (paidPaths.some((p) => p && PAID_MARKERS.includes(p))) return true;
   }
 
   return false;
@@ -511,23 +571,29 @@ function isFiltered(e, r, n, o) {
   if (sniffAd(e, r)) return true;
 
   // 2. 软文过滤
-  if (r.remove_advertorial && (e.promotion_extra || e.common_card?.footline?.elements?.[0]?.text?.includes("商品介绍"))) return true;
+  if (
+    r.remove_advertorial &&
+    (e.promotion_extra ||
+      e.common_card?.footline?.elements?.[0]?.text?.includes("商品介绍"))
+  )
+    return true;
 
   // 3. 关键词过滤 (性能保留：仅在开启时进行序列化)
   if (r.blocked_keywords && n.length > 0) {
     const contentStr = JSON.stringify(e);
-    if (n.some(k => contentStr.includes(k))) return true;
+    if (n.some((k) => contentStr.includes(k))) return true;
   }
 
   // 5. 黑名单用户过滤
   if (r.blocked_users && Object.keys(o).length > 0) {
-    const author = e.common_card?.feed_content?.author?.name || e.target?.author?.name;
+    const author =
+      e.common_card?.feed_content?.author?.name || e.target?.author?.name;
     if (author && o[author]) return true;
   }
 
   // 6. 阈值与低质量内容过滤
   const thresholds = r.thresholds || { Vote: 50, Collect: 0, Comment: 0 };
-  
+
   if (e.children && Array.isArray(e.children)) {
     for (const child of e.children) {
       if (!child.elements) continue;
@@ -538,7 +604,7 @@ function isFiltered(e, r, n, o) {
         }
         if (el.text) {
           // 营销词匹配
-          if (PROMOTION_WORDS.some(w => el.text.includes(w))) return true;
+          if (PROMOTION_WORDS.some((w) => el.text.includes(w))) return true;
           // 时间广告
           if (/^\d+小时前$/.test(el.text)) return true;
           // 赞同数文本检查
@@ -931,20 +997,25 @@ function MagicJS(e = "MagicJS", t = "INFO") {
           this.data.read("zhihu_settings_loglevel") ||
           this.data.read("magic_loglevel");
         let threshold = this.data.read("zhihu_settings_threshold") || "50,0,0";
+        let keywordBlockArg = "";
         if (this.argument) {
           if ("string" == typeof this.argument) {
             const t = this.argument.match(/LogLevel=([^&,]*)/i);
             t && (e = t[1]);
             const s = this.argument.match(/Threshold=([^&,]*)/i);
             s && (threshold = s[1]);
+            const i = this.argument.match(/KeywordBlock=([^&,]*)/i);
+            i && (keywordBlockArg = i[1]);
           } else if ("object" == typeof this.argument) {
             e = this.argument.LogLevel || e;
             threshold = this.argument.Threshold || threshold;
+            keywordBlockArg = this.argument.KeywordBlock || keywordBlockArg;
           }
         }
         const t = this.data.read("magic_bark_url");
         (e && this.logger.setLevel(e.toUpperCase()),
-          this.threshold = threshold,
+          (this.threshold = threshold),
+          (this.keywordBlockArg = keywordBlockArg),
           t && this.notification.setBark(t));
       }
     }
@@ -1446,7 +1517,6 @@ function MagicHttp(e, t) {
           Array.prototype.unshift.apply(d, y),
           d = d.concat([c, void 0]);
         d.length;
-
       ) {
         let e = d.shift(),
           r = d.shift();
@@ -1480,7 +1550,6 @@ function MagicHttp(e, t) {
           r = r.concat(l),
           h = Promise.resolve(f);
         r.length;
-
       )
         try {
           let n = r.shift(),
