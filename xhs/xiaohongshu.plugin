@@ -66,7 +66,7 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 
 [Script]
 # 详情预加载屏蔽词过滤
-http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/detailfeed\/preload script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=preload屏蔽词过滤, argument = [{xhs_des_regex}]
+http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/detailfeed\/preload script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=preload屏蔽词过滤, argument = [{xhs_des_regex}]
 
 # 信息流,homefeed regex过滤，图片水印
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/(followfeed|homefeed) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书首页流regex过滤, argument = [{xhs_des_regex},{xhs_nickname_regex},{xhs_counts_threshold}]
@@ -75,10 +75,10 @@ http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/(
 http-response ^https?:\/\/(?:so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/notes script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书搜索页, argument = [{xhs_search_des_regex},{xhs_search_nickname_regex}]
 
 # 实况、图片、视频水印
-http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note(\/imagefeed|\/live_photo\/save|\/feed|\/videofeed|\/video\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=图片水印视频水印
+http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note(\/imagefeed|\/live_photo\/save|\/feed|\/videofeed|\/video\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=图片水印视频水印, argument = [{xhs_des_regex}]
 # 评论区图片、live图水印，表情包下载
-http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/comment(\/list|\/sub_comments) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印存储
-http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/interaction\/comment\/video\/download script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印下载
+http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/comment(\/list|\/sub_comments) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印存储
+http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/interaction\/comment\/video\/download script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印下载
 
 # =====================================
 # MITM：中间人攻击，解密/跳过相关域名的内容，"-"开头为跳过
