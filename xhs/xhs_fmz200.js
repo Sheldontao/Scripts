@@ -5,8 +5,72 @@
  * @quote @RuCu6
  */
 
-const $ = new Env('小红书');
+const $ = new Env("小红书");
 const url = $request.url;
+const isRequestPhase = typeof $response === "undefined";
+
+if (isRequestPhase) {
+  if (url.includes("/api/sns/v1/note/videofeed/exit")) {
+    let reqBody = $request.body;
+    if (!reqBody) {
+      $done({});
+    } else {
+      try {
+        const reqObj = JSON.parse(reqBody);
+        const blockedIds = JSON.parse(
+          $.getdata("fmz200.xhs.blocked_note_ids") || "[]",
+        );
+        if (Array.isArray(blockedIds) && blockedIds.length > 0) {
+          const idSet = new Set(blockedIds.filter(Boolean));
+
+          const originalUnexposed = Array.isArray(reqObj.unexposed_note_ids)
+            ? reqObj.unexposed_note_ids
+            : [];
+          reqObj.unexposed_note_ids = Array.from(
+            new Set(originalUnexposed.concat(Array.from(idSet))),
+          );
+
+          if (!Array.isArray(reqObj.video_play_progress)) {
+            reqObj.video_play_progress = [];
+          }
+
+          for (const progressItem of reqObj.video_play_progress) {
+            if (idSet.has(progressItem?.note_id)) {
+              progressItem.duration = 0;
+              progressItem.replay_times = 0;
+              progressItem.max_play_time = 0;
+              progressItem.current_play_time = 0;
+            }
+          }
+
+          if (reqObj.note_id && idSet.has(reqObj.note_id)) {
+            const hasCurrent = reqObj.video_play_progress.some(
+              (item) => item?.note_id === reqObj.note_id,
+            );
+            if (!hasCurrent) {
+              reqObj.video_play_progress.push({
+                duration: 0,
+                replay_times: 0,
+                max_play_time: 0,
+                note_id: reqObj.note_id,
+                current_play_time: 0,
+              });
+            }
+          }
+
+          console.log(
+            `[Exit] merged blocked note ids: ${Array.from(idSet).length}`,
+          );
+          $done({ body: JSON.stringify(reqObj) });
+        }
+      } catch (e) {
+        console.error(`[Exit] request body parse/patch failed: ${e}`);
+      }
+    }
+  }
+  $done({});
+}
+
 let rsp_body = $response.body;
 if (!rsp_body) {
   $done({});
@@ -92,22 +156,33 @@ const getCachedCountsThreshold = (key, argValue) => {
   console.log(`Using counts threshold for ${key} from: ${logSource}`);
 
   const counts = [];
-    try {
-      const parsedCounts = JSON.parse(sourceCounts);
-      if (Array.isArray(parsedCounts) && parsedCounts.every(num => typeof num === 'number')) {
-        counts.push(...parsedCounts);
-      } else {
-        console.error(`Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`);
-      }
-    } catch (e) {
-      console.error(`Error parsing counts threshold string for ${key}: ${e}`);
+  try {
+    const parsedCounts = JSON.parse(sourceCounts);
+    if (
+      Array.isArray(parsedCounts) &&
+      parsedCounts.every((num) => typeof num === "number")
+    ) {
+      counts.push(...parsedCounts);
+    } else {
+      console.error(
+        `Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`,
+      );
     }
+  } catch (e) {
+    console.error(`Error parsing counts threshold string for ${key}: ${e}`);
+  }
   return counts;
 };
 
-if (url.includes("/system_service/splash_config") || url.includes("/httpdns") || url.includes("/o_live_p2p_mobilesdk")) {
+if (
+  url.includes("/system_service/splash_config") ||
+  url.includes("/httpdns") ||
+  url.includes("/o_live_p2p_mobilesdk")
+) {
   console.log("拦截到直连/配置请求: " + url);
-  $done({body: JSON.stringify({code: 0, success: true, msg: "Blocked", data: {}})});
+  $done({
+    body: JSON.stringify({ code: 0, success: true, msg: "Blocked", data: {} }),
+  });
 }
 
 if (url.includes("/search/notes")) {
@@ -115,20 +190,30 @@ if (url.includes("/search/notes")) {
   if (obj.data.items?.length > 0) {
     obj.data.items = obj.data.items.filter((i) => i.model_type === "note");
 
-    const searchDesRegexes = getCachedRegexes("fmz200.xhs_search_des_regex_cache", $argument.xhs_search_des_regex);
-    const searchUserRegexes = getCachedRegexes("fmz200.xhs_search_nickname_regex_cache", $argument.xhs_search_nickname_regex);
+    const searchDesRegexes = getCachedRegexes(
+      "fmz200.xhs_search_des_regex_cache",
+      $argument.xhs_search_des_regex,
+    );
+    const searchUserRegexes = getCachedRegexes(
+      "fmz200.xhs_search_nickname_regex_cache",
+      $argument.xhs_search_nickname_regex,
+    );
 
-    obj.data.items = obj.data.items.filter(item => {
+    obj.data.items = obj.data.items.filter((item) => {
       // 1. 正则过滤内容 (标题 + 描述 + 标签)
       const title = item?.note?.title || "";
       const desc = item?.note?.desc || "";
-      const tags = item?.note?.hash_tag ? item.note.hash_tag.map(t => t.name).join(" ") : "";
+      const tags = item?.note?.hash_tag
+        ? item.note.hash_tag.map((t) => t.name).join(" ")
+        : "";
       const contentToMatch = `${title} ${desc} ${tags}`.trim();
 
       if (searchDesRegexes.length > 0 && contentToMatch) {
         for (const regex of searchDesRegexes) {
           if (regex.test(contentToMatch)) {
-            console.log(`[Search] Filtered (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`);
+            console.log(
+              `[Search] Filtered (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
+            );
             return false;
           }
         }
@@ -139,7 +224,9 @@ if (url.includes("/search/notes")) {
       if (searchUserRegexes.length > 0 && currentNickname) {
         for (const regex of searchUserRegexes) {
           if (regex.test(currentNickname)) {
-            console.log(`[Search] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`);
+            console.log(
+              `[Search] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`,
+            );
             return false;
           }
         }
@@ -149,7 +236,11 @@ if (url.includes("/search/notes")) {
   }
 }
 
-if (url.includes("/note/imagefeed") || url.includes("/note/feed") || url.includes("/note/videofeed")) {
+if (
+  url.includes("/note/imagefeed") ||
+  url.includes("/note/feed") ||
+  url.includes("/note/videofeed")
+) {
   // 信息流/详情页 通用处理 (非拦截逻辑，先处理画质和保存)
   if (obj?.data?.length > 0) {
     const note_list = obj.data[0]?.note_list || obj.data;
@@ -161,14 +252,16 @@ if (url.includes("/note/imagefeed") || url.includes("/note/feed") || url.include
           item.media_save_config.disable_weibo_cover = true;
         }
         if (item?.share_info?.function_entries?.length > 0) {
-          const addItem = {type: "video_download"};
+          const addItem = { type: "video_download" };
           let func = item.share_info.function_entries[0];
           if (func?.type !== "video_download") {
             item.share_info.function_entries.unshift(addItem);
           }
         }
         if (item.hash_tag) {
-          item.hash_tag = item.hash_tag.filter(tag => tag.type !== "interact_vote");
+          item.hash_tag = item.hash_tag.filter(
+            (tag) => tag.type !== "interact_vote",
+          );
         }
       }
 
@@ -177,20 +270,20 @@ if (url.includes("/note/imagefeed") || url.includes("/note/feed") || url.include
         const images_list = note_list[0].images_list;
         note_list[0].images_list = imageEnhance(JSON.stringify(images_list));
         $.setdata(JSON.stringify(images_list), "fmz200.xiaohongshu.feed.rsp");
-        console.log('已存储无水印信息♻️');
+        console.log("已存储无水印信息♻️");
       }
     }
   }
-} 
+}
 
 if (url.includes("/note/live_photo/save")) {
-  console.log('原body：' + rsp_body);
+  console.log("原body：" + rsp_body);
   const rsp = $.getdata("fmz200.xiaohongshu.feed.rsp");
   console.log("读取缓存key：fmz200.xiaohongshu.feed.rsp");
   // console.log("读取缓存val：" + rsp);
   if (rsp == null || rsp.length === 0) {
-    console.log('缓存无内容，返回原body');
-    $done({body: rsp_body});
+    console.log("缓存无内容，返回原body");
+    $done({ body: rsp_body });
   }
   const cache_body = JSON.parse(rsp);
   let new_data = [];
@@ -199,7 +292,7 @@ if (url.includes("/note/live_photo/save")) {
       const item = {
         file_id: images.live_photo_file_id,
         video_id: images.live_photo.media.video_id,
-        url: images.live_photo.media.stream.h265[0].master_url
+        url: images.live_photo.media.stream.h265[0].master_url,
       };
       new_data.push(item);
     }
@@ -207,9 +300,9 @@ if (url.includes("/note/live_photo/save")) {
   if (obj.data.datas) {
     replaceUrlContent(obj.data.datas, new_data);
   } else {
-    obj = {"code": 0, "success": true, "msg": "成功", "data": {"datas": new_data}};
+    obj = { code: 0, success: true, msg: "成功", data: { datas: new_data } };
   }
-  console.log('新body：' + JSON.stringify(obj));
+  console.log("新body：" + JSON.stringify(obj));
 }
 
 if (url.includes("/v3/note/videofeed")) {
@@ -224,7 +317,7 @@ if (url.includes("/v3/note/videofeed")) {
       }
       if (item?.share_info?.function_entries?.length > 0) {
         // 下载限制
-        const addItem = {type: "video_download"};
+        const addItem = { type: "video_download" };
         let func = item.share_info.function_entries[0];
         if (func?.type !== "video_download") {
           // 向数组开头添加对象
@@ -258,10 +351,12 @@ if (url.includes("/v4/note/videofeed")) {
       }
       // 添加下载按钮（如果未存在）
       if (item?.share_info?.function_entries?.length > 0) {
-        const hasDownload = item.share_info.function_entries.some(entry => entry.type === "video_download");
+        const hasDownload = item.share_info.function_entries.some(
+          (entry) => entry.type === "video_download",
+        );
         if (!hasDownload) {
           console.log(`添加下载按钮: ${item.id}`);
-          item.share_info.function_entries.push({type: "video_download"});
+          item.share_info.function_entries.push({ type: "video_download" });
         }
       }
 
@@ -281,13 +376,13 @@ if (url.includes("/v4/note/videofeed")) {
 
       if (Array.isArray(h265List) && h265List.length > 0) {
         // 过滤有效链接并排序
-        const sorted = h265List.filter(v => !!v.master_url).sort(sortStream);
+        const sorted = h265List.filter((v) => !!v.master_url).sort(sortStream);
         if (sorted.length > 0) selectedStream = sorted[0];
       }
 
       // 降级策略：如果没有 H265，尝试 H264
       if (!selectedStream && Array.isArray(h264List) && h264List.length > 0) {
-        const sorted = h264List.filter(v => !!v.master_url).sort(sortStream);
+        const sorted = h264List.filter((v) => !!v.master_url).sort(sortStream);
         if (sorted.length > 0) selectedStream = sorted[0];
       }
 
@@ -295,11 +390,13 @@ if (url.includes("/v4/note/videofeed")) {
       if (item?.id && selectedStream?.master_url) {
         const data = {
           id: item.id,
-          url: selectedStream.master_url
+          url: selectedStream.master_url,
         };
         console.log(`提取成功 ➜ ${item.id} → ${selectedStream.stream_desc}`);
         videoData.push(data);
-        console.log(`[缓存] ID:${item.id} | 规格:${selectedStream.quality_type} | 码率:${selectedStream.avg_bitrate}`);
+        console.log(
+          `[缓存] ID:${item.id} | 规格:${selectedStream.quality_type} | 码率:${selectedStream.avg_bitrate}`,
+        );
       } else {
         console.log(`未找到可用视频: ${item.id}`);
       }
@@ -329,12 +426,21 @@ if (url.includes("/v10/note/video/save")) {
 }
 
 // 修改 /v6/homefeed 的匹配逻辑
-if (url.includes("/homefeed") || url.includes("/followfeed")) {
+if (url.includes("/homefeed")) {
   if (obj?.data?.length > 0) {
-    const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
-    const nicknameRegexes = getCachedRegexes("fmz200.xhs_nickname_regex_cache", $argument.xhs_nickname_regex);
-    const countsThreshold = getCachedCountsThreshold("fmz200.xhs_counts_threshold_cache", $argument.xhs_counts_threshold);
-    obj.data = obj.data.filter(item => {
+    const descRegexes = getCachedRegexes(
+      "fmz200.xhs_des_regex_cache",
+      $argument.xhs_des_regex,
+    );
+    const nicknameRegexes = getCachedRegexes(
+      "fmz200.xhs_nickname_regex_cache",
+      $argument.xhs_nickname_regex,
+    );
+    const countsThreshold = getCachedCountsThreshold(
+      "fmz200.xhs_counts_threshold_cache",
+      $argument.xhs_counts_threshold,
+    );
+    obj.data = obj.data.filter((item) => {
       // 1. 核心过滤：识别直播、广告、带货笔记
       if (
         (item?.model_type && String(item.model_type).includes("live")) ||
@@ -350,9 +456,10 @@ if (url.includes("/homefeed") || url.includes("/followfeed")) {
       }
       // 2. 移除首页热点
       if (
-        item?.recommend?.type === "hot_reason" || 
-        item?.recommend?.desc === "热点" || 
-        (item?.recommend?.track_id && /(^|_)hotspot|hotspoti2i/i.test(item.recommend.track_id)) ||
+        item?.recommend?.type === "hot_reason" ||
+        item?.recommend?.desc === "热点" ||
+        (item?.recommend?.track_id &&
+          /(^|_)hotspot|hotspoti2i/i.test(item.recommend.track_id)) ||
         (item?.rec_extra_info && item.rec_extra_info.includes('"hotEventId"'))
       ) {
         return false;
@@ -360,35 +467,45 @@ if (url.includes("/homefeed") || url.includes("/followfeed")) {
       // 3. 正则过滤内容 (标题 + 描述 + 标签)
       const title = item?.title || item?.note?.title || "";
       const desc = item?.desc || item?.note?.desc || "";
-      const tags = item?.note?.hash_tag ? item.note.hash_tag.map(t => t.name).join(" ") : "";
+      const tags = item?.note?.hash_tag
+        ? item.note.hash_tag.map((t) => t.name).join(" ")
+        : "";
       const contentToMatch = `${title} ${desc} ${tags}`.trim();
-      
+
       if (descRegexes.length > 0 && contentToMatch) {
         for (const regex of descRegexes) {
           if (regex.test(contentToMatch)) {
-            console.log(`[Homefeed] Filtered (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`);
+            console.log(
+              `[Homefeed] Filtered (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
+            );
             return false;
           }
         }
       }
       // 4. 正则过滤昵称
-      const currentNickname = item?.user?.nickname || item?.note?.user?.nickname;
+      const currentNickname =
+        item?.user?.nickname || item?.note?.user?.nickname;
       if (nicknameRegexes.length > 0 && currentNickname) {
         for (const regex of nicknameRegexes) {
           if (regex.test(currentNickname)) {
-            console.log(`[Homefeed] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`);
+            console.log(
+              `[Homefeed] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`,
+            );
             return false;
           }
         }
       }
       // 5. 数值阈值过滤
       if (countsThreshold.length === 5) {
-        const [minLikes, minCollected, minComments, minShared, minNice] = countsThreshold;
+        const [minLikes, minCollected, minComments, minShared, minNice] =
+          countsThreshold;
         if (
           (item?.shared_count !== undefined && item.shared_count < minShared) ||
           (item?.likes !== undefined && item.likes < minLikes) ||
-          (item?.comments_count !== undefined && item.comments_count < minComments) ||
-          (item?.collected_count !== undefined && item.collected_count < minCollected) ||
+          (item?.comments_count !== undefined &&
+            item.comments_count < minComments) ||
+          (item?.collected_count !== undefined &&
+            item.collected_count < minCollected) ||
           (item?.nice_count !== undefined && item.nice_count < minNice)
         ) {
           return false;
@@ -404,7 +521,10 @@ if (url.includes("/homefeed") || url.includes("/followfeed")) {
 }
 
 // 加载评论区
-if (url.includes("/api/sns/v5/note/comment/list?") || url.includes("/api/sns/v3/note/comment/sub_comments?")) {
+if (
+  url.includes("/api/sns/v5/note/comment/list?") ||
+  url.includes("/api/sns/v3/note/comment/sub_comments?")
+) {
   replaceRedIdWithFmz200(obj.data);
   let livePhotos = [];
   let note_id = "";
@@ -429,7 +549,7 @@ if (url.includes("/api/sns/v5/note/comment/list?") || url.includes("/api/sns/v3/
               console.log("video_id：" + picture.video_id);
               const videoData = {
                 videId: picture.video_id,
-                videoUrl: picObj.stream.h265[0].master_url
+                videoUrl: picObj.stream.h265[0].master_url,
               };
               livePhotos.push(videoData);
             }
@@ -455,7 +575,7 @@ if (url.includes("/api/sns/v5/note/comment/list?") || url.includes("/api/sns/v3/
                   console.log("video_id1：" + picture.video_id);
                   const videoData = {
                     videId: picture.video_id,
-                    videoUrl: picObj.stream.h265[0].master_url
+                    videoUrl: picObj.stream.h265[0].master_url,
                   };
                   livePhotos.push(videoData);
                 }
@@ -472,16 +592,18 @@ if (url.includes("/api/sns/v5/note/comment/list?") || url.includes("/api/sns/v3/
     const commitsCache = $.getdata("fmz200.xiaohongshu.comments.rsp");
     console.log("读取缓存val：" + commitsCache);
     if (!commitsCache) {
-      commitsRsp = {noteId: note_id, livePhotos: livePhotos};
+      commitsRsp = { noteId: note_id, livePhotos: livePhotos };
     } else {
       commitsRsp = JSON.parse(commitsCache);
       console.log("缓存note_id：" + commitsRsp.noteId);
       if (commitsRsp.noteId === note_id) {
         console.log("增量数据");
-        commitsRsp.livePhotos = deduplicateLivePhotos(commitsRsp.livePhotos.concat(livePhotos));
+        commitsRsp.livePhotos = deduplicateLivePhotos(
+          commitsRsp.livePhotos.concat(livePhotos),
+        );
       } else {
         console.log("更换数据");
-        commitsRsp = {noteId: note_id, livePhotos: livePhotos};
+        commitsRsp = { noteId: note_id, livePhotos: livePhotos };
       }
     }
     console.log("写入缓存val：" + JSON.stringify(commitsRsp));
@@ -513,12 +635,15 @@ if (url.includes("/api/sns/v1/interaction/comment/video/download?")) {
 
 // 详情页过滤逻辑 (全能版)
 if (
-  url.includes("/note/feed") || 
-  url.includes("/note/imagefeed") || 
-  url.includes("/note/videofeed") || 
+  url.includes("/note/feed") ||
+  url.includes("/note/imagefeed") ||
+  url.includes("/note/videofeed") ||
   url.includes("/note/video/save")
 ) {
-  const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
+  const descRegexes = getCachedRegexes(
+    "fmz200.xhs_des_regex_cache",
+    $argument.xhs_des_regex,
+  );
   if (descRegexes.length > 0 && obj.data) {
     // 兼容数组和单个对象结构
     const noteList = Array.isArray(obj.data) ? obj.data : [obj.data];
@@ -528,17 +653,50 @@ if (
       for (let note of notes) {
         const title = note?.title || note?.note?.title || "";
         const desc = note?.desc || note?.note?.desc || "";
-        const tags = note?.hash_tag ? note.hash_tag.map(t => t.name).join(" ") : 
-                     (note?.note?.hash_tag ? note.note.hash_tag.map(t => t.name).join(" ") : "");
+        const tags = note?.hash_tag
+          ? note.hash_tag.map((t) => t.name).join(" ")
+          : note?.note?.hash_tag
+            ? note.note.hash_tag.map((t) => t.name).join(" ")
+            : "";
         const contentToMatch = `${title} ${desc} ${tags}`.trim();
 
         if (contentToMatch) {
           for (const regex of descRegexes) {
             if (regex.test(contentToMatch)) {
-              console.log(`[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`);
+              console.log(
+                `[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
+              );
               obj.data = {};
               obj.code = -1;
               obj.msg = "内容已被正则过滤";
+              const blockedNoteId =
+                note?.id ||
+                note?.note_id ||
+                note?.note?.id ||
+                note?.note?.note_id;
+              if (blockedNoteId) {
+                let blockedIds = [];
+                try {
+                  blockedIds = JSON.parse(
+                    $.getdata("fmz200.xhs.blocked_note_ids") || "[]",
+                  );
+                } catch (e) {
+                  blockedIds = [];
+                }
+                if (!Array.isArray(blockedIds)) {
+                  blockedIds = [];
+                }
+                blockedIds = Array.from(
+                  new Set(blockedIds.concat([blockedNoteId])),
+                ).slice(-100);
+                $.setdata(
+                  JSON.stringify(blockedIds),
+                  "fmz200.xhs.blocked_note_ids",
+                );
+                console.log(
+                  `[Detail] cached blocked note id: ${blockedNoteId}`,
+                );
+              }
               break;
             }
           }
@@ -552,14 +710,19 @@ if (
 
 // 详情预加载过滤 (preload_map 结构: data.preload_map[note_id] = { desc, type, ... })
 if (url.includes("/note/detailfeed/preload")) {
-  const descRegexes = getCachedRegexes("fmz200.xhs_des_regex_cache", $argument.xhs_des_regex);
+  const descRegexes = getCachedRegexes(
+    "fmz200.xhs_des_regex_cache",
+    $argument.xhs_des_regex,
+  );
   if (descRegexes.length > 0 && obj.data?.preload_map) {
     for (const noteId of Object.keys(obj.data.preload_map)) {
       const note = obj.data.preload_map[noteId];
       const desc = note?.desc || "";
       for (const regex of descRegexes) {
         if (regex.test(desc)) {
-          console.log(`[Preload] Filtered (${regex.source}): ${desc.substring(0, 50)}...`);
+          console.log(
+            `[Preload] Filtered (${regex.source}): ${desc.substring(0, 50)}...`,
+          );
           delete obj.data.preload_map[noteId];
           break;
         }
@@ -568,7 +731,7 @@ if (url.includes("/note/detailfeed/preload")) {
   }
 }
 
-$done({body: JSON.stringify(obj)});
+$done({ body: JSON.stringify(obj) });
 
 // 小红书画质增强：加载2K分辨率的图片
 function imageEnhance(jsonStr) {
@@ -579,10 +742,15 @@ function imageEnhance(jsonStr) {
 
   const imageQuality = $.getdata("fmz200.xiaohongshu.imageQuality");
   console.log(`Image Quality: ${imageQuality}`);
-  if (imageQuality === "original") { // 原始分辨率，PNG格式的图片，占用空间比较大
+  if (imageQuality === "original") {
+    // 原始分辨率，PNG格式的图片，占用空间比较大
     console.log("画质修改为-原始分辨率");
-    jsonStr = jsonStr.replace(/\?imageView2\/2[^&]*(?:&redImage\/frame\/0)/, "?imageView2/0/format/png&redImage/frame/0");
-  } else { // 高像素输出
+    jsonStr = jsonStr.replace(
+      /\?imageView2\/2[^&]*(?:&redImage\/frame\/0)/,
+      "?imageView2/0/format/png&redImage/frame/0",
+    );
+  } else {
+    // 高像素输出
     console.log("画质修改为-高像素输出");
     const regex1 = /imageView2\/2\/w\/\d+\/format/g;
     jsonStr = jsonStr.replace(regex1, `imageView2/2/w/2160/format`);
@@ -590,7 +758,7 @@ function imageEnhance(jsonStr) {
     const regex2 = /imageView2\/2\/h\/\d+\/format/g;
     jsonStr = jsonStr.replace(regex2, `imageView2/2/h/2160/format`);
   }
-  console.log('图片画质增强完成✅');
+  console.log("图片画质增强完成✅");
 
   try {
     return JSON.parse(jsonStr);
@@ -601,19 +769,25 @@ function imageEnhance(jsonStr) {
 }
 
 function replaceUrlContent(collectionA, collectionB) {
-  console.log('替换无水印的URL');
-  collectionA.forEach(itemA => {
-    const itemB = collectionB.find(itemB => itemB.file_id === itemA.file_id);
+  console.log("替换无水印的URL");
+  collectionA.forEach((itemA) => {
+    const itemB = collectionB.find((itemB) => itemB.file_id === itemA.file_id);
     if (itemB) {
-      itemA.url = itemA.url !== "" ? itemA.url.replace(/^https?:\/\/.*\.mp4(\?[^"]*)?/g, `${itemB.url.match(/(.*)\.mp4/)[1]}.mp4`) : itemB.url;
-      itemA.author = "@fmz200"
+      itemA.url =
+        itemA.url !== ""
+          ? itemA.url.replace(
+              /^https?:\/\/.*\.mp4(\?[^"]*)?/g,
+              `${itemB.url.match(/(.*)\.mp4/)[1]}.mp4`,
+            )
+          : itemB.url;
+      itemA.author = "@fmz200";
     }
   });
 }
 
 function deduplicateLivePhotos(livePhotos) {
   const seen = new Map();
-  livePhotos = livePhotos.filter(item => {
+  livePhotos = livePhotos.filter((item) => {
     if (seen.has(item.videId)) {
       return false;
     }
@@ -625,23 +799,474 @@ function deduplicateLivePhotos(livePhotos) {
 
 function replaceRedIdWithFmz200(obj) {
   if (Array.isArray(obj)) {
-    obj.forEach(item => replaceRedIdWithFmz200(item));
-  } else if (typeof obj === 'object' && obj !== null) {
-    if ('red_id' in obj) {
+    obj.forEach((item) => replaceRedIdWithFmz200(item));
+  } else if (typeof obj === "object" && obj !== null) {
+    if ("red_id" in obj) {
       obj.fmz200 = obj.red_id; // 创建新属性fmz200
       delete obj.red_id; // 删除旧属性red_id
     }
-    Object.keys(obj).forEach(key => {
+    Object.keys(obj).forEach((key) => {
       replaceRedIdWithFmz200(obj[key]);
     });
   }
 }
 
-function Env(t, e) { class s { constructor(t) { this.env = t } send(t, e = "GET") { t = "string" == typeof t ? { url: t } : t; let s = this.get; return new Promise((e, i) => { s.call(this, t, (t, s, r) => { t ? i(t) : e(s) }) }) } get(t) { return this.send.call(this.env, t) } post(t) { return this.send.call(this.env, t, "POST") } } return new class { constructor(t, e) { this.name = t, this.http = new s(this), this.data = null, this.dataFile = "box.dat", this.logs = [], this.isMute = !1, this.isNeedRewrite = !1, this.logSeparator = "\n", this.encoding = "utf-8", this.startTime = (new Date).getTime(), Object.assign(this, e), this.log("", `\n${this.name},\n!`) } isNode() { return "undefined" != typeof module && !!module.exports } isQuanX() { return "undefined" != typeof $task } isSurge() { return "undefined" != typeof $httpClient && "undefined" == typeof $loon } isLoon() { return "undefined" != typeof $loon } isShadowrocket() { return "undefined" != typeof $rocket } isStash() { return "undefined" != typeof $environment && $environment["stash-version"] } toObj(t, e = null) { try { return JSON.parse(t) } catch { return e } } toStr(t, e = null) { try { return JSON.stringify(t) } catch { return e } } getjson(t, e) { let s = e; const i = this.getdata(t); if (i) try { s = JSON.parse(this.getdata(t)) } catch { } return s } setjson(t, e) { try { return this.setdata(JSON.stringify(t), e) } catch { return !1 } } getScript(t) { return new Promise(e => { this.get({ url: t }, (t, s, i) => e(i)) }) } runScript(t, e) { return new Promise(s => { let i = this.getdata("@chavy_boxjs_userCfgs.httpapi"); i = i ? i.replace(/\n/g, "").trim() : i; let r = this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout"); r = r ? 1 * r : 20, r = e && e.timeout ? e.timeout : r; const [o, a] = i.split("@"), n = { url: `http://${a}/v1/scripting/evaluate`, body: { script_text: t, mock_type: "cron", timeout: r }, headers: { "X-Key": o, Accept: "*/*" } }; this.post(n, (t, e, i) => s(i)) }).catch(t => this.logErr(t)) } loaddata() { if (!this.isNode()) return {}; { this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path"); const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile), s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e); if (!s && !i) return {}; { const i = s ? t : e; try { return JSON.parse(this.fs.readFileSync(i)) } catch (t) { return {} } } } } writedata() { if (this.isNode()) { this.fs = this.fs ? this.fs : require("fs"), this.path = this.path ? this.path : require("path"); const t = this.path.resolve(this.dataFile), e = this.path.resolve(process.cwd(), this.dataFile), s = this.fs.existsSync(t), i = !s && this.fs.existsSync(e), r = JSON.stringify(this.data); s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r) } } lodash_get(t, e, s) { const i = e.replace(/\.(\d+)\]/g, ".${1}").split("."); let r = t; for (const t of i) if (r = Object(r)[t], void 0 === r) return s; return r } lodash_set(t, e, s) { return Object(t) !== t ? t : (Array.isArray(e) || (e = e.toString().match(/[^.[\\\\]]+/g) || []), e.slice(0, -1).reduce((t, s, i) => Object(t[s]) === t[s] ? t[s] : t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}, t)[e[e.length - 1]] = s, t) } getdata(t) { let e = this.getval(t); if (/^@/.test(t)) { const [, s, i] = /^@(.*?)\.(.*?)$/.exec(t), r = s ? this.getval(s) : ""; if (r) try { const t = JSON.parse(r); e = t ? this.lodash_get(t, i, "") : e } catch (t) { e = "" } } return e } setdata(t, e) { let s = !1; if (/^@/.test(e)) { const [, i, r] = /^@(.*?)\.(.*?)$/.exec(e), o = this.getval(i), a = i ? "null" === o ? null : o || "{}" : "{}"; try { const e = JSON.parse(a); this.lodash_set(e, r, t), s = this.setval(JSON.stringify(e), i) } catch (e) { const o = {}; this.lodash_set(o, r, t), s = this.setval(JSON.stringify(o), i) } } else s = this.setval(t, e); return s } getval(t) { return this.isSurge() || this.isLoon() ? $persistentStore.read(t) : this.isQuanX() ? $prefs.valueForKey(t) : this.isNode() ? (this.data = this.loaddata(), this.data[t]) : this.data && this.data[t] || null } setval(t, e) { return this.isSurge() || this.isLoon() ? $persistentStore.write(t, e) : this.isQuanX() ? $prefs.setValueForKey(t, e) : this.isNode() ? (this.data = this.loaddata(), this.data[e] = t, this.writedata(), !0) : this.data && this.data[e] || null } initGotEnv(t) { this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar)) } get(t, e = (() => { })) { if (t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient.get(t, (t, s, i) => { !t && s && (s.body = i, s.statusCode = s.status ? s.status : s.statusCode, s.status = s.statusCode), e(t, s, i) }); else if (this.isQuanX()) this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => e(t && t.error || "UndefinedError")); else if (this.isNode()) { let s = require("iconv-lite"); this.initGotEnv(t), this.got(t).on("redirect", (t, e) => { try { if (t.headers["set-cookie"]) { const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString(); s && this.ckjar.setCookieSync(s, null), e.cookieJar = this.ckjar } } catch (t) { this.logErr(t) } }).then(t => { const { statusCode: i, statusCode: r, headers: o, rawBody: a } = t, n = s.decode(a, this.encoding); e(null, { status: i, statusCode: r, headers: o, rawBody: a, body: n }, n) }, t => { const { message: i, response: r } = t; e(i, r, r && s.decode(r.rawBody, this.encoding)) }) } } post(t, e = (() => { })) { const s = t.method ? t.method.toLocaleLowerCase() : "post"; if (t.body && t.headers && !t.headers["Content-Type"] && (t.headers["Content-Type"] = "application/x-www-form-urlencoded"), t.headers && delete t.headers["Content-Length"], this.isSurge() || this.isLoon()) this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })), $httpClient[s](t, (t, s, i) => { !t && s && (s.body = i, s.statusCode = s.status ? s.status : s.statusCode, s.status = s.statusCode), e(t, s, i) }); else if (this.isQuanX()) t.method = s, this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, { hints: !1 })), $task.fetch(t).then(t => { const { statusCode: s, statusCode: i, headers: r, body: o } = t; e(null, { status: s, statusCode: i, headers: r, body: o }, o) }, t => e(t && t.error || "UndefinedError")); else if (this.isNode()) { let i = require("iconv-lite"); this.initGotEnv(t); const { url: r, ...o } = t; this.got[s](r, o).then(t => { const { statusCode: s, statusCode: r, headers: o, rawBody: a } = t, n = i.decode(a, this.encoding); e(null, { status: s, statusCode: r, headers: o, rawBody: a, body: n }, n) }, t => { const { message: s, response: r } = t; e(s, r, r && i.decode(r.rawBody, this.encoding)) }) } } time(t, e = null) { const s = e ? new Date(e) : new Date; let i = { "M+": s.getMonth() + 1, "d+": s.getDate(), "H+": s.getHours(), "m+": s.getMinutes(), "s+": s.getSeconds(), "q+": Math.floor((s.getMonth() + 3) / 3), S: s.getMilliseconds() }; /(y+)/.test(t) && (t = t.replace(RegExp.$1, (s.getFullYear() + "").substr(4 - RegExp.$1.length))); for (let e in i) new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length))); return t } msg(e = t, s = "", i = "", r) { const o = t => { if (!t) return t; if ("string" == typeof t) return this.isLoon() ? t : this.isQuanX() ? { "open-url": t } : this.isSurge() ? { url: t } : void 0; if ("object" == typeof t) { if (this.isLoon()) { let e = t.openUrl || t.url || t["open-url"], s = t.mediaUrl || t["media-url"]; return { openUrl: e, mediaUrl: s } } if (this.isQuanX()) { let e = t["open-url"] || t.url || t.openUrl, s = t["media-url"] || t.mediaUrl, i = t["update-pasteboard"] || t.updatePasteboard; return { "open-url": e, "media-url": s, "update-pasteboard": i } } if (this.isSurge()) { let e = t.url || t.openUrl || t["open-url"]; return { url: e } } } }; if (this.isMute || (this.isSurge() || this.isLoon() ? $notification.post(e, s, i, o(r)) : this.isQuanX() && $notify(e, s, i, o(r))), !this.isMuteLog) { let t = ["", "============================"]; t.push(e), s && t.push(s), i && t.push(i), console.log(t.join("\n")), this.logs = this.logs.concat(t) } } log(...t) { t.length > 0 && (this.logs = [...this.logs, ...t]), console.log(t.join(this.logSeparator)) } logErr(t, e) { const s = !this.isSurge() && !this.isQuanX() && !this.isLoon(); s ? this.log("", `\n
+function Env(t, e) {
+  class s {
+    constructor(t) {
+      this.env = t;
+    }
+    send(t, e = "GET") {
+      t = "string" == typeof t ? { url: t } : t;
+      let s = this.get;
+      return new Promise((e, i) => {
+        s.call(this, t, (t, s, r) => {
+          t ? i(t) : e(s);
+        });
+      });
+    }
+    get(t) {
+      return this.send.call(this.env, t);
+    }
+    post(t) {
+      return this.send.call(this.env, t, "POST");
+    }
+  }
+  return new (class {
+    constructor(t, e) {
+      ((this.name = t),
+        (this.http = new s(this)),
+        (this.data = null),
+        (this.dataFile = "box.dat"),
+        (this.logs = []),
+        (this.isMute = !1),
+        (this.isNeedRewrite = !1),
+        (this.logSeparator = "\n"),
+        (this.encoding = "utf-8"),
+        (this.startTime = new Date().getTime()),
+        Object.assign(this, e),
+        this.log("", `\n${this.name},\n!`));
+    }
+    isNode() {
+      return "undefined" != typeof module && !!module.exports;
+    }
+    isQuanX() {
+      return "undefined" != typeof $task;
+    }
+    isSurge() {
+      return "undefined" != typeof $httpClient && "undefined" == typeof $loon;
+    }
+    isLoon() {
+      return "undefined" != typeof $loon;
+    }
+    isShadowrocket() {
+      return "undefined" != typeof $rocket;
+    }
+    isStash() {
+      return (
+        "undefined" != typeof $environment && $environment["stash-version"]
+      );
+    }
+    toObj(t, e = null) {
+      try {
+        return JSON.parse(t);
+      } catch {
+        return e;
+      }
+    }
+    toStr(t, e = null) {
+      try {
+        return JSON.stringify(t);
+      } catch {
+        return e;
+      }
+    }
+    getjson(t, e) {
+      let s = e;
+      const i = this.getdata(t);
+      if (i)
+        try {
+          s = JSON.parse(this.getdata(t));
+        } catch {}
+      return s;
+    }
+    setjson(t, e) {
+      try {
+        return this.setdata(JSON.stringify(t), e);
+      } catch {
+        return !1;
+      }
+    }
+    getScript(t) {
+      return new Promise((e) => {
+        this.get({ url: t }, (t, s, i) => e(i));
+      });
+    }
+    runScript(t, e) {
+      return new Promise((s) => {
+        let i = this.getdata("@chavy_boxjs_userCfgs.httpapi");
+        i = i ? i.replace(/\n/g, "").trim() : i;
+        let r = this.getdata("@chavy_boxjs_userCfgs.httpapi_timeout");
+        ((r = r ? 1 * r : 20), (r = e && e.timeout ? e.timeout : r));
+        const [o, a] = i.split("@"),
+          n = {
+            url: `http://${a}/v1/scripting/evaluate`,
+            body: { script_text: t, mock_type: "cron", timeout: r },
+            headers: { "X-Key": o, Accept: "*/*" },
+          };
+        this.post(n, (t, e, i) => s(i));
+      }).catch((t) => this.logErr(t));
+    }
+    loaddata() {
+      if (!this.isNode()) return {};
+      {
+        ((this.fs = this.fs ? this.fs : require("fs")),
+          (this.path = this.path ? this.path : require("path")));
+        const t = this.path.resolve(this.dataFile),
+          e = this.path.resolve(process.cwd(), this.dataFile),
+          s = this.fs.existsSync(t),
+          i = !s && this.fs.existsSync(e);
+        if (!s && !i) return {};
+        {
+          const i = s ? t : e;
+          try {
+            return JSON.parse(this.fs.readFileSync(i));
+          } catch (t) {
+            return {};
+          }
+        }
+      }
+    }
+    writedata() {
+      if (this.isNode()) {
+        ((this.fs = this.fs ? this.fs : require("fs")),
+          (this.path = this.path ? this.path : require("path")));
+        const t = this.path.resolve(this.dataFile),
+          e = this.path.resolve(process.cwd(), this.dataFile),
+          s = this.fs.existsSync(t),
+          i = !s && this.fs.existsSync(e),
+          r = JSON.stringify(this.data);
+        s
+          ? this.fs.writeFileSync(t, r)
+          : i
+            ? this.fs.writeFileSync(e, r)
+            : this.fs.writeFileSync(t, r);
+      }
+    }
+    lodash_get(t, e, s) {
+      const i = e.replace(/\.(\d+)\]/g, ".${1}").split(".");
+      let r = t;
+      for (const t of i) if (((r = Object(r)[t]), void 0 === r)) return s;
+      return r;
+    }
+    lodash_set(t, e, s) {
+      return Object(t) !== t
+        ? t
+        : (Array.isArray(e) || (e = e.toString().match(/[^.[\\\\]]+/g) || []),
+          (e
+            .slice(0, -1)
+            .reduce(
+              (t, s, i) =>
+                Object(t[s]) === t[s]
+                  ? t[s]
+                  : (t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}),
+              t,
+            )[e[e.length - 1]] = s),
+          t);
+    }
+    getdata(t) {
+      let e = this.getval(t);
+      if (/^@/.test(t)) {
+        const [, s, i] = /^@(.*?)\.(.*?)$/.exec(t),
+          r = s ? this.getval(s) : "";
+        if (r)
+          try {
+            const t = JSON.parse(r);
+            e = t ? this.lodash_get(t, i, "") : e;
+          } catch (t) {
+            e = "";
+          }
+      }
+      return e;
+    }
+    setdata(t, e) {
+      let s = !1;
+      if (/^@/.test(e)) {
+        const [, i, r] = /^@(.*?)\.(.*?)$/.exec(e),
+          o = this.getval(i),
+          a = i ? ("null" === o ? null : o || "{}") : "{}";
+        try {
+          const e = JSON.parse(a);
+          (this.lodash_set(e, r, t), (s = this.setval(JSON.stringify(e), i)));
+        } catch (e) {
+          const o = {};
+          (this.lodash_set(o, r, t), (s = this.setval(JSON.stringify(o), i)));
+        }
+      } else s = this.setval(t, e);
+      return s;
+    }
+    getval(t) {
+      return this.isSurge() || this.isLoon()
+        ? $persistentStore.read(t)
+        : this.isQuanX()
+          ? $prefs.valueForKey(t)
+          : this.isNode()
+            ? ((this.data = this.loaddata()), this.data[t])
+            : (this.data && this.data[t]) || null;
+    }
+    setval(t, e) {
+      return this.isSurge() || this.isLoon()
+        ? $persistentStore.write(t, e)
+        : this.isQuanX()
+          ? $prefs.setValueForKey(t, e)
+          : this.isNode()
+            ? ((this.data = this.loaddata()),
+              (this.data[e] = t),
+              this.writedata(),
+              !0)
+            : (this.data && this.data[e]) || null;
+    }
+    initGotEnv(t) {
+      ((this.got = this.got ? this.got : require("got")),
+        (this.cktough = this.cktough ? this.cktough : require("tough-cookie")),
+        (this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar()),
+        t &&
+          ((t.headers = t.headers ? t.headers : {}),
+          void 0 === t.headers.Cookie &&
+            void 0 === t.cookieJar &&
+            (t.cookieJar = this.ckjar)));
+    }
+    get(t, e = () => {}) {
+      if (
+        (t.headers &&
+          (delete t.headers["Content-Type"],
+          delete t.headers["Content-Length"]),
+        this.isSurge() || this.isLoon())
+      )
+        (this.isSurge() &&
+          this.isNeedRewrite &&
+          ((t.headers = t.headers || {}),
+          Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })),
+          $httpClient.get(t, (t, s, i) => {
+            (!t &&
+              s &&
+              ((s.body = i),
+              (s.statusCode = s.status ? s.status : s.statusCode),
+              (s.status = s.statusCode)),
+              e(t, s, i));
+          }));
+      else if (this.isQuanX())
+        (this.isNeedRewrite &&
+          ((t.opts = t.opts || {}), Object.assign(t.opts, { hints: !1 })),
+          $task.fetch(t).then(
+            (t) => {
+              const { statusCode: s, statusCode: i, headers: r, body: o } = t;
+              e(null, { status: s, statusCode: i, headers: r, body: o }, o);
+            },
+            (t) => e((t && t.error) || "UndefinedError"),
+          ));
+      else if (this.isNode()) {
+        let s = require("iconv-lite");
+        (this.initGotEnv(t),
+          this.got(t)
+            .on("redirect", (t, e) => {
+              try {
+                if (t.headers["set-cookie"]) {
+                  const s = t.headers["set-cookie"]
+                    .map(this.cktough.Cookie.parse)
+                    .toString();
+                  (s && this.ckjar.setCookieSync(s, null),
+                    (e.cookieJar = this.ckjar));
+                }
+              } catch (t) {
+                this.logErr(t);
+              }
+            })
+            .then(
+              (t) => {
+                const {
+                    statusCode: i,
+                    statusCode: r,
+                    headers: o,
+                    rawBody: a,
+                  } = t,
+                  n = s.decode(a, this.encoding);
+                e(
+                  null,
+                  { status: i, statusCode: r, headers: o, rawBody: a, body: n },
+                  n,
+                );
+              },
+              (t) => {
+                const { message: i, response: r } = t;
+                e(i, r, r && s.decode(r.rawBody, this.encoding));
+              },
+            ));
+      }
+    }
+    post(t, e = () => {}) {
+      const s = t.method ? t.method.toLocaleLowerCase() : "post";
+      if (
+        (t.body &&
+          t.headers &&
+          !t.headers["Content-Type"] &&
+          (t.headers["Content-Type"] = "application/x-www-form-urlencoded"),
+        t.headers && delete t.headers["Content-Length"],
+        this.isSurge() || this.isLoon())
+      )
+        (this.isSurge() &&
+          this.isNeedRewrite &&
+          ((t.headers = t.headers || {}),
+          Object.assign(t.headers, { "X-Surge-Skip-Scripting": !1 })),
+          $httpClient[s](t, (t, s, i) => {
+            (!t &&
+              s &&
+              ((s.body = i),
+              (s.statusCode = s.status ? s.status : s.statusCode),
+              (s.status = s.statusCode)),
+              e(t, s, i));
+          }));
+      else if (this.isQuanX())
+        ((t.method = s),
+          this.isNeedRewrite &&
+            ((t.opts = t.opts || {}), Object.assign(t.opts, { hints: !1 })),
+          $task.fetch(t).then(
+            (t) => {
+              const { statusCode: s, statusCode: i, headers: r, body: o } = t;
+              e(null, { status: s, statusCode: i, headers: r, body: o }, o);
+            },
+            (t) => e((t && t.error) || "UndefinedError"),
+          ));
+      else if (this.isNode()) {
+        let i = require("iconv-lite");
+        this.initGotEnv(t);
+        const { url: r, ...o } = t;
+        this.got[s](r, o).then(
+          (t) => {
+            const { statusCode: s, statusCode: r, headers: o, rawBody: a } = t,
+              n = i.decode(a, this.encoding);
+            e(
+              null,
+              { status: s, statusCode: r, headers: o, rawBody: a, body: n },
+              n,
+            );
+          },
+          (t) => {
+            const { message: s, response: r } = t;
+            e(s, r, r && i.decode(r.rawBody, this.encoding));
+          },
+        );
+      }
+    }
+    time(t, e = null) {
+      const s = e ? new Date(e) : new Date();
+      let i = {
+        "M+": s.getMonth() + 1,
+        "d+": s.getDate(),
+        "H+": s.getHours(),
+        "m+": s.getMinutes(),
+        "s+": s.getSeconds(),
+        "q+": Math.floor((s.getMonth() + 3) / 3),
+        S: s.getMilliseconds(),
+      };
+      /(y+)/.test(t) &&
+        (t = t.replace(
+          RegExp.$1,
+          (s.getFullYear() + "").substr(4 - RegExp.$1.length),
+        ));
+      for (let e in i)
+        new RegExp("(" + e + ")").test(t) &&
+          (t = t.replace(
+            RegExp.$1,
+            1 == RegExp.$1.length
+              ? i[e]
+              : ("00" + i[e]).substr(("" + i[e]).length),
+          ));
+      return t;
+    }
+    msg(e = t, s = "", i = "", r) {
+      const o = (t) => {
+        if (!t) return t;
+        if ("string" == typeof t)
+          return this.isLoon()
+            ? t
+            : this.isQuanX()
+              ? { "open-url": t }
+              : this.isSurge()
+                ? { url: t }
+                : void 0;
+        if ("object" == typeof t) {
+          if (this.isLoon()) {
+            let e = t.openUrl || t.url || t["open-url"],
+              s = t.mediaUrl || t["media-url"];
+            return { openUrl: e, mediaUrl: s };
+          }
+          if (this.isQuanX()) {
+            let e = t["open-url"] || t.url || t.openUrl,
+              s = t["media-url"] || t.mediaUrl,
+              i = t["update-pasteboard"] || t.updatePasteboard;
+            return { "open-url": e, "media-url": s, "update-pasteboard": i };
+          }
+          if (this.isSurge()) {
+            let e = t.url || t.openUrl || t["open-url"];
+            return { url: e };
+          }
+        }
+      };
+      if (
+        (this.isMute ||
+          (this.isSurge() || this.isLoon()
+            ? $notification.post(e, s, i, o(r))
+            : this.isQuanX() && $notify(e, s, i, o(r))),
+        !this.isMuteLog)
+      ) {
+        let t = ["", "============================"];
+        (t.push(e),
+          s && t.push(s),
+          i && t.push(i),
+          console.log(t.join("\n")),
+          (this.logs = this.logs.concat(t)));
+      }
+    }
+    log(...t) {
+      (t.length > 0 && (this.logs = [...this.logs, ...t]),
+        console.log(t.join(this.logSeparator)));
+    }
+    logErr(t, e) {
+      const s = !this.isSurge() && !this.isQuanX() && !this.isLoon();
+      s
+        ? this.log(
+            "",
+            `\n
 ${this.name},
-!`, t.stack) : this.log("", `\n
+!`,
+            t.stack,
+          )
+        : this.log(
+            "",
+            `\n
 ${this.name},
-!`, t) } wait(t) { return new Promise(e => setTimeout(e, t)) } done(t = {}) { const e = (new Date).getTime(), s = (e - this.startTime) / 1e3; this.log("", `\n
+!`,
+            t,
+          );
+    }
+    wait(t) {
+      return new Promise((e) => setTimeout(e, t));
+    }
+    done(t = {}) {
+      const e = new Date().getTime(),
+        s = (e - this.startTime) / 1e3;
+      (this.log(
+        "",
+        `\n
 ${this.name},
-! ${s} 
-`), this.log(), this.isSurge() || this.isQuanX() || this.isLoon() ? $done(t) : this.isNode() && process.exit(1) } }(t, e) }
+! ${s}
+`,
+      ),
+        this.log(),
+        this.isSurge() || this.isQuanX() || this.isLoon()
+          ? $done(t)
+          : this.isNode() && process.exit(1));
+    }
+  })(t, e);
+}
