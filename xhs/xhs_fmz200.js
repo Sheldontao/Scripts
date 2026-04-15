@@ -8,6 +8,63 @@
 const $ = new Env("小红书");
 const url = $request.url;
 const isRequestPhase = typeof $response === "undefined";
+const LOG_LEVELS = {
+  DEBUG: 10,
+  INFO: 20,
+  WARNING: 30,
+  ERROR: 40,
+};
+const DEFAULT_LOG_LEVEL = "WARNING";
+const runtimeArgument =
+  typeof $argument === "object" && $argument !== null ? $argument : {};
+
+function normalizeLogLevel(rawLevel) {
+  if (typeof rawLevel !== "string") {
+    return DEFAULT_LOG_LEVEL;
+  }
+
+  const normalizedLevel = rawLevel.trim().toUpperCase();
+  if (Object.prototype.hasOwnProperty.call(LOG_LEVELS, normalizedLevel)) {
+    return normalizedLevel;
+  }
+
+  return DEFAULT_LOG_LEVEL;
+}
+
+const effectiveLogLevel = normalizeLogLevel(runtimeArgument.xhs_loglevel);
+
+function shouldLog(level) {
+  return LOG_LEVELS[level] >= LOG_LEVELS[effectiveLogLevel];
+}
+
+function emitLog(level, ...messages) {
+  if (!shouldLog(level)) {
+    return;
+  }
+
+  if (level === "ERROR") {
+    console.error(...messages);
+    return;
+  }
+
+  console.log(...messages);
+}
+
+function logDebug(...messages) {
+  emitLog("DEBUG", ...messages);
+}
+
+function logInfo(...messages) {
+  emitLog("INFO", ...messages);
+}
+
+function logWarning(...messages) {
+  emitLog("WARNING", ...messages);
+}
+
+function logError(...messages) {
+  emitLog("ERROR", ...messages);
+}
 
 if (isRequestPhase) {
   if (url.includes("/api/sns/v1/note/videofeed/exit")) {
@@ -58,13 +115,13 @@ if (isRequestPhase) {
             }
           }
 
-          console.log(
+          logInfo(
             `[Exit] merged blocked note ids: ${Array.from(idSet).length}`,
           );
           $done({ body: JSON.stringify(reqObj) });
         }
       } catch (e) {
-        console.error(`[Exit] request body parse/patch failed: ${e}`);
+        logError(`[Exit] request body parse/patch failed: ${e}`);
       }
     }
   }
@@ -85,12 +142,12 @@ const getCachedRegexes = (key, argValue) => {
   if (argValue) {
     // Argument is present
     if (argValue !== cachedRegexStrs) {
-      console.log(`Argument for ${key} differs from cache. Updating cache.`);
+      logInfo(`Argument for ${key} differs from cache. Updating cache.`);
       try {
         $.setdata(argValue, key);
         logSource = "argument (updated cache)";
       } catch (e) {
-        console.error(`Error caching regexes for ${key}: ${e}`);
+        logError(`Error caching regexes for ${key}: ${e}`);
         logSource = "argument (cache update failed)";
       }
     } else {
@@ -106,7 +163,7 @@ const getCachedRegexes = (key, argValue) => {
     logSource = "empty";
   }
 
-  console.log(`Using regexes for ${key} from: ${logSource}`);
+  logDebug(`Using regexes for ${key} from: ${logSource}`);
 
   const regexes = [];
   try {
@@ -117,12 +174,12 @@ const getCachedRegexes = (key, argValue) => {
           regexes.push(new RegExp(str));
           // Removed the "Added regex filter" log here to reduce verbosity
         } catch (e) {
-          console.error(`Invalid regex provided: ${str}, Error: ${e}`);
+          logWarning(`Invalid regex provided: ${str}, Error: ${e}`);
         }
       }
     }
   } catch (e) {
-    console.error(`Error parsing regex strings for ${key}: ${e}`);
+    logWarning(`Error parsing regex strings for ${key}: ${e}`);
   }
   return regexes;
 };
@@ -134,12 +191,12 @@ const getCachedCountsThreshold = (key, argValue) => {
 
   if (argValue) {
     if (argValue !== cachedCountsStr) {
-      console.log(`Argument for ${key} differs from cache. Updating cache.`);
+      logInfo(`Argument for ${key} differs from cache. Updating cache.`);
       try {
         $.setdata(argValue, key);
         logSource = "argument (updated cache)";
       } catch (e) {
-        console.error(`Error caching counts threshold for ${key}: ${e}`);
+        logError(`Error caching counts threshold for ${key}: ${e}`);
         logSource = "argument (cache update failed)";
       }
     } else {
@@ -153,7 +210,7 @@ const getCachedCountsThreshold = (key, argValue) => {
     logSource = "empty";
   }
 
-  console.log(`Using counts threshold for ${key} from: ${logSource}`);
+  logDebug(`Using counts threshold for ${key} from: ${logSource}`);
 
   const counts = [];
   try {
@@ -164,12 +221,12 @@ const getCachedCountsThreshold = (key, argValue) => {
     ) {
       counts.push(...parsedCounts);
     } else {
-      console.error(
+      logWarning(
         `Invalid counts threshold format: ${sourceCounts}. Expected an array of numbers.`,
       );
     }
   } catch (e) {
-    console.error(`Error parsing counts threshold string for ${key}: ${e}`);
+    logWarning(`Error parsing counts threshold string for ${key}: ${e}`);
   }
   return counts;
 };
@@ -179,7 +236,7 @@ if (
   url.includes("/httpdns") ||
   url.includes("/o_live_p2p_mobilesdk")
 ) {
-  console.log("拦截到直连/配置请求: " + url);
+  logInfo("拦截到直连/配置请求: " + url);
   $done({
     body: JSON.stringify({ code: 0, success: true, msg: "Blocked", data: {} }),
   });
@@ -192,11 +249,11 @@ if (url.includes("/search/notes")) {
 
     const searchDesRegexes = getCachedRegexes(
       "fmz200.xhs_search_des_regex_cache",
-      $argument.xhs_search_des_regex,
+      runtimeArgument.xhs_search_des_regex,
     );
     const searchUserRegexes = getCachedRegexes(
       "fmz200.xhs_search_nickname_regex_cache",
-      $argument.xhs_search_nickname_regex,
+      runtimeArgument.xhs_search_nickname_regex,
     );
 
     obj.data.items = obj.data.items.filter((item) => {
@@ -211,7 +268,7 @@ if (url.includes("/search/notes")) {
       if (searchDesRegexes.length > 0 && contentToMatch) {
         for (const regex of searchDesRegexes) {
           if (regex.test(contentToMatch)) {
-            console.log(
+            logDebug(
               `[Search] Filtered (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
             );
             return false;
@@ -224,7 +281,7 @@ if (url.includes("/search/notes")) {
       if (searchUserRegexes.length > 0 && currentNickname) {
         for (const regex of searchUserRegexes) {
           if (regex.test(currentNickname)) {
-            console.log(
+            logDebug(
               `[Search] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`,
             );
             return false;
@@ -270,19 +327,19 @@ if (
         const images_list = note_list[0].images_list;
         note_list[0].images_list = imageEnhance(JSON.stringify(images_list));
         $.setdata(JSON.stringify(images_list), "fmz200.xiaohongshu.feed.rsp");
-        console.log("已存储无水印信息♻️");
+        logInfo("已存储无水印信息♻️");
       }
     }
   }
 }
 
 if (url.includes("/note/live_photo/save")) {
-  console.log("原body：" + rsp_body);
+  logDebug("原body：" + rsp_body);
   const rsp = $.getdata("fmz200.xiaohongshu.feed.rsp");
-  console.log("读取缓存key：fmz200.xiaohongshu.feed.rsp");
+  logDebug("读取缓存key：fmz200.xiaohongshu.feed.rsp");
   // console.log("读取缓存val：" + rsp);
   if (rsp == null || rsp.length === 0) {
-    console.log("缓存无内容，返回原body");
+    logWarning("缓存无内容，返回原body");
     $done({ body: rsp_body });
   }
   const cache_body = JSON.parse(rsp);
@@ -302,7 +359,7 @@ if (url.includes("/note/live_photo/save")) {
   } else {
     obj = { code: 0, success: true, msg: "成功", data: { datas: new_data } };
   }
-  console.log("新body：" + JSON.stringify(obj));
+  logDebug("新body：" + JSON.stringify(obj));
 }
 
 if (url.includes("/v3/note/videofeed")) {
@@ -355,7 +412,7 @@ if (url.includes("/v4/note/videofeed")) {
           (entry) => entry.type === "video_download",
         );
         if (!hasDownload) {
-          console.log(`添加下载按钮: ${item.id}`);
+          logDebug(`添加下载按钮: ${item.id}`);
           item.share_info.function_entries.push({ type: "video_download" });
         }
       }
@@ -392,18 +449,18 @@ if (url.includes("/v4/note/videofeed")) {
           id: item.id,
           url: selectedStream.master_url,
         };
-        console.log(`提取成功 ➜ ${item.id} → ${selectedStream.stream_desc}`);
+        logDebug(`提取成功 ➜ ${item.id} → ${selectedStream.stream_desc}`);
         videoData.push(data);
-        console.log(
+        logDebug(
           `[缓存] ID:${item.id} | 规格:${selectedStream.quality_type} | 码率:${selectedStream.avg_bitrate}`,
         );
       } else {
-        console.log(`未找到可用视频: ${item.id}`);
+        logDebug(`未找到可用视频: ${item.id}`);
       }
     }
     // 写入本地持久化缓存
     $.setdata(JSON.stringify(videoData), "redBookVideoFeed");
-    console.log(`已缓存普通视频 ${videoData.length} 条`);
+    logInfo(`已缓存普通视频 ${videoData.length} 条`);
   }
 }
 
@@ -430,15 +487,15 @@ if (url.includes("/homefeed")) {
   if (obj?.data?.length > 0) {
     const descRegexes = getCachedRegexes(
       "fmz200.xhs_des_regex_cache",
-      $argument.xhs_des_regex,
+      runtimeArgument.xhs_des_regex,
     );
     const nicknameRegexes = getCachedRegexes(
       "fmz200.xhs_nickname_regex_cache",
-      $argument.xhs_nickname_regex,
+      runtimeArgument.xhs_nickname_regex,
     );
     const countsThreshold = getCachedCountsThreshold(
       "fmz200.xhs_counts_threshold_cache",
-      $argument.xhs_counts_threshold,
+      runtimeArgument.xhs_counts_threshold,
     );
     obj.data = obj.data.filter((item) => {
       // 1. 核心过滤：识别直播、广告、带货笔记
@@ -475,7 +532,7 @@ if (url.includes("/homefeed")) {
       if (descRegexes.length > 0 && contentToMatch) {
         for (const regex of descRegexes) {
           if (regex.test(contentToMatch)) {
-            console.log(
+            logDebug(
               `[Homefeed] Filtered (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
             );
             return false;
@@ -488,7 +545,7 @@ if (url.includes("/homefeed")) {
       if (nicknameRegexes.length > 0 && currentNickname) {
         for (const regex of nicknameRegexes) {
           if (regex.test(currentNickname)) {
-            console.log(
+            logDebug(
               `[Homefeed] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`,
             );
             return false;
@@ -534,19 +591,19 @@ if (
       // comment_type: 0-文字，2-图片/live，3-表情包
       if (comment.comment_type === 3) {
         comment.comment_type = 2;
-        console.log(`修改评论类型：3->2`);
+        logDebug(`修改评论类型：3->2`);
       }
       if (comment.media_source_type === 1) {
         comment.media_source_type = 0;
-        console.log(`修改媒体类型：1->0`);
+        logDebug(`修改媒体类型：1->0`);
       }
       if (comment.pictures?.length > 0) {
-        console.log("comment_id: " + comment.id);
+        logDebug("comment_id: " + comment.id);
         for (const picture of comment.pictures) {
           if (picture.video_id) {
             const picObj = JSON.parse(picture.video_info);
             if (picObj.stream?.h265?.[0]?.master_url) {
-              console.log("video_id：" + picture.video_id);
+              logDebug("video_id：" + picture.video_id);
               const videoData = {
                 videId: picture.video_id,
                 videoUrl: picObj.stream.h265[0].master_url,
@@ -560,19 +617,19 @@ if (
         for (const sub_comment of comment.sub_comments) {
           if (sub_comment.comment_type === 3) {
             sub_comment.comment_type = 2;
-            console.log(`修改评论类型1：3->2`);
+            logDebug(`修改评论类型1：3->2`);
           }
           if (sub_comment.media_source_type === 1) {
             sub_comment.media_source_type = 0;
-            console.log(`修改媒体类型1：1->0`);
+            logDebug(`修改媒体类型1：1->0`);
           }
           if (sub_comment.pictures?.length > 0) {
-            console.log("comment_id1: " + comment.id);
+            logDebug("comment_id1: " + comment.id);
             for (const picture of sub_comment.pictures) {
               if (picture.video_id) {
                 const picObj = JSON.parse(picture.video_info);
                 if (picObj.stream?.h265?.[0]?.master_url) {
-                  console.log("video_id1：" + picture.video_id);
+                  logDebug("video_id1：" + picture.video_id);
                   const videoData = {
                     videId: picture.video_id,
                     videoUrl: picObj.stream.h265[0].master_url,
@@ -586,27 +643,27 @@ if (
       }
     }
   }
-  console.log("本次note_id：" + note_id);
+  logDebug("本次note_id：" + note_id);
   if (livePhotos.length > 0) {
     let commitsRsp;
     const commitsCache = $.getdata("fmz200.xiaohongshu.comments.rsp");
-    console.log("读取缓存val：" + commitsCache);
+    logDebug("读取缓存val：" + commitsCache);
     if (!commitsCache) {
       commitsRsp = { noteId: note_id, livePhotos: livePhotos };
     } else {
       commitsRsp = JSON.parse(commitsCache);
-      console.log("缓存note_id：" + commitsRsp.noteId);
+      logDebug("缓存note_id：" + commitsRsp.noteId);
       if (commitsRsp.noteId === note_id) {
-        console.log("增量数据");
+        logDebug("增量数据");
         commitsRsp.livePhotos = deduplicateLivePhotos(
           commitsRsp.livePhotos.concat(livePhotos),
         );
       } else {
-        console.log("更换数据");
+        logDebug("更换数据");
         commitsRsp = { noteId: note_id, livePhotos: livePhotos };
       }
     }
-    console.log("写入缓存val：" + JSON.stringify(commitsRsp));
+    logDebug("写入缓存val：" + JSON.stringify(commitsRsp));
     $.setdata(JSON.stringify(commitsRsp), "fmz200.xiaohongshu.comments.rsp");
   }
 }
@@ -614,22 +671,22 @@ if (
 // 下载评论区live图
 if (url.includes("/api/sns/v1/interaction/comment/video/download?")) {
   const commitsCache = $.getdata("fmz200.xiaohongshu.comments.rsp");
-  console.log("读取缓存val：" + commitsCache);
-  console.log("目标video_id：" + obj.data.video.video_id);
+  logDebug("读取缓存val：" + commitsCache);
+  logDebug("目标video_id：" + obj.data.video.video_id);
   if (commitsCache) {
     let commitsRsp = JSON.parse(commitsCache);
     if (commitsRsp.livePhotos.length > 0 && obj.data?.video) {
       for (const item of commitsRsp.livePhotos) {
         // console.log("缓存video_id：" + item.videId);
         if (item.videId === obj.data.video.video_id) {
-          console.log("匹配到无水印链接：" + item.videoUrl);
+          logInfo("匹配到无水印链接：" + item.videoUrl);
           obj.data.video.video_url = item.videoUrl;
           break;
         }
       }
     }
   } else {
-    console.log(`没有[${obj.data?.video.video_id}]的无水印地址`);
+    logWarning(`没有[${obj.data?.video.video_id}]的无水印地址`);
   }
 }
 
@@ -642,7 +699,7 @@ if (
 ) {
   const descRegexes = getCachedRegexes(
     "fmz200.xhs_des_regex_cache",
-    $argument.xhs_des_regex,
+    runtimeArgument.xhs_des_regex,
   );
   if (descRegexes.length > 0 && obj.data) {
     // 兼容数组和单个对象结构
@@ -663,7 +720,7 @@ if (
         if (contentToMatch) {
           for (const regex of descRegexes) {
             if (regex.test(contentToMatch)) {
-              console.log(
+              logDebug(
                 `[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
               );
               obj.data = {};
@@ -693,7 +750,7 @@ if (
                   JSON.stringify(blockedIds),
                   "fmz200.xhs.blocked_note_ids",
                 );
-                console.log(
+                logDebug(
                   `[Detail] cached blocked note id: ${blockedNoteId}`,
                 );
               }
@@ -712,7 +769,7 @@ if (
 if (url.includes("/note/detailfeed/preload")) {
   const descRegexes = getCachedRegexes(
     "fmz200.xhs_des_regex_cache",
-    $argument.xhs_des_regex,
+    runtimeArgument.xhs_des_regex,
   );
   if (descRegexes.length > 0 && obj.data?.preload_map) {
     for (const noteId of Object.keys(obj.data.preload_map)) {
@@ -720,7 +777,7 @@ if (url.includes("/note/detailfeed/preload")) {
       const desc = note?.desc || "";
       for (const regex of descRegexes) {
         if (regex.test(desc)) {
-          console.log(
+          logDebug(
             `[Preload] Filtered (${regex.source}): ${desc.substring(0, 50)}...`,
           );
           delete obj.data.preload_map[noteId];
@@ -736,40 +793,40 @@ $done({ body: JSON.stringify(obj) });
 // 小红书画质增强：加载2K分辨率的图片
 function imageEnhance(jsonStr) {
   if (!jsonStr) {
-    console.error("jsonStr is undefined or null");
+    logError("jsonStr is undefined or null");
     return [];
   }
 
   const imageQuality = $.getdata("fmz200.xiaohongshu.imageQuality");
-  console.log(`Image Quality: ${imageQuality}`);
+  logDebug(`Image Quality: ${imageQuality}`);
   if (imageQuality === "original") {
     // 原始分辨率，PNG格式的图片，占用空间比较大
-    console.log("画质修改为-原始分辨率");
+    logInfo("画质修改为-原始分辨率");
     jsonStr = jsonStr.replace(
       /\?imageView2\/2[^&]*(?:&redImage\/frame\/0)/,
       "?imageView2/0/format/png&redImage/frame/0",
     );
   } else {
     // 高像素输出
-    console.log("画质修改为-高像素输出");
+    logInfo("画质修改为-高像素输出");
     const regex1 = /imageView2\/2\/w\/\d+\/format/g;
     jsonStr = jsonStr.replace(regex1, `imageView2/2/w/2160/format`);
 
     const regex2 = /imageView2\/2\/h\/\d+\/format/g;
     jsonStr = jsonStr.replace(regex2, `imageView2/2/h/2160/format`);
   }
-  console.log("图片画质增强完成✅");
+  logInfo("图片画质增强完成✅");
 
   try {
     return JSON.parse(jsonStr);
   } catch (e) {
-    console.error("JSON parsing error: ", e);
+    logError("JSON parsing error: ", e);
     return [];
   }
 }
 
 function replaceUrlContent(collectionA, collectionB) {
-  console.log("替换无水印的URL");
+  logDebug("替换无水印的URL");
   collectionA.forEach((itemA) => {
     const itemB = collectionB.find((itemB) => itemB.file_id === itemA.file_id);
     if (itemB) {
