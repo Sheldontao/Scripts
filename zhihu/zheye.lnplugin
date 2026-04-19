@@ -4,7 +4,7 @@
 #!author=blackmatrix7, leo
 #!homepage=https://github.com/blackmatrix7/ios_rule_script
 #!icon=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/script/zheye/zheye.png
-#!date=2026.04.13
+#!date=2026.04.19
 #!version= zhihu: 10.88.0
 
 [Argument]
@@ -48,53 +48,48 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 
 
 [Rewrite]
-# 首页 - 悬浮图标、顶部横幅、开屏广告、关注页推荐、推荐信息流、热榜信息流、热榜直播、回答底部卡片
-^https:\/\/api\.zhihu\.com\/commercial_api\/ reject-dict
-^https:\/\/api\.zhihu\.com\/content-distribution-core\/bubble\/common\/settings reject-dict
-^https:\/\/api\.zhihu\.com\/(?:moments\/lastread|drama\/hot-drama-list) reject-dict
-^https:\/\/api\.zhihu\.com\/root\/window reject-dict
-
-# 会员页面 - 弹窗、悬浮动图
-^https:\/\/api\.zhihu\.com\/(?:bazaar\/float_window|market\/popovers_v\d) reject-dict
-^https:\/\/api\.zhihu\.com\/bazaar\/vip_tab\/header\? response-body-json-del activity_banner\x20activity_window\x20vip_tip
-
-# 我的页面 - 项目列表、会员卡片
-^https:\/\/api\.zhihu\.com\/me\/guides reject-dict
-^https:\/\/api\.zhihu\.com\/people\/homepage_entry_v\d reject-dict
-^https:\/\/api\.zhihu\.com\/unlimited\/go\/my_card reject
-^https:\/\/www\.zhihu\.com\/appview\/v\d\/zhmore reject
-
-# 搜索页 - 关键词、猜你想搜
-^https:\/\/api\.zhihu\.com\/search\/(hot_search|preset_words) reject-dict
-^https:\/\/api\.zhihu\.com\/search\/recommend_query\/v\d\? response-body-replace-regex "recommend_queries":\{.+\}\x20"recommend_queries":{}
-^https:\/\/www\.zhihu\.com\/api\/v4\/search\/related_queries\/(?:article|answer)\/\d+ reject-dict
-
-# 回答详情页 - 评论区顶部、下一个回答
-^https:\/\/api\.zhihu\.com\/comment_v\d\/(?:articles|answers)\/\d+\/list-headers reject-dict
-^https:\/\/api\.zhihu\.com\/prague\/related_suggestion_native\/feed\? reject-dict
-^https:\/\/api\.zhihu\.com\/v5\.1\/topics\/answer\/\d+\/relation reject-dict
-^https:\/\/api\.zhihu\.com\/questions\/\d+(?:\/answers|\?include=) response-body-json-jq 'del(.ad_info,\x20.data.ad_info?,\x20.query_info)\x20|\x20if\x20(.data\x20|\x20type)\x20==\x20"array"\x20then\x20.data\x20|=\x20map(select(.target?.answer_type?\x20//\x20""\x20|\x20tostring\x20|\x20contains("paid")\x20|\x20not))\x20else\x20.\x20end'
-^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists response-body-json-jq '.data\x20|=\x20map(select(.type\x20==\x20"hot_list_feed"\x20or\x20.type\x20==\x20"hot_list_feed_video"))'
-^https?:\/\/api\.zhihu\.com\/search\/preset_words response-body-json-jq '.preset_words.words\x20|=\x20map(select(.type\x20==\x20"general"))'
-^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries\x20|=\x20map(select(has("ad_commercial_json")\x20|\x20not))'
-
-# 其他 - 服务器推送配置
-^https:\/\/api\.zhihu\.com\/ab\/api\/v\d\/products\/zhihu\/platforms\/ios\/config reject-dict
-^https:\/\/api\.zhihu\.com\/ad-style-service\/request reject-dict
-^https:\/\/appcloud2\.zhihu\.com\/v\d\/resource\?group_name=mp reject-dict
-^https:\/\/link\.zhihu\.com\/\?target=(?:https?)?(?:%3A|:)?(?:\/\/|%2F%2F)?(.*) 302 http://$1
-
-# 网页版去广告 //www.zhihu.com, zhuanlan.zhihu.com
-^https:\/\/api\.zhihu\.com\/distribute\/rhea\/qa_ad_card\/h5\/recommendation\? reject-dict
-^https:\/\/www\.zhihu\.com\/api\/v\d\/hot_recommendation reject-dict
-^https:\/\/www\.zhihu\.com\/api\/v\d\/mcn\/v\d\/linkcards\? reject-dict
-^https:\/\/www\.zhihu\.com\/api\/v\d\/(?:answers|questions)\/\d+/related-readings reject-dict
-^https:\/\/www\.zhihu\.com\/commercial_api\/banners_v\d\/mobile_banner reject-dict
-^https:\/\/zhuanlan\.zhihu\.com\/api\/articles\/\d+\/recommendation reject-dict
-
-# 消息页 - 折叠官方消息、屏蔽营销消息
-^https?:\/\/api\.zhihu\.com\/notifications\/v\d\/(message|timeline\/entry\/system_message) response-body-json-jq '(if\x20.column_head\x20then\x20.column_head\x20|=\x20map(if\x20.id\x20==\x20"column_head_entry_invite"\x20then\x20.text\x20=\x20"您有\(.unread_count)条新的邀请回答"\x20|\x20.unread_count\x20=\x200\x20else\x20.\x20end)\x20else\x20.\x20end)\x20|\x20(if\x20.data\x20then\x20.data\x20|=\x20map(if\x20(.content.title\x20//\x20.detail_title)\x20==\x20"官方账号消息"\x20then\x20.content.text\x20=\x20(if\x20(.unread_count\x20//\x200)\x20>\x200\x20then\x20"未读消息\(.unread_count)条"\x20else\x20"全部消息已读"\x20end)\x20|\x20.is_read\x20=\x20true\x20|\x20.unread_count\x20=\x200\x20else\x20.\x20end)\x20|\x20.data\x20|=\x20map(select((.content.title\x20//\x20.detail_title)\x20as\x20$t\x20|\x20["超赞包小助手",\x20"知乎活动助手",\x20"考研记事本",\x20"创作者小助手"]\x20|\x20index($t)\x20|\x20not))\x20else\x20.\x20end)'
-
+# --- 首页 & 全局净化 ---
+# 悬浮图标、顶部横幅、开屏广告、关注页推荐、热榜直播、弹窗等
+^https?:\/\/api\.zhihu\.com\/commercial_api\/ reject-dict
+^https?:\/\/api\.zhihu\.com\/content-distribution-core\/bubble\/common\/settings reject-dict
+^https?:\/\/api\.zhihu\.com\/(moments\/lastread|drama\/hot-drama-list|root\/window) reject-dict
+# --- 会员页面 ---
+# 屏蔽弹窗、悬浮动图、精简顶部横幅
+^https?:\/\/api\.zhihu\.com\/(bazaar\/float_window|market\/popovers_v\d) reject-dict
+^https?:\/\/api\.zhihu\.com\/bazaar\/vip_tab\/header response-body-json-jq 'del(.activity_banner, .activity_window, .vip_tip)'
+# --- 我的页面 ---
+# 移除冗余的引导、入口和会员卡片
+^https?:\/\/api\.zhihu\.com\/(me\/guides|people\/homepage_entry_v\d|unlimited\/go\/my_card) reject-dict
+^https?:\/\/www\.zhihu\.com\/appview\/v\d\/zhmore reject-dict
+# --- 搜索页净化 ---
+# 1. 直接拦截热搜（热榜）
+^https?:\/\/api\.zhihu\.com\/search\/hot_search reject-dict
+# 2. 搜索框预置词：保留普通关键词，剔除广告推广词
+^https?:\/\/api\.zhihu\.com\/search\/preset_words response-body-json-jq '.preset_words.words |= map(select(.type == "general"))'
+# 3. 搜索建议：剔除带有商业广告标记的建议词
+^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries |= map(select(has("ad_commercial_json") | not))'
+# 4. 相关搜索（文章/回答底部）
+^https?:\/\/www\.zhihu\.com\/api\/v4\/search\/related_queries\/(article|answer)\/\d+ reject-dict
+# --- 回答详情页 ---
+# 屏蔽评论区顶部Header、相关建议、关联话题
+^https?:\/\/api\.zhihu\.com\/comment_v\d\/(articles|answers)\/\d+\/list-headers reject-dict
+^https?:\/\/api\.zhihu\.com\/prague\/related_suggestion_native\/feed reject-dict
+^https?:\/\/api\.zhihu\.com\/v5\.1\/topics\/answer\/\d+\/relation reject-dict
+# 核心过滤：删除回答中的广告卡片、屏蔽付费/盐选专栏内容
+^https?:\/\/api\.zhihu\.com\/questions\/\d+(\/answers|\?include=) response-body-json-jq 'del(.ad_info, .data.ad_info?, .query_info) | if (.data | type) == "array" then .data |= map(select(.target?.answer_type? // "" | tostring | contains("paid") | not)) else . end'
+# 热榜信息流：仅保留正常榜单内容
+^https?:\/\/api\.zhihu\.com\/topstory\/hot-lists response-body-json-jq '.data |= map(select(.type == "hot_list_feed" or .type == "hot_list_feed_video"))'
+# --- 系统服务 & 外链 ---
+^https?:\/\/api\.zhihu\.com\/(ab\/api\/v\d\/products\/zhihu\/platforms\/ios\/config|ad-style-service\/request) reject-dict
+^https?:\/\/appcloud2\.zhihu\.com\/v\d\/resource\?group_name=mp reject-dict
+# 外链直接跳转（跳过知乎中间页）
+^https?:\/\/link\.zhihu\.com\/\?target=(https?%3A\/\/.*) 302 $1
+# --- 网页版 (H5) 去广告 ---
+^https?:\/\/(api|www)\.zhihu\.com\/(distribute\/rhea\/qa_ad_card\/h5\/recommendation|api\/v\d\/(hot_recommendation|mcn\/v\d\/linkcards|(answers|questions)\/\d+\/related-readings)|commercial_api\/banners_v\d\/mobile_banner) reject-dict
+^https?:\/\/zhuanlan\.zhihu\.com\/api\/articles\/\d+\/recommendation reject-dict
+# --- 消息页净化 ---
+# 折叠官方消息、屏蔽垃圾营销助手消息
+^https?:\/\/api\.zhihu\.com\/notifications\/v\d\/(message|timeline\/entry\/system_message) response-body-json-jq '(if .column_head then .column_head |= map(if .id == "column_head_entry_invite" then .text = "您有\(.unread_count)条新的邀请回答" | .unread_count = 0 else . end) else . end) | (if .data then .data |= map(if (.content.title // .detail_title) == "官方账号消息" then .content.text = (if (.unread_count // 0) > 0 then "未读消息\(.unread_count)条" else "全部消息已读" end) | .is_read = true | .unread_count = 0 else . end) | .data |= map(select((.content.title // .detail_title) as $t | ["超赞包小助手", "知乎活动助手", "考研记事本", "创作者小助手"] | index($t) | not)) else . end)'
 
 [Script]
 # 获取用户信息 - 隔离用户数据，开启本地会员等
