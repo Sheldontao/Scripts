@@ -5,13 +5,13 @@
 #!homepage=https://github.com/Sheldontao/Scripts
 #!raw-url=https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
 #!loon_version = 3.3.7(921)
-#!date = 2026-4-15
+#!date = 2026-4-19
 #!app_version = 8.3.9
 #!system_version = 18
 
 
 [Argument]
-xhs_des_regex = input,"["峰哥",\x20"恋爱",\x20"雪茄",\x20"新闻",\x20"manus",\x20"揽佬",\x20"红十字",\x20"胡锡进"]",tag=xhs_des_regex
+xhs_des_regex = input,"["峰哥","恋爱","雪茄","新闻","manus","揽佬","红十字","胡锡进"]",tag=xhs_des_regex
 xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=xhs_nickname_regex
 xhs_counts_threshold = input, "[0,10,10,0,0]", tag=xhs_counts_threshold_点赞最低/收藏/评论/分享/好
 xhs_search_des_regex = input, "["一个正则表达式",""]",tag=xhs_search_des_regex
@@ -27,40 +27,40 @@ AND, ((PROTOCOL, QUIC), (DOMAIN-SUFFIX, xiaohongshu.com)), REJECT
 AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR, 140.207.56.254/32, no-resolve), (IP-CIDR, 119.45.2.92/32, no-resolve), (IP-CIDR, 47.97.66.48/32, no-resolve), (IP-CIDR, 47.97.64.97/32, no-resolve), (IP-CIDR, 81.69.116.0/24, no-resolve), (IP-CIDR, 114.55.236.88/32, no-resolve), (IP-CIDR, 1.13.12.27/32, no-resolve), (IP-CIDR, 119.45.249.52/32, no-resolve)))), REJECT
 
 [Rewrite]
-# 惊喜弹窗
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/surprisebox\/(?:get_style|open|submit_action) reject-dict
-^https?:\/\/www\.xiaohongshu\.com\/api\/marketing\/box\/trigger reject-dict
+# --- 惊喜弹窗 & 营销活动 ---
+^https?:\/\/(edith|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/(surprisebox\/(get_style|open|submit_action)|marketing\/box\/trigger) reject-dict
 
-# 信息流
-^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/(?:guide\/user_banner|note\/guide) reject-dict
-^https:\/\/www\.xiaohongshu\.com\/api\/sns\/v\d+\/(?:ads\/resource|hey\/\w+\/hey_gallery) reject-dict
+# --- 信息流广告 & 引导 ---
+^https?:\/\/(edith|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/(guide\/user_banner|note\/guide|ads\/resource|hey\/\w+\/hey_gallery) reject-dict
 
-# 搜索页
+# --- 搜索页净化 ---
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/banner_list$ response-body-json-replace data {}
 ^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/hot_list$ response-body-json-replace data.items []
 ^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/hint response-body-json-replace data.hint_words []
-^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/trending response-body-json-jq 'if\x20.data\x20!=\x20null\x20then\x20.data.queries\x20=\x20[]\x20|\x20.data.hint_word\x20=\x20{}\x20else\x20.\x20end'
+^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/trending response-body-json-jq '.data? |= (.queries = [] | .hint_word = {})'
 
-# 整体配置
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config response-body-json-jq 'del(.data.app_theme?,\x20.data.loading_img?,\x20.data.splash?,\x20.data.store?)'
-^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system\/service\/ui\/config response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.sideConfigHomepage\x20!=\x20null\x20and\x20.data.sideConfigHomepage.componentConfig\x20!=\x20null\x20and\x20.data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025\x20!=\x20null\x20then\x20.data.sideConfigHomepage.componentConfig.sidebar_config_cny_2025\x20=\x20{}\x20else\x20.\x20end\x20|\x20if\x20.data\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage.componentConfig\x20!=\x20null\x20and\x20.data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025\x20!=\x20null\x20then\x20.data.sideConfigPersonalPage.componentConfig.sidebar_config_cny_2025\x20=\x20{}\x20else\x20.\x20end'
+# --- 整体配置 (包含开屏、皮肤、侧边栏新年配置清理) ---
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config response-body-json-jq 'del(.data.app_theme?, .data.loading_img?, .data.splash?, .data.store?)'
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system\/service\/ui\/config response-body-json-jq 'del(.data.sideConfigHomepage?.componentConfig?.sidebar_config_cny_2025, .data.sideConfigPersonalPage?.componentConfig?.sidebar_config_cny_2025)'
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config reject-dict
+
+# --- 网络 & DNS 屏蔽 ---
 ^https?:\/\/.*\.xiaohongshu\.com\/api\/sns\/v\d+\/httpdns reject-dict
-^https?:\/\/.*\.xhscdn\.com\/.*\/httpdns reject-dict
-^https?:\/\/.*\.xhscdn\.com\/o_live_p2p_mobilesdk reject-dict
+^https?:\/\/.*\.xhscdn\.com\/(.*\/httpdns|o_live_p2p_mobilesdk) reject-dict
 
-# 详情页,小部件
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets response-body-json-jq 'del(.data.cooperate_binds?,\x20.data.generic?,\x20.data.note_next_step?,\x20.data.widget_list?)'
+# --- 详情页 & 小部件 ---
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets response-body-json-jq 'del(.data.cooperate_binds?, .data.generic?, .data.note_next_step?, .data.widget_list?)'
 
-# 关注列表/推荐
-^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/user\/followings\/followfeed response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.items\x20!=\x20null\x20then\x20.data.items\x20|=\x20map(select(.recommend_reason\x20==\x20"friend_post"))\x20else\x20.\x20end'
-^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/followfeed response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.items\x20!=\x20null\x20then\x20.data.items\x20|=\x20map(select(.recommend_reason\x20!=\x20"recommend_user"))\x20else\x20.\x20end'
-^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/recommend\/user\/follow_recommend response-body-json-jq 'if\x20.data\x20!=\x20null\x20and\x20.data.title\x20==\x20"你可能感兴趣的人"\x20and\x20(.data.rec_users\x20|\x20length)\x20>\x200\x20then\x20.data\x20=\x20{}\x20else\x20.\x20end'
+# --- 关注列表 & 推荐净化 ---
+# 仅保留好友发布的动态
+^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/user\/followings\/followfeed response-body-json-jq '.data.items? |= map(select(.recommend_reason == "friend_post"))'
+# 屏蔽推荐用户卡片
+^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/followfeed response-body-json-jq '.data.items? |= map(select(.recommend_reason != "recommend_user"))'
+# 屏蔽“你可能感兴趣的人”
+^https?:\/\/(edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/recommend\/user\/follow_recommend response-body-json-jq 'if .data?.title == "你可能感兴趣的人" then .data = {} else . end'
 
-# 笔记创作推荐
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/guide\/user_banner reject-dict
-
-# 评论区图片水印
+# --- 其他 ---
+# 评论区图片水印屏蔽
 ^https?:\/\/ci\.xiaohongshu\.com\/system_config\/watermark reject-img
 
 [Script]
