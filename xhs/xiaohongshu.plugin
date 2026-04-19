@@ -40,7 +40,7 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 ^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/trending response-body-json-jq '.data? |= (.queries = [] | .hint_word = {})'
 
 # --- 整体配置 (包含开屏、皮肤、侧边栏新年配置清理) ---
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config response-body-json-jq 'del(.data.app_theme?, .data.loading_img?, .data.splash?, .data.store?)'
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config response-body-json-jq '.data.configs |= with_entries(select(.key | (contains("splash") or contains("cny") or contains("theme") or contains("loading_img")) | not))'
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system\/service\/ui\/config response-body-json-jq 'del(.data.sideConfigHomepage?.componentConfig?.sidebar_config_cny_2025, .data.sideConfigPersonalPage?.componentConfig?.sidebar_config_cny_2025)'
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config reject-dict
 
