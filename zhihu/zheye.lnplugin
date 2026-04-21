@@ -59,8 +59,8 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 ^https?:\/\/api\.zhihu\.com\/bazaar\/vip_tab\/header response-body-json-jq 'del(.activity_banner, .activity_window, .vip_tip)'
 # --- 我的页面 ---
 # 移除冗余的引导、入口和会员卡片
-^https?:\/\/api\.zhihu\.com\/(me\/guides|people\/homepage_entry_v\d|unlimited\/go\/my_card) reject-drop
-^https?:\/\/www\.zhihu\.com\/appview\/v\d\/zhmore reject-drop
+^https?:\/\/api\.zhihu\.com\/(me\/guides|people\/homepage_entry_v\d|unlimited\/go\/my_card) reject-200
+^https?:\/\/www\.zhihu\.com\/appview\/v\d\/zhmore reject-200
 # --- 搜索页净化 ---
 # 1. 直接拦截热搜（热榜）
 ^https?:\/\/api\.zhihu\.com\/search\/hot_search reject-dict
