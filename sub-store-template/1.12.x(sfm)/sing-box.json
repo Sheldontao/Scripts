@@ -251,7 +251,7 @@
       "tag": "noCN-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "https://www.gstatic.com/generate_204",
+      "url": "https://cp.cloudflare.com/generate_204",
       "interval": "2m",
       "tolerance": 50,
       "interrupt_exist_connections": true
@@ -260,7 +260,7 @@
       "tag": "hk-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "https://www.gstatic.com/generate_204",
+      "url": "https://cp.cloudflare.com/generate_204",
       "interval": "2m",
       "tolerance": 50,
       "interrupt_exist_connections": true
@@ -269,7 +269,7 @@
       "tag": "tw-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "https://www.gstatic.com/generate_204",
+      "url": "https://cp.cloudflare.com/generate_204",
       "interval": "2m",
       "tolerance": 50,
       "interrupt_exist_connections": true
@@ -278,7 +278,7 @@
       "tag": "jp-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "https://www.gstatic.com/generate_204",
+      "url": "https://cp.cloudflare.com/generate_204",
       "interval": "2m",
       "tolerance": 50,
       "interrupt_exist_connections": true
@@ -287,7 +287,7 @@
       "tag": "sg-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "https://www.gstatic.com/generate_204",
+      "url": "https://cp.cloudflare.com/generate_204",
       "interval": "2m",
       "tolerance": 50,
       "interrupt_exist_connections": true
@@ -296,7 +296,7 @@
       "tag": "us-auto",
       "type": "urltest",
       "outbounds": [],
-      "url": "https://www.gstatic.com/generate_204",
+      "url": "https://cp.cloudflare.com/generate_204",
       "interval": "2m",
       "tolerance": 50,
       "interrupt_exist_connections": true
