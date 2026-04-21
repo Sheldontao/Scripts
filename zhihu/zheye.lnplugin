@@ -4,7 +4,7 @@
 #!author=blackmatrix7, leo
 #!homepage=https://github.com/blackmatrix7/ios_rule_script
 #!icon=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/script/zheye/zheye.png
-#!date=2026.04.19
+#!date=2026.04.21
 #!version= zhihu: 10.88.0
 
 [Argument]
@@ -59,15 +59,16 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 ^https?:\/\/api\.zhihu\.com\/bazaar\/vip_tab\/header response-body-json-jq 'del(.activity_banner, .activity_window, .vip_tip)'
 # --- 我的页面 ---
 # 移除冗余的引导、入口和会员卡片
-^https?:\/\/api\.zhihu\.com\/(me\/guides|people\/homepage_entry_v\d|unlimited\/go\/my_card) reject-dict
-^https?:\/\/www\.zhihu\.com\/appview\/v\d\/zhmore reject-dict
+^https?:\/\/api\.zhihu\.com\/(me\/guides|people\/homepage_entry_v\d|unlimited\/go\/my_card) reject-drop
+^https?:\/\/www\.zhihu\.com\/appview\/v\d\/zhmore reject-drop
 # --- 搜索页净化 ---
 # 1. 直接拦截热搜（热榜）
 ^https?:\/\/api\.zhihu\.com\/search\/hot_search reject-dict
 # 2. 搜索框预置词：保留普通关键词，剔除广告推广词
 ^https?:\/\/api\.zhihu\.com\/search\/preset_words response-body-json-jq '.preset_words.words |= map(select(.type == "general"))'
 # 3. 搜索建议：剔除带有商业广告标记的建议词
-^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries |= map(select(has("ad_commercial_json") | not))'
+#^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries |= map(select(has("ad_commercial_json") | not))'
+^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries = [] | .switch_off = true'
 # 4. 相关搜索（文章/回答底部）
 ^https?:\/\/www\.zhihu\.com\/api\/v4\/search\/related_queries\/(article|answer)\/\d+ reject-dict
 # --- 回答详情页 ---
