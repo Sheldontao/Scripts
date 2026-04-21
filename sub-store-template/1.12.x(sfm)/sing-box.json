@@ -248,10 +248,6 @@
       "type": "direct"
     },
     {
-      "tag": "block",
-      "type": "block"
-    },
-    {
       "tag": "noCN-auto",
       "type": "urltest",
       "outbounds": [],
