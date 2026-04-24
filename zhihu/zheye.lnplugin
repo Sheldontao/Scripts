@@ -29,7 +29,7 @@ URL-REGEX,^https?:\/\/api\.zhihu\.com\/(notifications\/v\d\/count),REJECT-DICT
 # 去除 - 关注页最常访问
 URL-REGEX,^https?:\/\/api\.zhihu\.com\/moments\/recent,REJECT-DICT
 # 屏蔽 - 推荐页顶部广告
-URL-REGEX,^https?:\/\/api\.zhihu\.com\/api\/v4\/ecom_data\/config,REJECT-DICT
+URL-REGEX,^https?:\/\/api\.zhihu\.com\/api\/v\d+\/ecom_data\/config,REJECT-DICT
 # 屏蔽 - 推荐页内容更新红点
 URL-REGEX,^https?:\/\/api\.zhihu\.com\/feed\/render\/revisit\/tag_config,REJECT-DICT
 # 屏蔽 - 部分推荐页Tab的Banner
@@ -70,12 +70,12 @@ DOMAIN,zxid-m.mobileservice.cn,REJECT
 #^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries |= map(select(has("ad_commercial_json") | not))'
 ^https?:\/\/api\.zhihu\.com\/search\/recommend_query response-body-json-jq '.recommend_queries.queries = [] | .switch_off = true'
 # 4. 相关搜索（文章/回答底部）
-^https?:\/\/www\.zhihu\.com\/api\/v4\/search\/related_queries\/(article|answer)\/\d+ reject-dict
+^https?:\/\/www\.zhihu\.com\/api\/v\d+\/search\/related_queries\/(article|answer)\/\d+ reject-dict
 # --- 回答详情页 ---
 # 屏蔽评论区顶部Header、相关建议、关联话题
 ^https?:\/\/api\.zhihu\.com\/comment_v\d\/(articles|answers)\/\d+\/list-headers reject-dict
 ^https?:\/\/api\.zhihu\.com\/prague\/related_suggestion_native\/feed reject-dict
-^https?:\/\/api\.zhihu\.com\/v5\.1\/topics\/answer\/\d+\/relation reject-dict
+^https?:\/\/api\.zhihu\.com\/v\d+\.1\/topics\/answer\/\d+\/relation reject-dict
 # 核心过滤：删除回答中的广告卡片、屏蔽付费/盐选专栏内容
 ^https?:\/\/api\.zhihu\.com\/questions\/\d+(\/answers|\?include=) response-body-json-jq 'del(.ad_info, .data.ad_info?, .query_info) | if (.data | type) == "array" then .data |= map(select(.target?.answer_type? // "" | tostring | contains("paid") | not)) else . end'
 # 热榜信息流：仅保留正常榜单内容

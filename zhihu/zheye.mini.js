@@ -803,7 +803,7 @@ function AsyncFunction() {
 const urlHandlers = {
   resp_handlers: {
     "^https:\\/\\/api\\.zhihu\\.com\\/people\\/self$": processUserInfo,
-    "^https:\\/\\/api\\.zhihu\\.com\\/root\\/tab\\/v2": modifyAppTabConfig,
+    "^https:\\/\\/api\\.zhihu\\.com\\/root\\/tab\\/v\d": modifyAppTabConfig,
     "^https:\\/\\/(api|web-render)\\.zhihu\\.com\\/topstory\\/recommend":
       removeRecommend,
     "^https:\\/\\/api\\.zhihu\\.com\\/questions\\/\\d+\\/feeds":
@@ -811,12 +811,12 @@ const urlHandlers = {
     "^https:\\/\\/api\\.zhihu\\.com\\/next-render\\?": modifyAnswersNextRender,
     "^https:\\/\\/api\\.zhihu\\.com\\/comment_v5\\/(answers|pins|comments?|articles)\\/\\d+\\/(root|child)_comment":
       removeComment,
-    "^https:\\/\\/(page-info|api)\\.zhihu\\.com\\/(answers|articles)\\/v2\\/\\d+":
+    "^https:\\/\\/(page-info|api)\\.zhihu\\.com\\/(answers|articles)\\/v\d\\/\\d+":
       removeAnswerOrArticleAd,
     "^https:\\/\\/api\\.zhihu\\.com\\/articles\\/v\\d\\/\\d+":
       removeAnswerOrArticleAd,
     "^https:\\/\\/api\\.zhihu\\.com\\/people\\/\\d+": autoInsertBlackList,
-    "^https:\\/\\/api\\.zhihu\\.com\\/moments_v3\\?": removeMoments,
+    "^https:\\/\\/api\\.zhihu\\.com\\/moments_v3\?": removeMoments,
     "^https:\\/\\/api\\.zhihu\\.com\\/settings\\/blocked_users":
       manageBlackUser,
   },
