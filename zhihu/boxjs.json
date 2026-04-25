@@ -13,7 +13,8 @@
         "zhihu_current_userinfo",
         "zhihu_keyword_block",
         "zhihu_black_answers",
-        "zheye_server_url"
+        "zheye_server_url",
+        "zhihu_settings_custom_tags"
       ],
       "author": "@Sheldontao",
       "repo": "https://github.com/Sheldontao/Scripts/zhihu",

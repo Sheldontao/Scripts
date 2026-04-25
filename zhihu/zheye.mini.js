@@ -27,9 +27,14 @@ function modifyAppTabConfig() {
     const e = JSON.parse($.response.body),
       t = ["follow", "recommend"];
     const removeTabsArg = $.data.read("zheye_remove_feed_tabs", "");
-    const removeTabs = removeTabsArg ? removeTabsArg.split(/[;；,，]/).map(s => s.trim()) : [];
+    const removeTabs = removeTabsArg
+      ? removeTabsArg.split(/[;；,，]/).map((s) => s.trim())
+      : [];
     return (
-      (e.tab_list = e.tab_list?.filter((e) => t.includes(e.tab_type) && !removeTabs.includes(e.tab_name)) || []),
+      (e.tab_list =
+        e.tab_list?.filter(
+          (e) => t.includes(e.tab_type) && !removeTabs.includes(e.tab_name),
+        ) || []),
       $.logger.debug(`修改推荐页Tab：${JSON.stringify(e)}`),
       { body: JSON.stringify(e) }
     );
@@ -150,7 +155,8 @@ function processUserInfo() {
       const creditScore = $.data.read("zhihu_credit_score", "0");
       if (creditScore && creditScore !== "0") {
         const score = parseInt(creditScore);
-        if (!isNaN(score)) e.infinity_data = { ...e.infinity_data, infinity_value: score };
+        if (!isNaN(score))
+          e.infinity_data = { ...e.infinity_data, infinity_value: score };
       }
       return { body: JSON.stringify(e) };
     }
