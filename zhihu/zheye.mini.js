@@ -306,36 +306,55 @@ function syncKeywordBlockFromArgument(e, t = []) {
     );
   return t;
 }
+function parseCustomTagsArg(e = "") {
+  if ("string" != typeof e || !e) return {};
+  return e
+    .split(";")
+    .filter((e) => "" !== e.trim())
+    .map((e) => e.split(":"))
+    .reduce(
+      (e, t) => (
+        2 !== t.length
+          ? $.logger.error(`自定义标签配置错误：${t.join(":")}`)
+          : (e[t[0]] = t[1]),
+        e
+      ),
+      {},
+    );
+}
+
 function getAllTagConfigs() {
-  let e = {};
   try {
-    const t = $.data.read("zhihu_settings_custom_tags", "");
-    ($.logger.debug(`自定义标签配置：${t}`),
-      (e = t
-        .split(";")
-        .filter((e) => "" !== e.trim())
-        .map((e) => e.split(":"))
-        .reduce(
-          (e, t) => (
-            2 !== t.length
-              ? $.logger.error(`自定义标签配置错误：${t.join(":")}`)
-              : (e[t[0]] = t[1]),
-            e
-          ),
-          {},
-        )));
+    const fromBoxjs = $.data.read("zhihu_settings_custom_tags", "") || "";
+    const fromArg = $.customTagsArg || "";
+    const parsedBoxjs = parseCustomTagsArg(fromBoxjs);
+    const parsedArg = parseCustomTagsArg(fromArg);
+    const boxjsCount = Object.keys(parsedBoxjs).length;
+    const argCount = Object.keys(parsedArg).length;
+    let finalTags;
+    if (argCount > boxjsCount) {
+      finalTags = parsedArg;
+      if (argCount > 0) {
+        $.data.write("zhihu_settings_custom_tags", fromArg);
+        $.logger.info(
+          `自定义标签已由插件参数覆盖并写入持久化：argument=${argCount}, local=${boxjsCount}`,
+        );
+      }
+    } else {
+      finalTags = parsedBoxjs;
+    }
     const r = {
       付费内容: "查看完整内容|查看全部章节",
       营销推广: "ad-link-card|xg.zhihu.com|营销平台",
       购物推广: "mcn-link-card",
-      ...e,
+      ...finalTags,
     };
     return ($.logger.debug(`合并后的标签配置：${JSON.stringify(r)}`), r);
   } catch (e) {
     ($.notification.post("推荐页设置自定义标签出现异常，请检查标签配置"),
       $.logger.error(`推荐页设置自定义标签出现异常，请检查标签配置：${e}`));
   }
-  return e;
+  return {};
 }
 async function _setContentTagByCloud(e, t) {
   const r = $.data.read(zheyeServerKey);
@@ -998,6 +1017,7 @@ function MagicJS(e = "MagicJS", t = "INFO") {
           this.data.read("magic_loglevel");
         let threshold = this.data.read("zhihu_settings_threshold") || "50,0,0";
         let keywordBlockArg = "";
+        let customTagsArg = "";
         if (this.argument) {
           if ("string" == typeof this.argument) {
             const t = this.argument.match(/LogLevel=([^&,]*)/i);
@@ -1006,16 +1026,20 @@ function MagicJS(e = "MagicJS", t = "INFO") {
             s && (threshold = s[1]);
             const i = this.argument.match(/KeywordBlock=([^&,]*)/i);
             i && (keywordBlockArg = i[1]);
+            const c = this.argument.match(/CustomTags=([^&,]*)/i);
+            c && (customTagsArg = c[1]);
           } else if ("object" == typeof this.argument) {
             e = this.argument.LogLevel || e;
             threshold = this.argument.Threshold || threshold;
             keywordBlockArg = this.argument.KeywordBlock || keywordBlockArg;
+            customTagsArg = this.argument.CustomTags || customTagsArg;
           }
         }
         const t = this.data.read("magic_bark_url");
         (e && this.logger.setLevel(e.toUpperCase()),
           (this.threshold = threshold),
           (this.keywordBlockArg = keywordBlockArg),
+          (this.customTagsArg = customTagsArg),
           t && this.notification.setBark(t));
       }
     }
