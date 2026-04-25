@@ -1,0 +1,194 @@
+{
+  "id": "blackmatrix7.zheye",
+  "name": "哲也同学",
+  "keys": [
+    "zhihu_blocked_users",
+    "zhihu_current_userinfo",
+    "zhihu_keyword_block",
+    "zhihu_black_answers",
+    "zheye_server_url"
+  ],
+  "author": "@blackmatrix7",
+  "repo": "https://github.com/blackmatrix7/ios_rule_script/tree/master/script/zheye",
+  "icons": [
+    "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/zheye/zheye.png",
+    "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/zheye/zheye.png"
+  ],
+  "descs_html": [
+    "<h4 align=\"left\">配置说明查看<a href=\"https://github.com/blackmatrix7/ios_rule_script/tree/master/script/zheye#readme\">README.md</a></h4>"
+  ],
+  "scripts": [],
+  "settings": [
+    {
+      "id": "zhihu_settings_fake_vip",
+      "name": "显示为盐选会员",
+      "val": false,
+      "type": "boolean",
+      "desc": "非会员用户显示为盐选会员"
+    },
+    {
+      "id": "zhihu_settings_app_conf",
+      "name": "软件配置优化",
+      "val": false,
+      "type": "boolean",
+      "desc": "对下发的软件配置进行一些调整"
+    },
+    {
+      "id": "zhihu_settings_remove_live_tab",
+      "name": "移除推荐页强制标签",
+      "val": false,
+      "type": "boolean",
+      "desc": "强制移除推荐页的强制标签，需配置移除的标签，并开启\"软件配置优化\""
+    },
+    {
+      "id": "zhihu_settings_blocked_keywords",
+      "name": "推荐页关键词过滤",
+      "val": true,
+      "type": "boolean",
+      "desc": "除普通关键词外还支持正则表达式过滤，需要开启\"显示为盐选会员\""
+    },
+    {
+      "id": "zhihu_settings_recommend_stream",
+      "name": "屏蔽推荐页流媒体",
+      "val": false,
+      "type": "boolean",
+      "desc": "屏蔽推荐页中的视频、直播等流媒体信息"
+    },
+    {
+      "id": "zhihu_settings_recommend_pin",
+      "name": "屏蔽推荐页想法",
+      "val": false,
+      "type": "boolean",
+      "desc": "屏蔽推荐页中的想法"
+    },
+    {
+      "id": "zhihu_settings_blocked_users",
+      "name": "黑名单屏蔽效果增强",
+      "val": true,
+      "type": "boolean",
+      "desc": "增强知乎APP黑名单用户屏蔽效果"
+    },
+    {
+      "id": "zhihu_settings_moments_stream",
+      "name": "屏蔽关注页流媒体",
+      "val": false,
+      "type": "boolean",
+      "desc": "屏蔽关注页中的视频等流媒体"
+    },
+    {
+      "id": "zhihu_settings_moments_recommend",
+      "name": "屏蔽关注页推荐关注人",
+      "val": false,
+      "type": "boolean",
+      "desc": "屏蔽关注页中的\"为您推荐\""
+    },
+    {
+      "id": "zhihu_settings_moments_activity",
+      "name": "屏蔽关注页活动更新",
+      "val": false,
+      "type": "boolean",
+      "desc": "屏蔽关注页中的\"关注的内容\""
+    },
+    {
+      "id": "zhihu_settings_hot_list",
+      "name": "热榜去广告",
+      "val": true,
+      "type": "boolean",
+      "desc": "去除知乎热榜页面的广告"
+    },
+    {
+      "id": "zhihu_settings_preset_words",
+      "name": "屏蔽预置关键词广告",
+      "val": false,
+      "type": "boolean",
+      "desc": "屏蔽搜索页中的预置关键词广告"
+    },
+    {
+      "id": "zhihu_settings_remove_article",
+      "name": "屏蔽推荐页中的文章",
+      "val": false,
+      "type": "boolean",
+      "desc": "屏蔽推荐页中的文章，默认不启用"
+    },
+    {
+      "id": "zhihu_settings_sys_msg",
+      "name": "屏蔽官方账号推广消息",
+      "val": false,
+      "type": "boolean",
+      "desc": "屏蔽消息页内的官方账号推广消息"
+    },
+    {
+      "id": "zhihu_settings_answer_tip",
+      "name": "付费内容/营销推广/购物推广提醒",
+      "val": true,
+      "type": "boolean",
+      "desc": "在知乎回答中提示付费或营销内容"
+    },
+    {
+      "id": "zhihu_settings_check_paid_content",
+      "name": "推荐页中提示付费/营销/购物推广",
+      "val": false,
+      "type": "boolean",
+      "desc": "需要额外消耗流量，可能会影响推荐页加载速度"
+    },
+    {
+      "id": "zhihu_settings_request_content",
+      "name": "推荐页主动探测内容的方式",
+      "val": "local",
+      "type": "radios",
+      "items": [
+        {
+          "key": "local",
+          "label": "本地"
+        },
+        {
+          "key": "cloud",
+          "label": "云端"
+        }
+      ],
+      "desc": "开启推荐页中推广内容提示时，需要配置主动探测方式。默认为本地，使用云端需要在下方配置中填写服务端地址。"
+    },
+    {
+      "id": "zhihu_credit_score",
+      "name": "自定义用户盐值",
+      "val": "0",
+      "type": "input",
+      "desc": "修改用户盐值显示，无实际意义，不建议使用。仅当修改的盐值大于真实盐值时生效，关闭此功能请将盐值设置为0。"
+    },
+    {
+      "id": "zhihu_black_answers",
+      "name": "知乎黑名单用户回答Id",
+      "val": "",
+      "type": "input",
+      "desc": "记录知乎黑名单用户的回答Id的临时变量，通常不会有太多数据。如果数据量过大请清空此内容。"
+    },
+    {
+      "id": "zhihu_keyword_block",
+      "name": "知乎屏蔽关键词",
+      "val": "",
+      "type": "textarea",
+      "desc": "必须是JSON格式，Key为用户Id，不要修改。格式不正确可能导致执行异常。"
+    },
+    {
+      "id": "zheye_server_url",
+      "name": "哲也同学服务端",
+      "val": "",
+      "type": "input",
+      "desc": "用于解锁更多功能。示例 http://192.168.1.200:52273 。"
+    },
+    {
+      "id": "zheye_remove_feed_tabs",
+      "name": "强制移除指定推荐页标签",
+      "val": "",
+      "type": "input",
+      "desc": "每个标签以;分隔，如\"直播;科学\""
+    },
+    {
+      "id": "zhihu_settings_custom_tags",
+      "name": "自定义内容标签",
+      "val": "",
+      "type": "textarea",
+      "desc": "格式：标签名:正则表达式;标签名2:正则2。正则表达式中可用|表示或。示例：我的标签:关键词A|关键词B;营销内容:推广|广告。内置标签：付费内容、营销推广、购物推广，会自动合并。"
+    }
+  ]
+}
