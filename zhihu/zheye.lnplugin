@@ -4,14 +4,14 @@
 #!author=blackmatrix7, leo
 #!homepage=https://github.com/blackmatrix7/ios_rule_script
 #!icon=https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/script/zheye/zheye.png
-#!date=2026.04.21
+#!date=2026.04.25
 #!version= zhihu: 10.88.0
 
 [Argument]
 LogLevel = select, "INFO", "WARN", "ERROR", "DEBUG", tag=zheye日志等级
-Threshold = input, "10,10,0", tag="minimum count vote,collect,comment"
-KeywordBlock = input, "["吴京","华为"]", tag="推荐页关键词列表(对应zhihu_keyword_block)"
-CustomTags = input, "", tag="自定义内容标签(付费内容:查看完整内容|查看全部章节;营销推广:ad-link-card|xg.zhihu.com|营销平台;购物推广:mcn-link-card)"
+Threshold = input, "10,10,0", tag=minimum\x20count\x20vote,collect,comment
+KeywordBlock = input, "["吴京","华为"]", tag=推荐页关键词列表(对应zhihu_keyword_block)
+CustomTags = input, "", tag=自定义内容标签(付费内容:查看完整内容|查看全部章节;营销推广:ad-link-card|xg.zhihu.com|营销平台;购物推广:mcn-link-card)
 [Rule]
 # 拦截HTTP DNS
 IP-CIDR, 103.41.167.237/32, REJECT, no-resolve
