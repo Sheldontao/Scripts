@@ -29,7 +29,7 @@
         {
           "id": "zhihu_settings_fake_vip",
           "name": "显示为盐选会员",
-          "val": false,
+          "val": true,
           "type": "boolean",
           "desc": "非会员用户显示为盐选会员"
         },
@@ -42,10 +42,10 @@
         },
         {
           "id": "zhihu_settings_remove_live_tab",
-          "name": "移除推荐页强制标签",
-          "val": false,
+          "name": "移除推荐页强制tabs",
+          "val": true,
           "type": "boolean",
-          "desc": "强制移除推荐页的强制标签，需配置移除的标签，并开启'软件配置优化'"
+          "desc": "强制移除推荐页的强制tabs，需配置移除的tabs，并开启'软件配置优化'"
         },
         {
           "id": "zhihu_settings_blocked_keywords",
@@ -57,7 +57,7 @@
         {
           "id": "zhihu_settings_recommend_stream",
           "name": "屏蔽推荐页流媒体",
-          "val": false,
+          "val": true,
           "type": "boolean",
           "desc": "屏蔽推荐页中的视频、直播等流媒体信息"
         },
@@ -92,7 +92,7 @@
         {
           "id": "zhihu_settings_moments_activity",
           "name": "屏蔽关注页活动更新",
-          "val": false,
+          "val": true,
           "type": "boolean",
           "desc": "屏蔽关注页中的‘关注的内容’"
         },
@@ -106,7 +106,7 @@
         {
           "id": "zhihu_settings_preset_words",
           "name": "屏蔽预置关键词广告",
-          "val": false,
+          "val": true,
           "type": "boolean",
           "desc": "屏蔽搜索页中的预置关键词广告"
         },
@@ -120,7 +120,7 @@
         {
           "id": "zhihu_settings_sys_msg",
           "name": "屏蔽官方账号推广消息",
-          "val": false,
+          "val": true,
           "type": "boolean",
           "desc": "屏蔽消息页内的官方账号推广消息"
         },
@@ -185,7 +185,7 @@
         },
         {
           "id": "zheye_remove_feed_tabs",
-          "name": "强制移除指定推荐页标签",
+          "name": "强制移除指定推荐页tabs(deprecated)",
           "val": "",
           "type": "input",
           "desc": "每个标签以;分隔，如‘直播;科学’"

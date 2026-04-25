@@ -22,11 +22,14 @@ function getUserInfo() {
 }
 function modifyAppTabConfig() {
   try {
-    if (!1 === $.data.read("zhihu_settings_app_conf", !1)) return null;
+    if (!1 === $.data.read(\"zhihu_settings_app_conf\", !1)) return null;
+    if (!1 === $.data.read(\"zhihu_settings_remove_live_tab\", !0)) return null;
     const e = JSON.parse($.response.body),
       t = ["follow", "recommend"];
+    const removeTabsArg = $.data.read("zheye_remove_feed_tabs", "");
+    const removeTabs = removeTabsArg ? removeTabsArg.split(/[;；,，]/).map(s => s.trim()) : [];
     return (
-      (e.tab_list = e.tab_list?.filter((e) => t.includes(e.tab_type)) || []),
+      (e.tab_list = e.tab_list?.filter((e) => t.includes(e.tab_type) && !removeTabs.includes(e.tab_name)) || []),
       $.logger.debug(`修改推荐页Tab：${JSON.stringify(e)}`),
       { body: JSON.stringify(e) }
     );
@@ -135,17 +138,21 @@ function processUserInfo() {
         ($.data.write(currentUserInfoKey, t),
         !1 !== $.data.read("zhihu_settings_blocked_keywords") &&
           !1 === e.vip_info.is_vip)
-      )
-        return (
-          (e.vip_info.is_vip = !0),
-          (e.vip_info.vip_type = 2),
-          (e.vip_info.vip_icon = {
-            url: "https://picx.zhimg.com/v2-aa8a1823abfc46f14136f01d55224925.jpg?source=88ceefae",
-            night_mode_url:
-              "https://picx.zhimg.com/v2-aa8a1823abfc46f14136f01d55224925.jpg?source=88ceefae",
-          }),
-          { body: JSON.stringify(e) }
-        );
+      ) {
+        e.vip_info.is_vip = !0;
+        e.vip_info.vip_type = 2;
+        e.vip_info.vip_icon = {
+          url: "https://picx.zhimg.com/v2-aa8a1823abfc46f14136f01d55224925.jpg?source=88ceefae",
+          night_mode_url:
+            "https://picx.zhimg.com/v2-aa8a1823abfc46f14136f01d55224925.jpg?source=88ceefae",
+        };
+      }
+      const creditScore = $.data.read("zhihu_credit_score", "0");
+      if (creditScore && creditScore !== "0") {
+        const score = parseInt(creditScore);
+        if (!isNaN(score)) e.infinity_data = { ...e.infinity_data, infinity_value: score };
+      }
+      return { body: JSON.stringify(e) };
     }
   } catch (e) {
     return ($.logger.error(`获取当前用户信息出现异常：${e}`), null);
@@ -240,6 +247,9 @@ function autoInsertBlackList() {
 function removeMoments() {
   try {
     const e = $.data.read("zhihu_settings_blocked_users", !1);
+    const m_stream = $.data.read("zhihu_settings_moments_stream", !0);
+    const m_recommend = $.data.read("zhihu_settings_moments_recommend", !0);
+    const m_activity = $.data.read("zhihu_settings_moments_activity", !0);
     let t = JSON.parse($.response?.body || "{}");
     const r = getUserInfo();
     let n = {};
@@ -247,10 +257,10 @@ function removeMoments() {
 
     if (t.data) {
       t.data = t.data.filter((t) => {
-        // 1. 深度嗅探广告
-        if (sniffAd(t, { recommend_stream: true })) return false;
+        if (m_stream && sniffAd(t, { recommend_stream: true })) return false;
+        if (m_recommend && t.target?.type === "moments_recommend") return false;
+        if (m_activity && t.target?.type === "moments_activity") return false;
 
-        // 2. 黑名单用户过滤
         const author = t.target?.author?.name || t.target?.author;
         if (e && author && n[author]) return false;
 
@@ -441,7 +451,8 @@ async function removeRecommend() {
           "zhihu_settings_remove_advertorial",
           !0,
         ),
-        remove_pin: $.data.read("zhihu_settings_remove_pin", !0),
+        recommend_pin: $.data.read("zhihu_settings_recommend_pin", !0),
+        remove_live_tab: $.data.read("zhihu_settings_remove_live_tab", !0),
         blocked_users: $.data.read("zhihu_settings_blocked_users", !1),
         blocked_keywords: $.data.read("zhihu_settings_blocked_keywords", !0),
         check_paid_content: $.data.read(
@@ -449,6 +460,9 @@ async function removeRecommend() {
           !1,
         ),
         request_content: $.data.read("zhihu_settings_request_content", "local"),
+        moments_stream: $.data.read("zhihu_settings_moments_stream", !0),
+        moments_recommend: $.data.read("zhihu_settings_moments_recommend", !0),
+        moments_activity: $.data.read("zhihu_settings_moments_activity", !0),
       },
       t = getUserInfo();
     let r =
@@ -561,7 +575,7 @@ function sniffAd(e, r) {
     return true;
 
   // 检查 Pin (想法)
-  if (r.remove_pin) {
+  if (r.recommend_pin) {
     if (e.target?.type === "pin" || e.extra?.content_type === "pin")
       return true;
   }

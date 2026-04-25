@@ -9,8 +9,8 @@
 
 [Argument]
 LogLevel = select, "INFO", "WARN", "ERROR", "DEBUG", tag=zheye日志等级
-Threshold = input, "10,10,0", tag=minimum count/vote/collect/comment
-KeywordBlock = input, "["吴京","华为"]", tag=推荐页关键词列表(对应zhihu_keyword_block)
+Threshold = input, "10,10,0", tag=minimum vote/collect/comment
+KeywordBlock = input, "["吴京","华为"]", tag=推荐页关键词列表(zhihu_keyword_block)
 CustomTags = input, "", tag=自定义内容标签(付费内容:查看完整内容|查看全部章节;营销推广:ad-link-card|xg.zhihu.com|营销平台;购物推广:mcn-link-card)
 [Rule]
 # 拦截HTTP DNS
