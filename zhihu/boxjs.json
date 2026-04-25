@@ -198,69 +198,6 @@
           "desc": "自定义内容标签，格式：标签名:正则表达式;标签名2:正则2。例如：我的标签:某个关键词|另一个词。内置标签包括：付费内容(查看完整内容|查看全部章节)、营销推广(ad-link-card|xg.zhihu.com|营销平台)、购物推广(mcn-link-card)"
         }
       ]
-    },
-    {
-      "id": "blackmatrix7.famijia",
-      "name": "Fa米家",
-      "keys": [
-        "famijia_checkin_cookie",
-        "famijia_device_id",
-        "famijia_black_box"
-      ],
-      "author": "@blackmatrix7",
-      "repo": "https://github.com/blackmatrix7/ios_rule_script/tree/master/script/famijia",
-      "icons": [
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/famijia/famijia.png",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/famijia/famijia.png"
-      ],
-      "script": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/famijia/famijia_checkin.js"
-    },
-    {
-      "id": "blackmatrix7.manmanbuy",
-      "name": "慢慢买",
-      "keys": [
-        "manmanbuy_checkin_cookie",
-        "manmanbuy_login_body",
-        "manmanbuy_username",
-        "manmanbuy_deviceid"
-      ],
-      "author": "@blackmatrix7",
-      "repo": "https://github.com/blackmatrix7/ios_rule_script/tree/master/script/manmanbuy",
-      "icons": [
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/manmanbuy/manmanmai.png",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/manmanbuy/manmanmai.png"
-      ],
-      "script": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/manmanbuy/manmanbuy_checkin.js"
-    },
-    {
-      "id": "blackmatrix7.tieba",
-      "name": "百度贴吧",
-      "keys": ["tieba_signin_cookie", "tieba_sync_qinglong"],
-      "author": "@blackmatrix7",
-      "repo": "https://github.com/blackmatrix7/ios_rule_script/tree/master/script/tieba",
-      "icons": [
-        "https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/tieba.png",
-        "https://raw.githubusercontent.com/Orz-3/mini/master/Color/tieba.png"
-      ],
-      "script": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/tieba/tieba_signin.js",
-      "settings": [
-        {
-          "id": "tieba_sync_qinglong",
-          "name": "同步数据到青龙面板",
-          "val": false,
-          "type": "boolean",
-          "desc": "将必要数据同步至青龙面板，以执行作业"
-        },
-        {
-          "id": "tieba_signin_cookie",
-          "name": "百度贴吧Cookies",
-          "val": "",
-          "type": "textarea",
-          "placeholder": "推荐由脚本自动获取Cookies，如有特殊情况可手动填写，必须为Json格式",
-          "autoGrow": true,
-          "desc": "多账户Cookies，如出现异常，请删除全部内容，避免直接编辑数据"
-        }
-      ]
     }
   ]
 }
