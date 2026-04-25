@@ -22,8 +22,8 @@ function getUserInfo() {
 }
 function modifyAppTabConfig() {
   try {
-    if (!1 === $.data.read(\"zhihu_settings_app_conf\", !1)) return null;
-    if (!1 === $.data.read(\"zhihu_settings_remove_live_tab\", !0)) return null;
+    if (!1 === $.data.read("zhihu_settings_app_conf", !1)) return null;
+    if (!1 === $.data.read("zhihu_settings_remove_live_tab", !0)) return null;
     const e = JSON.parse($.response.body),
       t = ["follow", "recommend"];
     const removeTabsArg = $.data.read("zheye_remove_feed_tabs", "");
