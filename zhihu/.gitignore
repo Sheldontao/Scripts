@@ -6,4 +6,4 @@ original_zheye/
 *.json
 !zheye.mini.js
 !zheye.lnplugin
-!boxjszheye.json
+!boxjs.json
