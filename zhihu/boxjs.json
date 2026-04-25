@@ -1,12 +1,12 @@
 {
-  "id": "blackmatrix7.app.sub",
+  "id": "Sheldontao.app.sub",
   "name": "Sheldontao 应用订阅",
-  "author": "@blackmatrix7",
+  "author": "@Sheldontao",
   "icon": "https://avatars.githubusercontent.com/u/27717518?v=4",
-  "repo": "https://github.com/blackmatrix7/ios_rule_script",
+  "repo": "https://github.com/Sheldontao/Scripts",
   "apps": [
     {
-      "id": "blackmatrix7.zheye",
+      "id": "Sheldontao.zheye",
       "name": "哲野同学",
       "keys": [
         "zhihu_blocked_users",
@@ -15,11 +15,11 @@
         "zhihu_black_answers",
         "zheye_server_url"
       ],
-      "author": "@blackmatrix7",
-      "repo": "https://github.com/blackmatrix7/ios_rule_script/tree/master/script/zheye",
+      "author": "@Sheldontao",
+      "repo": "https://github.com/Sheldontao/Scripts/zhihu",
       "icons": [
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/zheye/zheye.png",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/zheye/zheye.png"
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/tree/master/script/zheye/zheye.png",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/tree/master/script/zheye/zheye.png"
       ],
       "descs_html": [
         "<h4 align=\"left\">配置说明查看<a href=\"https://github.com/blackmatrix7/ios_rule_script/tree/master/script/zheye#readme\">README.md</a></h4>"
@@ -178,7 +178,7 @@
         },
         {
           "id": "zheye_server_url",
-          "name": "哲也同学服务端",
+          "name": "哲野同学服务端",
           "val": "",
           "type": "input",
           "desc": "用于解锁更多功能。示例 http://192.168.1.200:52273 。"
