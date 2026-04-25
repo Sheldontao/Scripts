@@ -38,14 +38,14 @@
       "name": "移除推荐页强制标签",
       "val": false,
       "type": "boolean",
-      "desc": "强制移除推荐页的强制标签，需配置移除的标签，并开启\"软件配置优化\""
+      "desc": "强制移除推荐页的强制标签，需配置移除的标签，并开启'软件配置优化'"
     },
     {
       "id": "zhihu_settings_blocked_keywords",
       "name": "推荐页关键词过滤",
       "val": true,
       "type": "boolean",
-      "desc": "除普通关键词外还支持正则表达式过滤，需要开启\"显示为盐选会员\""
+      "desc": "除普通关键词外还支持正则表达式过滤，需要开启‘显示为盐选会员’"
     },
     {
       "id": "zhihu_settings_recommend_stream",
@@ -80,14 +80,14 @@
       "name": "屏蔽关注页推荐关注人",
       "val": false,
       "type": "boolean",
-      "desc": "屏蔽关注页中的\"为您推荐\""
+      "desc": "屏蔽关注页中的‘为您推荐’"
     },
     {
       "id": "zhihu_settings_moments_activity",
       "name": "屏蔽关注页活动更新",
       "val": false,
       "type": "boolean",
-      "desc": "屏蔽关注页中的\"关注的内容\""
+      "desc": "屏蔽关注页中的‘关注的内容’"
     },
     {
       "id": "zhihu_settings_hot_list",
@@ -181,14 +181,14 @@
       "name": "强制移除指定推荐页标签",
       "val": "",
       "type": "input",
-      "desc": "每个标签以;分隔，如\"直播;科学\""
+      "desc": "每个标签以;分隔，如‘直播;科学’"
     },
     {
       "id": "zhihu_settings_custom_tags",
       "name": "自定义内容标签",
       "val": "",
       "type": "textarea",
-      "desc": "格式：标签名:正则表达式;标签名2:正则2。正则表达式中可用|表示或。示例：我的标签:关键词A|关键词B;营销内容:推广|广告。内置标签：付费内容、营销推广、购物推广，会自动合并。"
+      "desc": "自定义内容标签，格式：标签名:正则表达式;标签名2:正则2。例如：我的标签:某个关键词|另一个词。内置标签包括：付费内容(查看完整内容|查看全部章节)、营销推广(ad-link-card|xg.zhihu.com|营销平台)、购物推广(mcn-link-card)"
     }
   ]
 }
