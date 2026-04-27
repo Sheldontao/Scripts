@@ -90,7 +90,7 @@ function removeAdData(obj) {
         const filtered = obj.filter(item => {
             if (!item || typeof item !== "object") return true;
             const s = JSON.stringify(item).toLowerCase();
-            return !s.includes(""广告"") &&
+            return !s.includes("\u201c\u5e7f\u544a\u201d") &&
                    !s.includes("isad") &&
                    !s.includes("is_ad") &&
                    !(item.isAd === true) &&
