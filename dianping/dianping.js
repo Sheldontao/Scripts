@@ -1,18 +1,4 @@
-/*
-大众点评去广告脚本 v3.0
-基于 zirawell v1.0 增强版
-
-原始功能:
-- /dpmobile / goodsawardpic 的 trace header 逻辑
-- /picassovc 的 WedgetCard 组件禁用
-
-新增功能:
-- 拦截广告联盟/浮窗 Bundle
-- 过滤 API 响应中的广告数据
-*/
-
 const url = $request.url;
-const method = $request.method;
 
 if (url.includes("/dpmobile") || url.includes("/goodsawardpic")) {
     const header = $request.headers;
@@ -25,50 +11,54 @@ if (url.includes("/dpmobile") || url.includes("/goodsawardpic")) {
         $done({body: "", headers: "", status: "HTTP/1.1 404 Not Found"});
     } else if (url.includes(".gif")) {
         const hexString = "47494638396101000100800000000000ffffff21f90401000000002c000000000100010000020144003b";
-        const header = {};
-        header["Content-Type"] = "image/gif";
-        header["Content-length"] = 42;
-        header["Connection"] = "close";
-        $done({bodyBytes: hexStringToArrayBuffer(hexString), headers: header, status: "HTTP/1.1 200 OK"});
+        const respHeader = {};
+        respHeader["Content-Type"] = "image/gif";
+        respHeader["Content-length"] = 42;
+        respHeader["Connection"] = "close";
+        $done({bodyBytes: hexStringToArrayBuffer(hexString), headers: respHeader, status: "HTTP/1.1 200 OK"});
     } else {
         $done({});
     }
 } else if (url.includes("/picassovc")) {
     if (!$response.body) $done({});
-    let body = $response.body;
+    const body = $response.body;
 
-    if (body.includes("WedgetCard")) {
-        body = body.replace(/function WedgetCard/g, "function WedgetCard0");
-        body = body.replace(/WedgetCard\s*=/g, "WedgetCard0=");
-        body = body.replace(/new WedgetCard/g, "new WedgetCard0");
+    if (typeof body === "string") {
+        let modified = body;
+        if (modified.includes("WedgetCard")) {
+            modified = modified.replace(/function WedgetCard/g, "function WedgetCard0");
+            modified = modified.replace(/WedgetCard\s*=/g, "WedgetCard0=");
+            modified = modified.replace(/new WedgetCard/g, "new WedgetCard0");
+        }
+        $done({body: modified});
+    } else if (body instanceof Uint8Array) {
+        $done({});
+    } else {
+        $done({});
     }
-
-    $done({body});
 } else {
-    if (method === "GET" || method === "POST") {
-        const adPatterns = [
-            "adunionulandpage",
-            "peanutfloat",
-            "peanutalert",
-            "peanutbubble",
-            "homegrowthhacking",
-            "floataudioplay",
-            "floataudioplayer",
-            "floatfeedcomment",
-            "checkin-float",
-            "brand-marketing"
-        ];
+    const adPatterns = [
+        "adunionulandpage",
+        "peanutfloat",
+        "peanutalert",
+        "peanutbubble",
+        "homegrowthhacking",
+        "floataudioplay",
+        "floataudioplayer",
+        "floatfeedcomment",
+        "checkin-float",
+        "brand-marketing"
+    ];
 
-        for (const pattern of adPatterns) {
-            if (url.includes(pattern)) {
-                $done({});
-                return;
-            }
+    for (const pattern of adPatterns) {
+        if (url.includes(pattern)) {
+            $done({});
+            return;
         }
     }
 
     if ($response && $response.body && url.includes("mapi.dianping.com")) {
-        let body = $response.body;
+        const body = $response.body;
         if (typeof body === "string") {
             try {
                 const json = JSON.parse(body);
@@ -90,7 +80,7 @@ function removeAdData(obj) {
         const filtered = obj.filter(item => {
             if (!item || typeof item !== "object") return true;
             const s = JSON.stringify(item).toLowerCase();
-            return !s.includes("\u201c\u5e7f\u544a\u201d") &&
+            return !s.includes("\u5e7f\u544a") &&
                    !s.includes("isad") &&
                    !s.includes("is_ad") &&
                    !(item.isAd === true) &&
