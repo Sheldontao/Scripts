@@ -1,5 +1,10 @@
 const url = $request.url;
 
+if ($response && $response.body && typeof $response.body !== "string") {
+    $done({});
+    return;
+}
+
 if (url.includes("/dpmobile") || url.includes("/goodsawardpic")) {
     const header = $request.headers;
     const traceKey1 = Object.keys(header).find(key => /^m-(shark-)?traceid$/i.test(key));
