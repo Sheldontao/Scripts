@@ -1,14 +1,7 @@
-#!name=大众点评去广告
-#!desc=屏蔽大众点评App广告，包括开屏广告、悬浮窗、联盟广告、首页信息流广告等。支持版本11.28.3及以下。
-#!author=zirawell (enhanced by Sisyphus)
-#!homepage=https://github.com/zirawell/R-Store
-#!icon=https://raw.githubusercontent.com/zirawell/R-Store/main/Rule/QuanX/Adblock/App/D/大众点评/icon.png
-#!version=3.0
-
 [Rewrite]
-# > 大众点评去广告 v3.0
-
-# 原有重写规则
+# > 大众点评
+# hostname = 103.37.155.60, *.dianping.com, img.meituan.net, p.meituan.com, rms.meituan.com, www.dpfile.com, awp-assets.meituan.net, s3plus.meituan.net, p*.meituan.net, ddplus.meituan.net
+# 开屏广告
 ^https?:\/\/103\.37\.155\.60\/fetch - reject
 ^https?:\/\/catdot\.dianping\.com\/broker-service\/hijack - reject
 ^https?:\/\/mapi\.dianping\.com\/mapi\/operating\/(?>indexopsmodules|loadsplashconfig) - reject
@@ -16,8 +9,6 @@
 ^https?:\/\/mapi\.dianping\.com\/wdrpreload\/userprediction - reject
 ^https?:\/\/mapi\.dianping\.com\/adshopping - reject
 ^https?:\/\/img\.meituan\.net\/goodsawardpic\/\w+\.gif - reject-img
-^https?:\/\/img\.meituan\.net\/dpmobile\/\w+\.(gif|webp|png|jpg|jpeg) - reject-img
-^https?:\/\/img\.meituan\.net\/goodsawardpic\/\w+\.(webp|png|jpg|jpeg) - reject-img
 ^https?:\/\/p\.meituan\.com\/api\/privacy\/config - reject
 ^https?:\/\/rms\.meituan\.com\/api\/v\d\/rmsmina\/c\/queryWechatAdvertisement - reject-dict
 ^https?:\/\/www\.dpfile\.com\/app\/fecommonservice-lottie\/ugc-write-done\/media - reject
@@ -29,15 +20,17 @@
 ^https?:\/\/p\d\.meituan\.net\/nrpresourcevenus\/\w+\.gif - reject-img
 ^https?:\/\/p\d\.meituan\.net\/travelcube\/(?!c129a661)\w+\.gif - reject-img
 ^https?:\/\/ddplus\.meituan\.net\/v\d\/mss_\w+\/(?>ehc|titansx|ddblue|edfu)\/ - reject
-
-# 广告联盟/浮窗 Bundle 直接 reject
-^https?:\/\/.*(?:adunionulandpage|peanutfloat|peanutalert|peanutbubble|homegrowthhacking|floataudioplay|floataudioplayer|floatfeedcomment|checkin-float|brand-marketing) - reject
-
+# > 新增: 统计/上报类广告拦截
+^https?:\/\/dreport\.meituan\.net\/ - reject
+^https?:\/\/medusa\.dianping\.com\/sdk\/report - reject
+^https?:\/\/lx0\.meituan\.com\/ - reject
+^https?:\/\/r1\.dianping\.com\/broker-service\/commandbatch - reject
+^https?:\/\/r1\.dianping\.com\/broker-service\/applog - reject
 [Script]
-# > 大众点评去广告 v3.0 - 脚本仅处理文本响应
-
-# Picasso JS Bundle (禁用 WedgetCard)
-http-response ^https?:\/\/ddplus\.meituan\.net\/v\d\/mss_\w+\/picassovc script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/dianping/dianping.js, requires-body=true, timeout=60, tag=大众点评
-
-# API 广告数据过滤 (JSON 文本)
-http-response ^https?:\/\/mapi\.dianping\.com script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/dianping/dianping.js, requires-body=true, timeout=60, tag=大众点评
+# > 大众点评
+# 开屏广告
+http-response ^https?:\/\/img\.meituan\.net\/dpmobile\/ script-path=https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/dianping.js, requires-body=true, timeout=60, tag=大众点评
+http-response ^https?:\/\/img\.meituan\.net\/goodsawardpic\/\w+\.(?!gif)\w+$ script-path=https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/dianping.js, requires-body=true, timeout=60, tag=大众点评
+http-response ^https?:\/\/ddplus\.meituan\.net\/v\d\/mss_\w+\/picassovc script-path=https://raw.githubusercontent.com/zirawell/R-Store/main/Res/Scripts/AntiAd/dianping.js, requires-body=true, timeout=60, tag=大众点评
+[Mitm]
+hostname = 103.37.155.60, *.dianping.com, img.meituan.net, p.meituan.com, rms.meituan.com, www.dpfile.com, awp-assets.meituan.net, s3plus.meituan.net, p*.meituan.net, ddplus.meituan.net, dreport.meituan.net, medusa.dianping.com, lx0.meituan.com
