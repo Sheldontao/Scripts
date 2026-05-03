@@ -1,6 +1,6 @@
 {
   "log": {
-    "level": "warn",
+    "level": "info",
     "output": "sing-box.log",
     "timestamp": true
   },
@@ -15,8 +15,11 @@
       {
         "type": "tls",
         "tag": "dns_proxy",
-        "server": "8.8.8.8",
-        "detour": "proxy"
+        "server": "8.8.8.8"
+      },
+      {
+        "type": "local",
+        "tag": "local"
       },
       {
         "type": "udp",
@@ -33,23 +36,62 @@
     "rules": [
       {
         "clash_mode": "Direct",
-        "server": "dns_direct"
+        "server": "local"
       },
       {
         "clash_mode": "Global",
-        "server": "dns_proxy"
+        "server": "fakeip"
+      },
+      {
+        "domain_suffix": [".local", ".lan", "miwifi.com"],
+        "server": "local"
       },
       {
         "rule_set": "ads",
         "action": "predefined"
       },
       {
-        "query_type": ["A", "AAAA"],
-        "rule_set": "cn_domain",
-        "server": "fakeip"
+        "domain_suffix": [
+          "tplogin.cn",
+          "router.asus.com",
+          "tendawifi.com",
+          "tplinkwifi.net",
+          "app-measurement.com",
+          "hm.baidu.com",
+          "firebaselogging.googleapis.com",
+          "firebaselogging-pa.googleapis.com",
+          "beacons.gvt2.com",
+          "beacons2.gvt2.com",
+          "beacons3.gvt2.com",
+          "tracking.miui.com",
+          "market.xiaomi.com",
+          "lancache.steamcontent.com"
+        ],
+        "rule_set": [
+          "cn_domain",
+          "apple_cn",
+          "microsoft_cn",
+          "bilibili_domain"
+        ],
+        "server": "dns_direct"
       },
       {
-        "rule_set": "cn_domain",
+        "process_name": [
+          "motrixnext-aria2c",
+          "aria2c.exe",
+          "fdm.exe",
+          "folx.exe",
+          "nettransport.exe",
+          "thunder.exe",
+          "transmission.exe",
+          "utorrent.exe",
+          "webtorrent.exe",
+          "webtorrent helper.exe",
+          "qbittorrent.exe",
+          "downloadservice.exe",
+          "weiyun.exe",
+          "baidunetdisk.exe"
+        ],
         "server": "dns_direct"
       },
       {
@@ -57,27 +99,27 @@
         "mode": "and",
         "rules": [
           {
-            "rule_set": ["proxy_domain", "gfw"],
+            "rule_set": ["proxy_domain"],
             "invert": true
           },
           {
             "rule_set": "cn_ip"
           }
         ],
-        "server": "dns_proxy",
-        "client_subnet": "222.17.11.0/24"
+        "server": "dns_direct"
       },
       {
         "query_type": ["A", "AAAA"],
         "server": "fakeip"
       }
     ],
-    "independent_cache": true
+    "independent_cache": true,
+    "client_subnet": "222.17.11.0/24"
   },
   "inbounds": [
     {
       "type": "tun",
-      "address": ["172.19.0.1/30", "fdfe:dcba:9876::1/126"],
+      "address": ["172.19.0.1/30", "fdfe:dcba:9876::0/126"],
       "auto_route": true,
       "stack": "mixed",
       "platform": {
@@ -310,10 +352,6 @@
   "route": {
     "rules": [
       {
-        "action": "sniff",
-        "timeout": "500ms"
-      },
-      {
         "type": "logical",
         "mode": "or",
         "rules": [
@@ -325,6 +363,61 @@
           }
         ],
         "action": "hijack-dns"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "type": "logical",
+            "mode": "or",
+            "rules": [{ "port": 853 }, { "network": "udp", "port": 443 }]
+          },
+          {
+            "rule_set": "cn_ip",
+            "invert": true
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "process_name": [
+          "motrixnext-aria2c",
+          "aria2c.exe",
+          "fdm.exe",
+          "folx.exe",
+          "nettransport.exe",
+          "thunder.exe",
+          "transmission.exe",
+          "utorrent.exe",
+          "webtorrent.exe",
+          "webtorrent helper.exe",
+          "qbittorrent.exe",
+          "downloadservice.exe",
+          "weiyun.exe",
+          "baidunetdisk.exe"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "proxy"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "direct"
+      },
+      {
+        "action": "sniff",
+        "timeout": "500ms"
+      },
+      {
+        "protocol": ["stun"],
+        "outbound": "reject"
       },
       {
         "type": "logical",
@@ -341,52 +434,21 @@
         "action": "reject"
       },
       {
-        "type": "logical",
-        "mode": "or",
-        "rules": [
-          {
-            "port": 853
-          },
-          {
-            "network": "udp",
-            "port": 443
-          },
-          {
-            "protocol": ["quic", "stun"]
-          }
-        ],
-        "action": "reject"
-      },
-      {
-        "clash_mode": "Global",
-        "outbound": "proxy"
-      },
-      {
-        "clash_mode": "Direct",
-        "outbound": "direct"
-      },
-      {
-        "domain": ["imap.qq.com", "smtp.qq.com"],
-        "domain_suffix": ["smtp"],
-        "domain_keyword": ["aria2"],
-        "ip_is_private": true,
-        "outbound": "direct"
+        "domain_regex": "emby\\.",
+        "outbound": "streaming"
       },
       {
         "rule_set": ["apple_cn"],
         "outbound": "apple_cn"
       },
       {
-        "domain_suffix": ["hutaoindex.com", "besttelecom.cc"],
-        "outbound": "streaming"
-      },
-      {
-        "protocol": "bittorrent",
-        "outbound": "direct"
-      },
-      {
         "rule_set": "bilibili_domain",
         "outbound": "bilibili"
+      },
+      {
+        "domain_suffix": ["miwifi.com"],
+        "rule_set": ["cn_domain", "cn_ip", "microsoft_cn"],
+        "outbound": "cn"
       },
       {
         "rule_set": "youtube_domain",
@@ -397,7 +459,7 @@
         "outbound": "ai"
       },
       {
-        "rule_set": ["netflix_domain", "netflix_ip"],
+        "rule_set": ["netflix_domain"],
         "outbound": "streaming"
       },
       {
@@ -407,27 +469,16 @@
       {
         "rule_set": ["google_domain", "google_ip"],
         "outbound": "google"
-      },
-      {
-        "type": "logical",
-        "mode": "and",
-        "rules": [
-          {
-            "rule_set": ["proxy_domain", "gfw"]
-          },
-          {
-            "invert": true,
-            "rule_set": ["cn_domain", "cn_ip"]
-          }
-        ],
-        "outbound": "proxy"
-      },
-      {
-        "rule_set": ["cn_domain", "cn_ip", "microsoft_cn"],
-        "outbound": "cn"
       }
     ],
     "rule_set": [
+      {
+        "tag": "microsoft_cn",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/microsoft@cn.srs",
+        "download_detour": "direct"
+      },
       {
         "tag": "apple_cn",
         "type": "remote",
@@ -471,13 +522,6 @@
         "download_detour": "direct"
       },
       {
-        "tag": "netflix_ip",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo-lite/geoip/netflix.srs",
-        "download_detour": "direct"
-      },
-      {
         "tag": "netflix_domain",
         "type": "remote",
         "format": "binary",
@@ -489,13 +533,6 @@
         "type": "remote",
         "format": "binary",
         "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-chat-!cn.srs",
-        "download_detour": "direct"
-      },
-      {
-        "tag": "gfw",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://github.com/DustinWin/ruleset_geodata/releases/download/sing-box-ruleset/gfw.srs",
         "download_detour": "direct"
       },
       {
@@ -527,17 +564,10 @@
         "download_detour": "direct"
       },
       {
-        "tag": "microsoft_cn",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/sing/geo/geosite/microsoft@cn.srs",
-        "download_detour": "direct"
-      },
-      {
         "tag": "ads",
         "type": "remote",
-        "format": "source",
-        "url": "https://ruleset.skk.moe/sing-box/domainset/reject.json",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/refs/heads/sing-box-ruleset/ads.srs",
         "download_detour": "direct"
       }
     ],
@@ -547,6 +577,7 @@
   "experimental": {
     "clash_api": {
       "external_controller": "127.0.0.1:9090",
+      "secret": "22222222",
       "external_ui": "ClashUIforSingbox",
       "external_ui_download_url": "https://ghfast.top/https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip",
       "external_ui_download_detour": "direct"
