@@ -46,7 +46,7 @@
 async function operator(proxies = [], targetPlatform, context) {
   const $ = $substore
   const { isLoon, isSurge, isNode } = $.env
-  const internal = $arguments.internal
+  const internal = boolArg($arguments.internal)
   const regex = $arguments.regex
   let format = $arguments.format || '{{api.country}} {{api.isp}} - {{proxy.name}}'
   let url = $arguments.api || 'http://ip-api.com/json?lang=zh-CN'
@@ -73,12 +73,12 @@ async function operator(proxies = [], targetPlatform, context) {
   if (!surge_http_api_enabled && !isLoon && !isSurge)
     throw new Error('请使用 Loon, Surge(ability=http-client-policy) 或 配置 HTTP API')
 
-  const disableFailedCache = $arguments.disable_failed_cache || $arguments.ignore_failed_error
-  const remove_failed = $arguments.remove_failed
-  const remove_incompatible = $arguments.remove_incompatible
-  const incompatibleEnabled = $arguments.incompatible
-  const geoEnabled = $arguments.geo
-  const cacheEnabled = $arguments.cache
+  const disableFailedCache = boolArg($arguments.disable_failed_cache) || boolArg($arguments.ignore_failed_error)
+  const remove_failed = boolArg($arguments.remove_failed)
+  const remove_incompatible = boolArg($arguments.remove_incompatible)
+  const incompatibleEnabled = boolArg($arguments.incompatible)
+  const geoEnabled = boolArg($arguments.geo)
+  const cacheEnabled = boolArg($arguments.cache)
   const cache = scriptResourceCache
 
   const method = $arguments.method || 'get'
@@ -96,7 +96,7 @@ async function operator(proxies = [], targetPlatform, context) {
     { key: 'discovery', tag: 'DC'  },
     { key: 'chatgpt',   tag: 'GPT' },
   ]
-  const enabledMediaChecks = MEDIA_PLATFORMS.filter(p => $arguments[p.key] === 'true')
+  const enabledMediaChecks = MEDIA_PLATFORMS.filter(p => boolArg($arguments[p.key]))
   const mediaFormat = $arguments.media_format
   const mediaTimeout = parseFloat($arguments.media_timeout || $arguments.timeout || 5000)
 
@@ -321,6 +321,9 @@ async function operator(proxies = [], targetPlatform, context) {
       }
     }
     return result
+  }
+  function boolArg(value) {
+    return value === true || value === 'true' || value === 1 || value === '1'
   }
   function formatter({ proxy = {}, api = {}, format = '', regex = '' }) {
     if (regex) {
