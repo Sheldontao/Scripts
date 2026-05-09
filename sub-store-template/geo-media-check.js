@@ -32,6 +32,7 @@
  * - [disable_failed_cache/ignore_failed_error] 禁用失败缓存. 即不缓存失败结果
  * - [youtube/netflix/disney/dazn/paramount/discovery/chatgpt] 媒体解锁检测. 设为 true 启用. 对每个节点发起 HTTP 请求检测对应平台解锁状态, 通过则追加后缀标签
  * - [media_format] 自定义媒体检测后缀格式, 默认只显示通过的平台标签. 可用变量: {{yt}} {{nf}} {{dp}} {{dz}} {{pm}} {{dc}} {{gpt}}, 值为 ✓ (通过) 或 ✗ (失败) 或 ◐ (部分)
+ * - [media_timeout] 媒体检测单独超时(毫秒). 默认取 timeout 值. 设为较小值可不拖慢整体检测
  * 关于缓存时长
  * 当使用相关脚本时, 若在对应的脚本中使用参数(⚠ 别忘了这个, 一般为 cache, 值设为 true 即可)开启缓存
  * 可在前端(>=2.16.0) 配置各项缓存的默认时长
@@ -97,6 +98,7 @@ async function operator(proxies = [], targetPlatform, context) {
   ]
   const enabledMediaChecks = MEDIA_PLATFORMS.filter(p => $arguments[p.key] === 'true')
   const mediaFormat = $arguments.media_format
+  const mediaTimeout = parseFloat($arguments.media_timeout || $arguments.timeout || 5000)
 
   // 媒体解锁检测 - 常量 (需在 executeAsyncTasks 前初始化)
   const MEDIA_RESULT_SYMBOLS = { ok: '✓', partial: '◐', blocked: '✗', error: '?' }
@@ -171,8 +173,8 @@ async function operator(proxies = [], targetPlatform, context) {
     try {
       const node = ProxyUtils.produce([proxy], surge_http_api_enabled ? 'Surge' : target)
       if (node) {
-        // 媒体解锁检测
-        const mediaSuffix = enabledMediaChecks.length > 0 ? await runMediaChecks(node) : ''
+        // 媒体解锁检测 - 启动异步任务，与 geo 请求并行
+        const mediaCheckPromise = enabledMediaChecks.length > 0 ? runMediaChecks(node) : Promise.resolve('')
 
         const cached = cache.get(id)
         if (cacheEnabled && cached) {
@@ -180,6 +182,7 @@ async function operator(proxies = [], targetPlatform, context) {
             $.info(`[${proxy.name}] 使用成功缓存`)
             $.log(`[${proxy.name}] api: ${JSON.stringify(cached.api, null, 2)}`)
             proxy.name = formatter({ proxy, api: cached.api, format, regex })
+            const mediaSuffix = await mediaCheckPromise
             if (mediaSuffix) proxy.name += ` ${mediaSuffix}`
             proxy._geo = cached.api
             return
@@ -225,6 +228,7 @@ async function operator(proxies = [], targetPlatform, context) {
         $.log(`[${proxy.name}] api: ${JSON.stringify(api, null, 2)}`)
         if (status == 200) {
           proxy.name = formatter({ proxy, api, format, regex })
+          const mediaSuffix = await mediaCheckPromise
           if (mediaSuffix) proxy.name += ` ${mediaSuffix}`
           proxy._geo = api
           if (cacheEnabled) {
@@ -414,6 +418,7 @@ async function operator(proxies = [], targetPlatform, context) {
     try {
       const res = await http({
         url: 'https://www.youtube.com/premium',
+        timeout: mediaTimeout,
         headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36' },
         'policy-descriptor': node,
         node,
@@ -430,6 +435,7 @@ async function operator(proxies = [], targetPlatform, context) {
     try {
       const res = await http({
         url: 'https://www.netflix.com/title/81280792',
+        timeout: mediaTimeout,
         headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15' },
         'policy-descriptor': node,
         node,
@@ -449,6 +455,7 @@ async function operator(proxies = [], targetPlatform, context) {
       const res = await http({
         method: 'post',
         url: 'https://disney.api.edge.bamgrid.com/graph/v1/device/graphql',
+        timeout: mediaTimeout,
         headers: {
           'Accept-Language': 'en',
           'Authorization': 'ZGlzbmV5JmJyb3dzZXImMS4wLjA.Cu56AgSfBTDag5NiRA81oLHkDZfu5L3CKadnefEAY84',
@@ -478,6 +485,7 @@ async function operator(proxies = [], targetPlatform, context) {
       const res = await http({
         method: 'post',
         url: 'https://startup.core.indazn.com/misl/v5/Startup',
+        timeout: mediaTimeout,
         headers: {
           'Content-Type': 'application/json',
           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
@@ -498,6 +506,7 @@ async function operator(proxies = [], targetPlatform, context) {
     try {
       const res = await http({
         url: 'https://www.paramountplus.com/',
+        timeout: mediaTimeout,
         headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36' },
         'policy-descriptor': node,
         node,
@@ -513,6 +522,7 @@ async function operator(proxies = [], targetPlatform, context) {
     try {
       const tokenRes = await http({
         url: 'https://us1-prod-direct.discoveryplus.com/token?deviceId=d1a4a5d25212400d1e6985984604d740&realm=go&shortlived=true',
+        timeout: mediaTimeout,
         headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36' },
         'policy-descriptor': node,
         node,
@@ -525,6 +535,7 @@ async function operator(proxies = [], targetPlatform, context) {
 
       const userRes = await http({
         url: 'https://us1-prod-direct.discoveryplus.com/users/me',
+        timeout: mediaTimeout,
         headers: {
           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
           'Cookie': `st=${token}`,
@@ -546,6 +557,7 @@ async function operator(proxies = [], targetPlatform, context) {
     try {
       const res = await http({
         url: 'https://chat.openai.com/',
+        timeout: mediaTimeout,
         'auto-redirect': false,
         'policy-descriptor': node,
         node,
@@ -555,6 +567,7 @@ async function operator(proxies = [], targetPlatform, context) {
 
       const regionRes = await http({
         url: 'https://chat.openai.com/cdn-cgi/trace',
+        timeout: mediaTimeout,
         'policy-descriptor': node,
         node,
       })
