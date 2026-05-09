@@ -98,6 +98,27 @@ async function operator(proxies = [], targetPlatform, context) {
   const enabledMediaChecks = MEDIA_PLATFORMS.filter(p => $arguments[p.key] === 'true')
   const mediaFormat = $arguments.media_format
 
+  // 媒体解锁检测 - 常量 (需在 executeAsyncTasks 前初始化)
+  const MEDIA_RESULT_SYMBOLS = { ok: '✓', partial: '◐', blocked: '✗', error: '?' }
+  const MEDIA_RESULT_TAGS = {
+    youtube:   { ok: 'YT', partial: '', blocked: '', error: '' },
+    netflix:   { ok: 'NF', partial: 'NF◐', blocked: '', error: '' },
+    disney:    { ok: 'D+', partial: 'D+⚠', blocked: '', error: '' },
+    dazn:      { ok: 'DZ', partial: '', blocked: '', error: '' },
+    paramount: { ok: 'PM', partial: '', blocked: '', error: '' },
+    discovery: { ok: 'DC', partial: '', blocked: '', error: '' },
+    chatgpt:   { ok: 'GPT', partial: '', blocked: '', error: '' },
+  }
+  const mediaCheckers = {
+    youtube: checkYoutube,
+    netflix: checkNetflix,
+    disney: checkDisney,
+    dazn: checkDazn,
+    paramount: checkParamount,
+    discovery: checkDiscovery,
+    chatgpt: checkChatgpt,
+  }
+
   await executeAsyncTasks(
     proxies.map(proxy => () => check(proxy)),
     { concurrency }
@@ -357,18 +378,7 @@ async function operator(proxies = [], targetPlatform, context) {
     })
   }
 
-  // ---- 媒体解锁检测 ----
-  const MEDIA_RESULT_SYMBOLS = { ok: '✓', partial: '◐', blocked: '✗', error: '?' }
-  const MEDIA_RESULT_TAGS = {
-    youtube:   { ok: 'YT', partial: '', blocked: '', error: '' },
-    netflix:   { ok: 'NF', partial: 'NF◐', blocked: '', error: '' },
-    disney:    { ok: 'D+', partial: 'D+⚠', blocked: '', error: '' },
-    dazn:      { ok: 'DZ', partial: '', blocked: '', error: '' },
-    paramount: { ok: 'PM', partial: '', blocked: '', error: '' },
-    discovery: { ok: 'DC', partial: '', blocked: '', error: '' },
-    chatgpt:   { ok: 'GPT', partial: '', blocked: '', error: '' },
-  }
-
+  // ---- 媒体解锁检测函数 ----
   async function runMediaChecks(node) {
     const results = {}
     const checks = enabledMediaChecks.map(async (platform) => {
@@ -557,15 +567,5 @@ async function operator(proxies = [], targetPlatform, context) {
     } catch (e) {
       return 'error'
     }
-  }
-
-  const mediaCheckers = {
-    youtube: checkYoutube,
-    netflix: checkNetflix,
-    disney: checkDisney,
-    dazn: checkDazn,
-    paramount: checkParamount,
-    discovery: checkDiscovery,
-    chatgpt: checkChatgpt,
   }
 }
