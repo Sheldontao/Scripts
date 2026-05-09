@@ -170,11 +170,12 @@ async function operator(proxies = [], targetPlatform, context) {
         )}`
       : undefined
     // $.info(`检测 ${id}`)
+    let mediaCheckPromise = Promise.resolve('')
     try {
       const node = ProxyUtils.produce([proxy], surge_http_api_enabled ? 'Surge' : target)
       if (node) {
         // 媒体解锁检测 - 启动异步任务，与 geo 请求并行
-        const mediaCheckPromise = enabledMediaChecks.length > 0 ? runMediaChecks(node) : Promise.resolve('')
+        mediaCheckPromise = enabledMediaChecks.length > 0 ? runMediaChecks(node) : Promise.resolve('')
 
         const cached = cache.get(id)
         if (cacheEnabled && cached) {
@@ -246,6 +247,8 @@ async function operator(proxies = [], targetPlatform, context) {
       }
     } catch (e) {
       $.error(`[${proxy.name}] ${e.message ?? e}`)
+      const mediaSuffix = await mediaCheckPromise
+      if (mediaSuffix) proxy.name += ` ${mediaSuffix}`
       if (cacheEnabled) {
         $.info(`[${proxy.name}] 设置失败缓存`)
         cache.set(id, {})
