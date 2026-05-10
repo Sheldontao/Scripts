@@ -422,11 +422,14 @@ async function operator(proxies = [], targetPlatform, context) {
       const res = await http({
         url: 'https://www.youtube.com/premium',
         timeout: mediaTimeout,
+        'auto-redirect': false,
         headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36' },
         'policy-descriptor': node,
         node,
       })
+      const status = parseInt(res.status || res.statusCode || 0)
       const body = String(lodash_get(res, 'body') || '')
+      if (status === 302 || status === 301 || status === 303) return 'blocked'
       if (body.includes('Premium is not available in your country')) return 'blocked'
       return body.includes('www.google.cn') ? 'blocked' : 'ok'
     } catch (e) {
