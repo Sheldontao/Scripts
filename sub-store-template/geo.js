@@ -30,9 +30,6 @@
  * - [surge_http_api_key] HTTP API 的 密码
  * - [cache] 使用缓存. 默认不使用缓存
  * - [disable_failed_cache/ignore_failed_error] 禁用失败缓存. 即不缓存失败结果
- * - [youtube/netflix/disney/dazn/paramount/discovery/chatgpt] 媒体解锁检测. 设为 true 启用. 对每个节点发起 HTTP 请求检测对应平台解锁状态, 通过则追加后缀标签
- * - [media_format] 自定义媒体检测后缀格式, 默认只显示通过的平台标签. 可用变量: {{yt}} {{nf}} {{dp}} {{dz}} {{pm}} {{dc}} {{gpt}}, 值为 ✓ (通过) 或 ✗ (失败) 或 ◐ (部分)
- * - [media_timeout] 媒体检测单独超时(毫秒). 默认取 timeout 值. 设为较小值可不拖慢整体检测
  * 关于缓存时长
  * 当使用相关脚本时, 若在对应的脚本中使用参数(⚠ 别忘了这个, 一般为 cache, 值设为 true 即可)开启缓存
  * 可在前端(>=2.16.0) 配置各项缓存的默认时长
@@ -86,41 +83,6 @@ async function operator(proxies = [], targetPlatform, context) {
   const target = isLoon ? 'Loon' : isSurge ? 'Surge' : undefined
   const concurrency = parseInt($arguments.concurrency || 10) // 一组并发数
 
-  // 媒体解锁检测配置
-  const MEDIA_PLATFORMS = [
-    { key: 'youtube',   tag: 'YT'  },
-    { key: 'netflix',   tag: 'NF'  },
-    { key: 'disney',    tag: 'D+'  },
-    { key: 'dazn',      tag: 'DZ'  },
-    { key: 'paramount', tag: 'PM'  },
-    { key: 'discovery', tag: 'DC'  },
-    { key: 'chatgpt',   tag: 'GPT' },
-  ]
-  const enabledMediaChecks = MEDIA_PLATFORMS.filter(p => $arguments[p.key] === 'true' || $arguments[p.key] === true)
-  const mediaFormat = $arguments.media_format
-  const mediaTimeout = parseFloat($arguments.media_timeout || $arguments.timeout || 5000)
-
-  // 媒体解锁检测 - 常量 (需在 executeAsyncTasks 前初始化)
-  const MEDIA_RESULT_SYMBOLS = { ok: '✓', partial: '◐', blocked: '✗', error: '?' }
-  const MEDIA_RESULT_TAGS = {
-    youtube:   { ok: 'YT', partial: '', blocked: '', error: '' },
-    netflix:   { ok: 'NF', partial: 'NF◐', blocked: '', error: '' },
-    disney:    { ok: 'D+', partial: 'D+⚠', blocked: '', error: '' },
-    dazn:      { ok: 'DZ', partial: '', blocked: '', error: '' },
-    paramount: { ok: 'PM', partial: '', blocked: '', error: '' },
-    discovery: { ok: 'DC', partial: '', blocked: '', error: '' },
-    chatgpt:   { ok: 'GPT', partial: '', blocked: '', error: '' },
-  }
-  const mediaCheckers = {
-    youtube: checkYoutube,
-    netflix: checkNetflix,
-    disney: checkDisney,
-    dazn: checkDazn,
-    paramount: checkParamount,
-    discovery: checkDiscovery,
-    chatgpt: checkChatgpt,
-  }
-
   await executeAsyncTasks(
     proxies.map(proxy => () => check(proxy)),
     { concurrency }
@@ -170,21 +132,15 @@ async function operator(proxies = [], targetPlatform, context) {
         )}`
       : undefined
     // $.info(`检测 ${id}`)
-    let mediaCheckPromise = Promise.resolve('')
     try {
       const node = ProxyUtils.produce([proxy], surge_http_api_enabled ? 'Surge' : target)
       if (node) {
-        // 媒体解锁检测 - 启动异步任务，与 geo 请求并行
-        mediaCheckPromise = enabledMediaChecks.length > 0 ? runMediaChecks(node) : Promise.resolve('')
-
         const cached = cache.get(id)
         if (cacheEnabled && cached) {
           if (cached.api) {
             $.info(`[${proxy.name}] 使用成功缓存`)
             $.log(`[${proxy.name}] api: ${JSON.stringify(cached.api, null, 2)}`)
             proxy.name = formatter({ proxy, api: cached.api, format, regex })
-            const mediaSuffix = await mediaCheckPromise
-            if (mediaSuffix) proxy.name += ` ${mediaSuffix}`
             proxy._geo = cached.api
             return
           } else {
@@ -229,8 +185,6 @@ async function operator(proxies = [], targetPlatform, context) {
         $.log(`[${proxy.name}] api: ${JSON.stringify(api, null, 2)}`)
         if (status == 200) {
           proxy.name = formatter({ proxy, api, format, regex })
-          const mediaSuffix = await mediaCheckPromise
-          if (mediaSuffix) proxy.name += ` ${mediaSuffix}`
           proxy._geo = api
           if (cacheEnabled) {
             $.info(`[${proxy.name}] 设置成功缓存`)
@@ -247,8 +201,6 @@ async function operator(proxies = [], targetPlatform, context) {
       }
     } catch (e) {
       $.error(`[${proxy.name}] ${e.message ?? e}`)
-      const mediaSuffix = await mediaCheckPromise
-      if (mediaSuffix) proxy.name += ` ${mediaSuffix}`
       if (cacheEnabled) {
         $.info(`[${proxy.name}] 设置失败缓存`)
         cache.set(id, {})
@@ -383,205 +335,5 @@ async function operator(proxies = [], targetPlatform, context) {
         reject(e)
       }
     })
-  }
-
-  // ---- 媒体解锁检测函数 ----
-  async function runMediaChecks(node) {
-    const results = {}
-    const checks = enabledMediaChecks.map(async (platform) => {
-      try {
-        results[platform.key] = await mediaCheckers[platform.key](node)
-      } catch (e) {
-        results[platform.key] = 'error'
-      }
-    })
-    await Promise.allSettled(checks)
-
-    if (mediaFormat) {
-      const vars = {}
-      for (const p of enabledMediaChecks) {
-        vars[p.key === 'youtube' ? 'yt' : p.key === 'netflix' ? 'nf' : p.key === 'disney' ? 'dp' : p.key === 'dazn' ? 'dz' : p.key === 'paramount' ? 'pm' : p.key === 'discovery' ? 'dc' : 'gpt'] =
-          MEDIA_RESULT_SYMBOLS[results[p.key]] || '?'
-      }
-      let f = mediaFormat.replace(/\{\{(.*?)\}\}/g, '${$1}')
-      try {
-        return eval(`\`${f}\``)
-      } catch (e) {
-        return ''
-      }
-    }
-
-    const tags = enabledMediaChecks
-      .map(p => MEDIA_RESULT_TAGS[p.key][results[p.key]] || '')
-      .filter(Boolean)
-    return tags.length > 0 ? `[${tags.join('][')}]` : ''
-  }
-
-  async function checkYoutube(node) {
-    try {
-      const res = await http({
-        url: 'https://www.youtube.com/premium',
-        timeout: mediaTimeout,
-        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36' },
-        'policy-descriptor': node,
-        node,
-      })
-      const body = String(lodash_get(res, 'body') || '')
-      if (body.includes('Premium is not available in your country')) return 'blocked'
-      return body.includes('www.google.cn') ? 'blocked' : 'ok'
-    } catch (e) {
-      return 'error'
-    }
-  }
-
-  async function checkNetflix(node) {
-    try {
-      const res = await http({
-        url: 'https://www.netflix.com/title/81280792',
-        timeout: mediaTimeout,
-        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15' },
-        'policy-descriptor': node,
-        node,
-      })
-      const status = parseInt(res.status || res.statusCode || 0)
-      if (status === 403) return 'blocked'
-      if (status === 404) return 'partial'
-      if (status === 200) return 'ok'
-      return 'error'
-    } catch (e) {
-      return 'error'
-    }
-  }
-
-  async function checkDisney(node) {
-    try {
-      const res = await http({
-        method: 'post',
-        url: 'https://disney.api.edge.bamgrid.com/graph/v1/device/graphql',
-        timeout: mediaTimeout,
-        headers: {
-          'Accept-Language': 'en',
-          'Authorization': 'ZGlzbmV5JmJyb3dzZXImMS4wLjA.Cu56AgSfBTDag5NiRA81oLHkDZfu5L3CKadnefEAY84',
-          'Content-Type': 'application/json',
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
-        },
-        body: JSON.stringify({
-          query: 'mutation registerDevice($input: RegisterDeviceInput!) { registerDevice(registerDevice: $input) { grant { grantType assertion } } }',
-          variables: { input: { applicationRuntime: 'chrome', attributes: { browserName: 'chrome', browserVersion: '94.0.4606', manufacturer: 'microsoft', model: null, operatingSystem: 'windows', operatingSystemVersion: '10.0', osDeviceIds: [] }, deviceFamily: 'browser', deviceLanguage: 'en', deviceProfile: 'windows' } },
-        }),
-        'policy-descriptor': node,
-        node,
-      })
-      const body = String(lodash_get(res, 'body') || '')
-      let data
-      try { data = JSON.parse(body) } catch (e) { return 'error' }
-      const session = data?.extensions?.sdk?.session
-      if (!session) return 'blocked'
-      return session.inSupportedLocation === false ? 'partial' : 'ok'
-    } catch (e) {
-      return 'error'
-    }
-  }
-
-  async function checkDazn(node) {
-    try {
-      const res = await http({
-        method: 'post',
-        url: 'https://startup.core.indazn.com/misl/v5/Startup',
-        timeout: mediaTimeout,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
-        },
-        body: JSON.stringify({ LandingPageKey: 'generic', Platform: 'web', PlatformAttributes: {}, Manufacturer: '', PromoCode: '', Version: '2' }),
-        'policy-descriptor': node,
-        node,
-      })
-      const body = String(lodash_get(res, 'body') || '')
-      if (body.includes('"GeolocatedCountry"')) return 'ok'
-      return 'blocked'
-    } catch (e) {
-      return 'error'
-    }
-  }
-
-  async function checkParamount(node) {
-    try {
-      const res = await http({
-        url: 'https://www.paramountplus.com/',
-        timeout: mediaTimeout,
-        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36' },
-        'policy-descriptor': node,
-        node,
-      })
-      const status = parseInt(res.status || res.statusCode || 0)
-      return status === 200 ? 'ok' : status === 302 ? 'blocked' : 'error'
-    } catch (e) {
-      return 'error'
-    }
-  }
-
-  async function checkDiscovery(node) {
-    try {
-      const tokenRes = await http({
-        url: 'https://us1-prod-direct.discoveryplus.com/token?deviceId=d1a4a5d25212400d1e6985984604d740&realm=go&shortlived=true',
-        timeout: mediaTimeout,
-        headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36' },
-        'policy-descriptor': node,
-        node,
-      })
-      const tokenBody = String(lodash_get(tokenRes, 'body') || '')
-      let tokenData
-      try { tokenData = JSON.parse(tokenBody) } catch (e) { return 'error' }
-      const token = tokenData?.data?.attributes?.token
-      if (!token) return 'error'
-
-      const userRes = await http({
-        url: 'https://us1-prod-direct.discoveryplus.com/users/me',
-        timeout: mediaTimeout,
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
-          'Cookie': `st=${token}`,
-        },
-        'policy-descriptor': node,
-        node,
-      })
-      const userBody = String(lodash_get(userRes, 'body') || '')
-      let userData
-      try { userData = JSON.parse(userBody) } catch (e) { return 'error' }
-      const location = userData?.data?.attributes?.currentLocationTerritory
-      return location === 'us' ? 'ok' : 'blocked'
-    } catch (e) {
-      return 'error'
-    }
-  }
-
-  async function checkChatgpt(node) {
-    try {
-      const res = await http({
-        url: 'https://chat.openai.com/',
-        timeout: mediaTimeout,
-        'auto-redirect': false,
-        'policy-descriptor': node,
-        node,
-      })
-      const respStr = JSON.stringify(res)
-      if (respStr.includes('text/plain')) return 'blocked'
-
-      const regionRes = await http({
-        url: 'https://chat.openai.com/cdn-cgi/trace',
-        timeout: mediaTimeout,
-        'policy-descriptor': node,
-        node,
-      })
-      const traceBody = String(lodash_get(regionRes, 'body') || '')
-      const match = traceBody.match(/loc=([A-Z]{2})/)
-      if (!match) return 'error'
-
-      const SUPPORTED = ['T1','XX','AL','DZ','AD','AO','AG','AR','AM','AU','AT','AZ','BS','BD','BB','BE','BZ','BJ','BT','BA','BW','BR','BG','BF','CV','CA','CL','CO','KM','CR','HR','CY','DK','DJ','DM','DO','EC','SV','EE','FJ','FI','FR','GA','GM','GE','DE','GH','GR','GD','GT','GN','GW','GY','HT','HN','HU','IS','IN','ID','IQ','IE','IL','IT','JM','JP','JO','KZ','KE','KI','KW','KG','LV','LB','LS','LR','LI','LT','LU','MG','MW','MY','MV','ML','MT','MH','MR','MU','MX','MC','MN','ME','MA','MZ','MM','NA','NR','NP','NL','NZ','NI','NE','NG','MK','NO','OM','PK','PW','PA','PG','PE','PH','PL','PT','QA','RO','RW','KN','LC','VC','WS','SM','ST','SN','RS','SC','SL','SG','SK','SI','SB','ZA','ES','LK','SR','SE','CH','TH','TG','TO','TT','TN','TR','TV','UG','AE','US','UY','VU','ZM','BO','BN','CG','CZ','VA','FM','MD','PS','KR','TW','TZ','TL','GB']
-      return SUPPORTED.includes(match[1]) ? 'ok' : 'blocked'
-    } catch (e) {
-      return 'error'
-    }
   }
 }

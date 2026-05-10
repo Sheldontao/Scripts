@@ -1,55 +1,88 @@
-const { type, name } = $arguments
+const { type, name } = $arguments;
 const compatible_outbound = {
-  tag: 'COMPATIBLE',
-  type: 'direct',
-}
+  tag: "COMPATIBLE",
+  type: "direct",
+};
 
-let compatible
-let config = JSON.parse($files[0])
+let compatible;
+let config = JSON.parse($files[0]);
 let proxies = await produceArtifact({
   name,
-  type: /^1$|col/i.test(type) ? 'collection' : 'subscription',
-  platform: 'sing-box',
-  produceType: 'internal',
-})
+  type: /^1$|col/i.test(type) ? "collection" : "subscription",
+  platform: "sing-box",
+  produceType: "internal",
+});
 
-config.outbounds.push(...proxies)
+config.outbounds.push(...proxies);
 
-config.outbounds.map(i => {
-  if (['all'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies))
+config.outbounds.map((i) => {
+  if (["all"].includes(i.tag)) {
+    i.outbounds.push(...getTags(proxies));
   }
-  if (['hk-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(港|hk|hong.*kong|🇭🇰)/i))
+  if (["hk-auto"].includes(i.tag)) {
+    i.outbounds.push(
+      ...getTags(
+        proxies,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(港|hk|hong.*kong|🇭🇰)/i,
+      ),
+    );
   }
-  if (['tw-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(台|tw|tai.*wan|🇹🇼)/i))
+  if (["tw-auto"].includes(i.tag)) {
+    i.outbounds.push(
+      ...getTags(
+        proxies,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(台|tw|tai.*wan|🇹🇼)/i,
+      ),
+    );
   }
-  if (['jp-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(日本|jp|japan|🇯🇵)/i))
+  if (["jp-auto"].includes(i.tag)) {
+    i.outbounds.push(
+      ...getTags(
+        proxies,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(日本|jp|japan|🇯🇵)/i,
+      ),
+    );
   }
-  if (['sg-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(新|sg|singapore|🇸🇬)/i))
+  if (["sg-auto"].includes(i.tag)) {
+    i.outbounds.push(
+      ...getTags(
+        proxies,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(新|sg|singapore|🇸🇬)/i,
+      ),
+    );
   }
-  if (['us-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(美|us|united.*states|🇺🇸)/i))
+  if (["us-auto"].includes(i.tag)) {
+    i.outbounds.push(
+      ...getTags(
+        proxies,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(美|us|united.*states|🇺🇸)/i,
+      ),
+    );
   }
-  if (['noCN-auto'].includes(i.tag)) {
-    i.outbounds.push(...getTags(proxies, /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置|港|hk|hongkong|Hong Kong|🇭🇰|台|🇹🇼|TW|Taiwan))/i))
-}})
+  if (["noCN-auto"].includes(i.tag)) {
+    i.outbounds.push(
+      ...getTags(
+        proxies,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置|港|hk|hongkong|Hong Kong|🇭🇰|台|🇹🇼|TW|Taiwan)).*(yt)/i,
+      ),
+    );
+  }
+});
 
-config.outbounds.forEach(outbound => {
+config.outbounds.forEach((outbound) => {
   if (Array.isArray(outbound.outbounds) && outbound.outbounds.length === 0) {
     if (!compatible) {
-      config.outbounds.push(compatible_outbound)
-      compatible = true
+      config.outbounds.push(compatible_outbound);
+      compatible = true;
     }
     outbound.outbounds.push(compatible_outbound.tag);
   }
 });
 
-$content = JSON.stringify(config, null, 2)
+$content = JSON.stringify(config, null, 2);
 
 function getTags(proxies, regex) {
-  return (regex ? proxies.filter(p => regex.test(p.tag)) : proxies).map(p => p.tag)
+  return (regex ? proxies.filter((p) => regex.test(p.tag)) : proxies).map(
+    (p) => p.tag,
+  );
 }
