@@ -23,7 +23,7 @@ config.outbounds.map((i) => {
     i.outbounds.push(
       ...getTags(
         proxies,
-        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(港|hk|hong.*kong|🇭🇰)/i,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(\b(港|hk|hong.*kong)\b|🇭🇰)/i,
       ),
     );
   }
@@ -31,7 +31,7 @@ config.outbounds.map((i) => {
     i.outbounds.push(
       ...getTags(
         proxies,
-        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(台|tw|tai.*wan|🇹🇼)/i,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(\b(tw|台|taiwan)\b|🇹🇼)/i,
       ),
     );
   }
@@ -39,7 +39,7 @@ config.outbounds.map((i) => {
     i.outbounds.push(
       ...getTags(
         proxies,
-        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(日本|jp|japan|🇯🇵)/i,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(\b(日本|jp|japan)\b|🇯🇵)/i,
       ),
     );
   }
@@ -47,7 +47,7 @@ config.outbounds.map((i) => {
     i.outbounds.push(
       ...getTags(
         proxies,
-        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(新|sg|singapore|🇸🇬)/i,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(\b(sg|新加坡|singapore)\b|🇸🇬)/i,
       ),
     );
   }
@@ -55,7 +55,7 @@ config.outbounds.map((i) => {
     i.outbounds.push(
       ...getTags(
         proxies,
-        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(美|us|united.*states|🇺🇸)/i,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置)).*(\b(美|us|united.*states)\b|🇺🇸)/i,
       ),
     );
   }
@@ -63,7 +63,7 @@ config.outbounds.map((i) => {
     i.outbounds.push(
       ...getTags(
         proxies,
-        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置|港|hk|hongkong|Hong Kong|🇭🇰|台|🇹🇼|TW|Taiwan)).*(yt)/i,
+        /^(?!.*(?:网站|网址|获取|订阅|流量|到期|余量|续费|过期|重置|\b(港|hk|hongkong|Hong Kong|TW|Taiwan|台)\b|🇭🇰|🇹🇼)).*(yt)/i,
       ),
     );
   }
