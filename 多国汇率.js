@@ -1,9 +1,12 @@
 export default async function (ctx) {
   // 请求基础汇率数据
   const apiUrl = "https://api.exchangerate-api.com/v4/latest/USD";
+  // 1. 统一 UI 规范颜色
   const C = {
-    bg: { light: "#FFFFFF", dark: "#121212" },
-    text: { light: "#1C1C1E", dark: "#FFFFFF" },
+    bg: { light: "#FFFFFF", dark: "#121212" }, // 背景色
+    text: { light: "#1C1C1E", dark: "#FFFFFF" }, // 主文字颜色
+    dim: { light: "#8E8E93", dark: "#8E8E93" }, // 次要文字/更新时间颜色
+    line: { light: "#34C759", dark: "#30D158" }, // 汇率数字颜色（绿色）
   };
   let rates = {};
   let isError = false;
@@ -139,14 +142,14 @@ export default async function (ctx) {
             type: "text",
             text: item.name,
             font: { size: "subheadline", weight: "medium" },
-            textColor: "#FFFFFF",
+            textColor: C.text,
             flex: 1,
           },
           {
             type: "text",
             text: item.rate,
             font: { size: "subheadline", weight: "bold" },
-            textColor: "#34C759",
+            textColor: C.line,
           },
         ],
       });
@@ -199,7 +202,7 @@ export default async function (ctx) {
                 size: isSmall ? "footnote" : "subheadline",
                 weight: "medium",
               },
-              textColor: "#FFFFFF",
+              textColor: C.text,
               flex: 1,
             },
             {
@@ -209,7 +212,7 @@ export default async function (ctx) {
                 size: isSmall ? "footnote" : "subheadline",
                 weight: "bold",
               },
-              textColor: "#34C759",
+              textColor: C.line,
             },
           ],
         });
@@ -229,12 +232,7 @@ export default async function (ctx) {
   // 构建最终配置
   return {
     type: "widget",
-    backgroundGradient: {
-      type: "linear",
-      backgroundColor: C.bg,
-      startPoint: { x: 0, y: 0 },
-      endPoint: { x: 1, y: 1 },
-    },
+    backgroundColor: C.bg,
     padding: paddingVal,
     gap: 0,
     children: [
@@ -278,7 +276,7 @@ export default async function (ctx) {
             type: "text",
             text: "更新于",
             font: { size: "caption2" },
-            textColor: C.text,
+            textColor: C.dim,
           },
           {
             type: "date",
