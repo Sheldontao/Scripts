@@ -246,7 +246,7 @@ export default async function (ctx) {
           {
             type: "image",
             src: "sf-symbol:banknote.fill",
-            color: C.text,
+            color: "#FF9500",
             width: 16,
             height: 16,
           },
