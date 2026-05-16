@@ -1033,7 +1033,10 @@ function Env(t, e) {
       let e = this.getval(t);
       if (/^@/.test(t)) {
         const match = /^@(.*?)\.(.*?)$/.exec(t);
-        if (!match) { e = ""; return e; }
+        if (!match) {
+          e = "";
+          return e;
+        }
         const [, s, i] = match,
           r = s ? this.getval(s) : "";
         if (r)
@@ -1294,15 +1297,13 @@ function Env(t, e) {
       s
         ? this.log(
             "",
-            `\n
-${this.name},
+            `${this.name},
 !`,
             t.stack,
           )
         : this.log(
             "",
-            `\n
-${this.name},
+            `${this.name},
 !`,
             t,
           );
@@ -1315,8 +1316,7 @@ ${this.name},
         s = (e - this.startTime) / 1e3;
       (this.log(
         "",
-        `\n
-${this.name},
+        `${this.name},
 ! ${s}
 `,
       ),
