@@ -15,13 +15,8 @@ const LOG_LEVELS = {
   ERROR: 40,
 };
 const DEFAULT_LOG_LEVEL = "WARNING";
-const runtimeArgument = (() => {
-  if (typeof $argument === "object" && $argument !== null) return $argument;
-  if (typeof $argument === "string") {
-    try { return JSON.parse($argument); } catch (e) { return {}; }
-  }
-  return {};
-})();
+const runtimeArgument =
+  typeof $argument === "object" && $argument !== null ? $argument : {};
 
 function normalizeLogLevel(rawLevel) {
   if (typeof rawLevel !== "string") {
@@ -172,18 +167,12 @@ const getCachedRegexes = (key, argValue) => {
 
   const regexes = [];
   try {
-    let parsedRegexStrs;
-    if (typeof sourceRegexStrs === "string") {
-      parsedRegexStrs = JSON.parse(sourceRegexStrs);
-    } else if (Array.isArray(sourceRegexStrs)) {
-      parsedRegexStrs = sourceRegexStrs;
-    } else {
-      parsedRegexStrs = [];
-    }
+    const parsedRegexStrs = JSON.parse(sourceRegexStrs);
     if (Array.isArray(parsedRegexStrs)) {
       for (const str of parsedRegexStrs) {
         try {
           regexes.push(new RegExp(str));
+          // Removed the "Added regex filter" log here to reduce verbosity
         } catch (e) {
           logWarning(`Invalid regex provided: ${str}, Error: ${e}`);
         }
@@ -225,14 +214,7 @@ const getCachedCountsThreshold = (key, argValue) => {
 
   const counts = [];
   try {
-    let parsedCounts;
-    if (typeof sourceCounts === "string") {
-      parsedCounts = JSON.parse(sourceCounts);
-    } else if (Array.isArray(sourceCounts)) {
-      parsedCounts = sourceCounts;
-    } else {
-      parsedCounts = [];
-    }
+    const parsedCounts = JSON.parse(sourceCounts);
     if (
       Array.isArray(parsedCounts) &&
       parsedCounts.every((num) => typeof num === "number")
@@ -768,9 +750,7 @@ if (
                   JSON.stringify(blockedIds),
                   "fmz200.xhs.blocked_note_ids",
                 );
-                logDebug(
-                  `[Detail] cached blocked note id: ${blockedNoteId}`,
-                );
+                logDebug(`[Detail] cached blocked note id: ${blockedNoteId}`);
               }
               break;
             }
@@ -920,7 +900,7 @@ function Env(t, e) {
         (this.encoding = "utf-8"),
         (this.startTime = new Date().getTime()),
         Object.assign(this, e),
-        this.log("", `\n${this.name},\n!`));
+        this.log("", `${this.name}\n`));
     }
     isNode() {
       return "undefined" != typeof module && !!module.exports;
