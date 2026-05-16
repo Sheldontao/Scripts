@@ -15,8 +15,13 @@ const LOG_LEVELS = {
   ERROR: 40,
 };
 const DEFAULT_LOG_LEVEL = "WARNING";
-const runtimeArgument =
-  typeof $argument === "object" && $argument !== null ? $argument : {};
+const runtimeArgument = (() => {
+  if (typeof $argument === "object" && $argument !== null) return $argument;
+  if (typeof $argument === "string") {
+    try { return JSON.parse($argument); } catch (e) { return {}; }
+  }
+  return {};
+})();
 
 function normalizeLogLevel(rawLevel) {
   if (typeof rawLevel !== "string") {
@@ -167,12 +172,18 @@ const getCachedRegexes = (key, argValue) => {
 
   const regexes = [];
   try {
-    const parsedRegexStrs = JSON.parse(sourceRegexStrs);
+    let parsedRegexStrs;
+    if (typeof sourceRegexStrs === "string") {
+      parsedRegexStrs = JSON.parse(sourceRegexStrs);
+    } else if (Array.isArray(sourceRegexStrs)) {
+      parsedRegexStrs = sourceRegexStrs;
+    } else {
+      parsedRegexStrs = [];
+    }
     if (Array.isArray(parsedRegexStrs)) {
       for (const str of parsedRegexStrs) {
         try {
           regexes.push(new RegExp(str));
-          // Removed the "Added regex filter" log here to reduce verbosity
         } catch (e) {
           logWarning(`Invalid regex provided: ${str}, Error: ${e}`);
         }
@@ -214,7 +225,14 @@ const getCachedCountsThreshold = (key, argValue) => {
 
   const counts = [];
   try {
-    const parsedCounts = JSON.parse(sourceCounts);
+    let parsedCounts;
+    if (typeof sourceCounts === "string") {
+      parsedCounts = JSON.parse(sourceCounts);
+    } else if (Array.isArray(sourceCounts)) {
+      parsedCounts = sourceCounts;
+    } else {
+      parsedCounts = [];
+    }
     if (
       Array.isArray(parsedCounts) &&
       parsedCounts.every((num) => typeof num === "number")
