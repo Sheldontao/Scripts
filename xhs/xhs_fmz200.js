@@ -900,7 +900,7 @@ function Env(t, e) {
         (this.encoding = "utf-8"),
         (this.startTime = new Date().getTime()),
         Object.assign(this, e),
-        this.log("", `${this.name}\n`));
+        this.log("", `${this.name}`));
     }
     isNode() {
       return "undefined" != typeof module && !!module.exports;
@@ -1032,7 +1032,9 @@ function Env(t, e) {
     getdata(t) {
       let e = this.getval(t);
       if (/^@/.test(t)) {
-        const [, s, i] = /^@(.*?)\.(.*?)$/.exec(t),
+        const match = /^@(.*?)\.(.*?)$/.exec(t);
+        if (!match) { e = ""; return e; }
+        const [, s, i] = match,
           r = s ? this.getval(s) : "";
         if (r)
           try {
