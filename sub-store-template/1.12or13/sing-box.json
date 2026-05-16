@@ -38,10 +38,21 @@
       },
       {
         "domain_suffix": [".local", ".lan", "miwifi.com"],
+        "rule_set": "private",
         "server": "local"
       },
       {
-        "rule_set": "ads",
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "clash_mode": "AllowAds",
+            "invert": true
+          },
+          {
+            "rule_set": "ads"
+          }
+        ],
         "action": "predefined"
       },
       {
@@ -101,15 +112,14 @@
             "rule_set": "cn_ip"
           }
         ],
-        "server": "dns_direct"
+        "server": "local"
       },
       {
         "query_type": ["A", "AAAA"],
         "server": "fakeip"
       }
     ],
-    "independent_cache": true,
-    "client_subnet": "222.17.11.0/24"
+    "independent_cache": true
   },
   "ntp": {
     "enabled": true,
@@ -149,8 +159,8 @@
         "jp-auto",
         "sg-auto",
         "us-auto",
-        "all",
-        "noCN-auto"
+        "noCN-auto",
+        "all"
       ],
       "default": "hk-auto"
     },
@@ -165,9 +175,10 @@
         "jp-auto",
         "sg-auto",
         "us-auto",
-        "all",
-        "noCN-auto"
-      ]
+        "noCN-auto",
+        "all"
+      ],
+      "default": "noCN-auto"
     },
     {
       "tag": "apple_cn",
@@ -267,8 +278,8 @@
         "jp-auto",
         "sg-auto",
         "us-auto",
-        "all",
-        "noCN-auto"
+        "noCN-auto",
+        "all"
       ],
       "default": "noCN-auto"
     },
@@ -593,7 +604,14 @@
         "tag": "ads",
         "type": "remote",
         "format": "binary",
-        "url": "https://ghfast.top/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/sing-box-ruleset/ads.srs",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads.srs",
+        "download_detour": "direct"
+      },
+      {
+        "tag": "private",
+        "type": "remote",
+        "format": "binary",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/private.srs",
         "download_detour": "direct"
       }
     ],
