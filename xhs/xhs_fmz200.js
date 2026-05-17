@@ -899,8 +899,7 @@ function Env(t, e) {
         (this.logSeparator = "\n"),
         (this.encoding = "utf-8"),
         (this.startTime = new Date().getTime()),
-        Object.assign(this, e),
-        this.log(`${this.name}`));
+        Object.assign(this, e));
     }
     isNode() {
       return "undefined" != typeof module && !!module.exports;
@@ -1302,7 +1301,7 @@ function Env(t, e) {
     done(t = {}) {
       const e = new Date().getTime(),
         s = (e - this.startTime) / 1e3;
-      (this.log(`${this.name},! ${s}`),
+      (this.log("", `${this.name}, 结束! 🕛 ${s} 秒`),
         this.log(),
         this.isSurge() || this.isQuanX() || this.isLoon()
           ? $done(t)
