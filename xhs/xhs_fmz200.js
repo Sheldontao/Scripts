@@ -889,7 +889,7 @@ function Env(t, e) {
   }
   return new (class {
     constructor(t, e) {
-      (((this.name = t),
+      ((this.name = t),
       (this.http = new s(this)),
       (this.data = null),
       (this.dataFile = "box.dat"),
@@ -899,8 +899,8 @@ function Env(t, e) {
       (this.logSeparator = "\n"),
       (this.encoding = "utf-8"),
       (this.startTime = new Date().getTime()),
-      Object.assign(this, e)),
-        this.log(`${this.name}, 开始! 🕛 ${this.startTime}`));
+      Object.assign(this, e),
+      this.log(`${this.name}, 开始! 🕛 ${new Date(this.startTime).toLocaleString()}`));
     }
     isNode() {
       return "undefined" != typeof module && !!module.exports;
@@ -1302,7 +1302,7 @@ function Env(t, e) {
     done(t = {}) {
       const e = new Date().getTime(),
         s = (e - this.startTime) / 1e3;
-      (this.log("", `${this.name}, 结束! 🕛 ${s} 秒`),
+      (this.log(`${this.name}, 结束! 🕛 ${new Date(e).toLocaleString()} (耗时 ${s} 秒)`),
         this.log(),
         this.isSurge() || this.isQuanX() || this.isLoon()
           ? $done(t)
