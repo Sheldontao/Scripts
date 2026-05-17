@@ -900,7 +900,7 @@ function Env(t, e) {
         (this.encoding = "utf-8"),
         (this.startTime = new Date().getTime()),
         Object.assign(this, e),
-        this.log("", `${this.name}`));
+        this.log(`${this.name}`));
     }
     isNode() {
       return "undefined" != typeof module && !!module.exports;
@@ -1294,19 +1294,7 @@ function Env(t, e) {
     }
     logErr(t, e) {
       const s = !this.isSurge() && !this.isQuanX() && !this.isLoon();
-      s
-        ? this.log(
-            "",
-            `${this.name},
-!`,
-            t.stack,
-          )
-        : this.log(
-            "",
-            `${this.name},
-!`,
-            t,
-          );
+      s ? this.log(`${this.name},!`, t.stack) : this.log(`${this.name},!`, t);
     }
     wait(t) {
       return new Promise((e) => setTimeout(e, t));
@@ -1314,12 +1302,7 @@ function Env(t, e) {
     done(t = {}) {
       const e = new Date().getTime(),
         s = (e - this.startTime) / 1e3;
-      (this.log(
-        "",
-        `${this.name},
-! ${s}
-`,
-      ),
+      (this.log(`${this.name},! ${s}`),
         this.log(),
         this.isSurge() || this.isQuanX() || this.isLoon()
           ? $done(t)
