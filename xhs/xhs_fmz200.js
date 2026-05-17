@@ -890,17 +890,19 @@ function Env(t, e) {
   return new (class {
     constructor(t, e) {
       ((this.name = t),
-      (this.http = new s(this)),
-      (this.data = null),
-      (this.dataFile = "box.dat"),
-      (this.logs = []),
-      (this.isMute = !1),
-      (this.isNeedRewrite = !1),
-      (this.logSeparator = "\n"),
-      (this.encoding = "utf-8"),
-      (this.startTime = new Date().getTime()),
-      Object.assign(this, e),
-      this.log(`${this.name}, 开始! 🕛 ${new Date(this.startTime).toLocaleString()}`));
+        (this.http = new s(this)),
+        (this.data = null),
+        (this.dataFile = "box.dat"),
+        (this.logs = []),
+        (this.isMute = !1),
+        (this.isNeedRewrite = !1),
+        (this.logSeparator = "\n"),
+        (this.encoding = "utf-8"),
+        (this.startTime = new Date().getTime()),
+        Object.assign(this, e),
+        this.log(
+          `${this.name}, 开始! 🕛 ${new Date(this.startTime).toLocaleString()}`,
+        ));
     }
     isNode() {
       return "undefined" != typeof module && !!module.exports;
@@ -1302,8 +1304,9 @@ function Env(t, e) {
     done(t = {}) {
       const e = new Date().getTime(),
         s = (e - this.startTime) / 1e3;
-      (this.log(`${this.name}, 结束! 🕛 ${new Date(e).toLocaleString()} (耗时 ${s} 秒)`),
-        this.log(),
+      (this.log(
+        `${this.name}, 结束! 🕛 ${new Date(e).toLocaleString()} (耗时 ${s} 秒)`,
+      ),
         this.isSurge() || this.isQuanX() || this.isLoon()
           ? $done(t)
           : this.isNode() && process.exit(1));
