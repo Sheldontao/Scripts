@@ -70,7 +70,7 @@ if (isRequestPhase) {
   if (url.includes("/api/sns/v1/note/videofeed/exit")) {
     let reqBody = $request.body;
     if (!reqBody) {
-      $done({});
+      $.done({});
     } else {
       try {
         const reqObj = JSON.parse(reqBody);
@@ -118,19 +118,19 @@ if (isRequestPhase) {
           logInfo(
             `[Exit] merged blocked note ids: ${Array.from(idSet).length}`,
           );
-          $done({ body: JSON.stringify(reqObj) });
+          $.done({ body: JSON.stringify(reqObj) });
         }
       } catch (e) {
         logError(`[Exit] request body parse/patch failed: ${e}`);
       }
     }
   }
-  $done({});
+  $.done({});
 }
 
 let rsp_body = $response.body;
 if (!rsp_body) {
-  $done({});
+  $.done({});
 }
 let obj = JSON.parse(rsp_body);
 
@@ -237,7 +237,7 @@ if (
   url.includes("/o_live_p2p_mobilesdk")
 ) {
   logInfo("拦截到直连/配置请求: " + url);
-  $done({
+  $.done({
     body: JSON.stringify({ code: 0, success: true, msg: "Blocked", data: {} }),
   });
 }
@@ -340,7 +340,7 @@ if (url.includes("/note/live_photo/save")) {
   // console.log("读取缓存val：" + rsp);
   if (rsp == null || rsp.length === 0) {
     logWarning("缓存无内容，返回原body");
-    $done({ body: rsp_body });
+    $.done({ body: rsp_body });
   }
   const cache_body = JSON.parse(rsp);
   let new_data = [];
@@ -786,7 +786,7 @@ if (url.includes("/note/detailfeed/preload")) {
   }
 }
 
-$done({ body: JSON.stringify(obj) });
+$.done({ body: JSON.stringify(obj) });
 
 // 小红书画质增强：加载2K分辨率的图片
 function imageEnhance(jsonStr) {
