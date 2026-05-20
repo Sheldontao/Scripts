@@ -1,11 +1,11 @@
 # description: "transvert mihomo ruleset to egern format"
 # author: "leo"
 scriptings:
-  - http-response:
+  - http_response:
       match: ^https?:\/\/raw\.githubusercontent\.com\/MetaCubeX\/meta-rules-dat\/meta\/geo\/geosite\/.*\.list
       name: "transvert mihomo ruleset to egern format"
-      script-url: https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/MtoEgernRule/MihomoList_to_Egern.js
-      body-required: true
+      script_url: https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/MtoEgernRule/MihomoList_to_Egern.js
+      body_required: true
       max_size: 2097152
 mitm:
   hostnames:
