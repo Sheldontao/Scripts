@@ -1061,7 +1061,7 @@ function MagicJS(e = "MagicJS", t = "INFO") {
           threshold = threshold || "50,0,0";
         }
         const t = this.data.read("magic_bark_url");
-        (this.configSource = configSource),
+        (this.configSource = configSource,
           e && this.logger.setLevel(e.toUpperCase()),
           (this.threshold = threshold),
           (this.keywordBlockArg = keywordBlockArg),
