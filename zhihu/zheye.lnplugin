@@ -12,6 +12,7 @@ LogLevel = select, "INFO", "WARN", "ERROR", "DEBUG", tag=zheye日志等级
 Threshold = input, "10,10,0", tag=minimum vote/collect/comment
 KeywordBlock = input, "["吴京","华为"]", tag=推荐页关键词列表
 CustomTags = input, "付费内容:查看完整内容|查看全部章节;营销推广:ad-link-card|xg.zhihu.com|营销平台;购物推广:mcn-link-card", tag=自定义内容标签
+Config = select, "Argument","PersistentStore", tag=配置读取方式
 [Rule]
 # 拦截HTTP DNS
 IP-CIDR, 103.41.167.237/32, REJECT, no-resolve
@@ -103,13 +104,13 @@ http-request ^https?:\/\/api\.zhihu\.com\/feed-root\/block requires-body=1,scrip
 http-response ^https?:\/\/api\.zhihu\.com\/root\/tab\/v\d requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_优化推荐标签页
 
 # 推荐页 - 移除黑名单用户发布的文章、去除广告，及自定义一些屏蔽项目
-http-response ^https:\/\/(api|web-render)\.zhihu\.com\/topstory\/recommend requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_推荐页优化,argument=[{LogLevel},{Threshold},{KeywordBlock}]
+http-response ^https:\/\/(api|web-render)\.zhihu\.com\/topstory\/recommend requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_推荐页优化,argument=[{LogLevel},{Threshold},{KeywordBlock},{Config}]
 
 # 回答列表 - 移除黑名单用户的回答及去除广告
-http-response ^https:\/\/api\.zhihu\.com\/questions\/\d+\/feeds? requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_回答列表优化,argument=[{LogLevel},{Threshold}]
+http-response ^https:\/\/api\.zhihu\.com\/questions\/\d+\/feeds? requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_回答列表优化,argument=[{LogLevel},{Threshold},{Config}]
 
 # 回答信息流 - 移除黑名单用户的回答、去除广告
-http-response ^https?:\/\/api\.zhihu\.com\/next-render requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_回答信息流优化,argument=[{LogLevel},{Threshold}]
+http-response ^https?:\/\/api\.zhihu\.com\/next-render requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_回答信息流优化,argument=[{LogLevel},{Threshold},{Config}]
 
 # 评论页 - 去除黑名单用户发表的评论
 http-response ^https?:\/\/api\.zhihu\.com\/(comment_v\d\/)?(answers|comments?|articles|pins)\/\d+\/(root_|child_)?comments? requires-body=1,script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/zhihu/zheye.mini.js,tag=哲也_评论优化
