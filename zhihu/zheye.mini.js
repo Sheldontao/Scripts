@@ -313,14 +313,7 @@ function parseKeywordBlockArgument(e) {
 function syncKeywordBlockFromArgument(e, t = []) {
   if ("PersistentStore" === $.configSource) return t;
   const r = parseKeywordBlockArgument($.keywordBlockArg || "");
-  if (r.length > 0)
-    return (
-      $.data.write(keywordBlockKey, r, e),
-      $.logger.info(
-        `关键词列表已由插件参数覆盖并写入持久化：argument=${r.length}, local=${t.length}`,
-      ),
-      r
-    );
+  if (r.length > 0) return r;
   return t;
 }
 function parseCustomTagsArg(e = "") {
