@@ -1032,13 +1032,26 @@ function MagicJS(e = "MagicJS", t = "INFO") {
             : void 0),
         void 0 !== this.data)
       ) {
-        let e =
-          this.data.read("zhihu_settings_loglevel") ||
-          this.data.read("magic_loglevel");
-        let threshold = this.data.read("zhihu_settings_threshold") || "50,0,0";
-        let keywordBlockArg = "";
-        let customTagsArg = "";
+        let configSource = "Argument";
         if (this.argument) {
+          if ("string" == typeof this.argument) {
+            const m = this.argument.match(/Config=([^&,]*)/i);
+            m && (configSource = m[1]);
+          } else if ("object" == typeof this.argument) {
+            configSource = this.argument.Config || configSource;
+          }
+        }
+        let e = "",
+          threshold = "",
+          keywordBlockArg = "",
+          customTagsArg = "";
+        if ("PersistentStore" === configSource) {
+          e =
+            this.data.read("zhihu_settings_loglevel") ||
+            this.data.read("magic_loglevel");
+          threshold =
+            this.data.read("zhihu_settings_threshold") || "50,0,0";
+        } else if (this.argument) {
           if ("string" == typeof this.argument) {
             const t = this.argument.match(/LogLevel=([^&,]*)/i);
             t && (e = t[1]);
@@ -1054,9 +1067,11 @@ function MagicJS(e = "MagicJS", t = "INFO") {
             keywordBlockArg = this.argument.KeywordBlock || keywordBlockArg;
             customTagsArg = this.argument.CustomTags || customTagsArg;
           }
+          threshold = threshold || "50,0,0";
         }
         const t = this.data.read("magic_bark_url");
-        (e && this.logger.setLevel(e.toUpperCase()),
+        (this.configSource = configSource),
+          e && this.logger.setLevel(e.toUpperCase()),
           (this.threshold = threshold),
           (this.keywordBlockArg = keywordBlockArg),
           (this.customTagsArg = customTagsArg),
