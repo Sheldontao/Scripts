@@ -22,7 +22,7 @@ function getUserInfo() {
 }
 function modifyAppTabConfig() {
   try {
-    if (!1 === $.data.read("zhihu_settings_app_conf", !1)) return null;
+    if (!1 === $.data.read("zhihu_settings_app_conf", !0)) return null;
     if (!1 === $.data.read("zhihu_settings_remove_live_tab", !0)) return null;
     const e = JSON.parse($.response.body),
       t = ["follow", "recommend"];
@@ -141,7 +141,7 @@ function processUserInfo() {
       const t = { id: e.id, is_vip: e.vip_info.is_vip ?? !1 };
       if (
         ($.data.write(currentUserInfoKey, t),
-        !1 !== $.data.read("zhihu_settings_blocked_keywords") &&
+        !1 !== $.data.read("zhihu_settings_fake_vip") &&
           !1 === e.vip_info.is_vip)
       ) {
         e.vip_info.is_vip = !0;
@@ -443,7 +443,7 @@ async function removeRecommend() {
         ),
         recommend_pin: $.data.read("zhihu_settings_recommend_pin", !0),
         remove_live_tab: $.data.read("zhihu_settings_remove_live_tab", !0),
-        blocked_users: $.data.read("zhihu_settings_blocked_users", !1),
+        blocked_users: $.data.read("zhihu_settings_blocked_users", !0),
         blocked_keywords: $.data.read("zhihu_settings_blocked_keywords", !0),
         check_paid_content: $.data.read(
           "zhihu_settings_check_paid_content",
@@ -677,8 +677,9 @@ function removeQuestions() {
   }
 }
 function insertContentTip() {
-  const e = JSON.parse($.response.body ?? "{}"),
-    t = getAllTagConfigs();
+  const e = JSON.parse($.response.body ?? "{}");
+  if (!1 === $.data.read("zhihu_settings_answer_tip", !0)) return e;
+  const t = getAllTagConfigs();
   if (e?.endorsement) {
     for (const [r, n] of Object.entries(t))
       if (
@@ -1033,8 +1034,7 @@ function MagicJS(e = "MagicJS", t = "INFO") {
           e =
             this.data.read("zhihu_settings_loglevel") ||
             this.data.read("magic_loglevel");
-          threshold =
-            this.data.read("zhihu_settings_threshold") || "50,0,0";
+          threshold = this.data.read("zhihu_settings_threshold") || "50,0,0";
         } else if (this.argument) {
           if ("string" == typeof this.argument) {
             const t = this.argument.match(/LogLevel=([^&,]*)/i);
@@ -1054,7 +1054,7 @@ function MagicJS(e = "MagicJS", t = "INFO") {
           threshold = threshold || "50,0,0";
         }
         const t = this.data.read("magic_bark_url");
-        (this.configSource = configSource,
+        ((this.configSource = configSource),
           e && this.logger.setLevel(e.toUpperCase()),
           (this.threshold = threshold),
           (this.keywordBlockArg = keywordBlockArg),
