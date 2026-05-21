@@ -311,8 +311,9 @@ function parseKeywordBlockArgument(e) {
     .filter((e) => !!e);
 }
 function syncKeywordBlockFromArgument(e, t = []) {
+  if ("PersistentStore" === $.configSource) return t;
   const r = parseKeywordBlockArgument($.keywordBlockArg || "");
-  if (r.length > t.length)
+  if (r.length > 0)
     return (
       $.data.write(keywordBlockKey, r, e),
       $.logger.info(
@@ -341,23 +342,13 @@ function parseCustomTagsArg(e = "") {
 
 function getAllTagConfigs() {
   try {
-    const fromBoxjs = $.data.read("zhihu_settings_custom_tags", "") || "";
-    const fromArg = $.customTagsArg || "";
-    const parsedBoxjs = parseCustomTagsArg(fromBoxjs);
-    const parsedArg = parseCustomTagsArg(fromArg);
-    const boxjsCount = Object.keys(parsedBoxjs).length;
-    const argCount = Object.keys(parsedArg).length;
     let finalTags;
-    if (argCount > boxjsCount) {
-      finalTags = parsedArg;
-      if (argCount > 0) {
-        $.data.write("zhihu_settings_custom_tags", fromArg);
-        $.logger.info(
-          `自定义标签已由插件参数覆盖并写入持久化：argument=${argCount}, local=${boxjsCount}`,
-        );
-      }
+    if ("PersistentStore" === $.configSource) {
+      const fromBoxjs = $.data.read("zhihu_settings_custom_tags", "") || "";
+      finalTags = parseCustomTagsArg(fromBoxjs);
     } else {
-      finalTags = parsedBoxjs;
+      const fromArg = $.customTagsArg || "";
+      finalTags = parseCustomTagsArg(fromArg);
     }
     const r = {
       付费内容: "查看完整内容|查看全部章节",
