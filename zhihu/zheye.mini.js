@@ -439,7 +439,7 @@ async function removeRecommend() {
         remove_article: $.data.read("zhihu_settings_remove_article", !1),
         remove_advertorial: $.data.read(
           "zhihu_settings_remove_advertorial",
-          !0,
+          !1,
         ),
         recommend_pin: $.data.read("zhihu_settings_recommend_pin", !0),
         remove_live_tab: $.data.read("zhihu_settings_remove_live_tab", !0),

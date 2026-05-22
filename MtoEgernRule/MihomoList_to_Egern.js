@@ -5,6 +5,13 @@ export default async function (ctx) {
   const body = await ctx.response.text();
   const url = ctx.request.url;
 
+  // 解析 query 参数，例如 ?no_resolve=false
+  // 注意：URL fragment (#xxx) 不会出现在 HTTP 请求中，请使用 query 参数
+  const parsedUrl = new URL(url);
+  const noResolveParam = parsedUrl.searchParams.get('no_resolve');
+  // 默认 true，仅当 ?no_resolve=false 时设为 false
+  const noResolve = noResolveParam !== 'false';
+
   let lines = body.split("\n").filter((line) => {
     const t = line.trim();
     return t && !t.startsWith("#") && !t.startsWith("//");
@@ -31,7 +38,7 @@ export default async function (ctx) {
     });
 
     let output = [];
-    output.push("no_resolve: true");
+    output.push(`no_resolve: ${noResolve}`);
     if (ipv4.length > 0) {
       output.push("ip_cidr_set:");
       ipv4.forEach((c) => output.push("  - " + c));
