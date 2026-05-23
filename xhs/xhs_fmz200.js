@@ -656,7 +656,12 @@ if (
           for (const regex of commentRegexes.author) {
             if (regex.test(comment.content)) {
               logInfo(`Author comment matched author_comment_regex "${regex.source}", replacing all comments`);
-              obj.data.comments = [{ content: `命中xhsplus的评论正则${regex.source}` }];
+              const firstComment = obj.data.comments[0];
+              firstComment.content = `该条评论命中${regex.source}规则已屏蔽`;
+              if (firstComment.sub_comments) {
+                delete firstComment.sub_comments;
+              }
+              obj.data.comments = [firstComment];
               skipLivePhoto = true;
               break;
             }
@@ -670,7 +675,12 @@ if (
               for (const regex of commentRegexes.author) {
                 if (regex.test(sub.content)) {
                   logInfo(`Author sub-comment matched author_comment_regex "${regex.source}", replacing all comments`);
-                  obj.data.comments = [{ content: `命中xhsplus的评论正则${regex.source}` }];
+                  const firstComment = obj.data.comments[0];
+                  firstComment.content = `该条评论命中${regex.source}规则已屏蔽`;
+                  if (firstComment.sub_comments) {
+                    delete firstComment.sub_comments;
+                  }
+                  obj.data.comments = [firstComment];
                   skipLivePhoto = true;
                   break;
                 }
