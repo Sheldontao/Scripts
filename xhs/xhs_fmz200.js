@@ -184,6 +184,65 @@ const getCachedRegexes = (key, argValue) => {
   return regexes;
 };
 
+const getCachedCommentRegex = (key, argValue) => {
+  let cachedRegexStrs = $.getdata(key);
+  let sourceRegexStrs = '{"author_comment_regex":[],"general_comment_regex":[]}';
+  let logSource = "empty";
+
+  if (argValue) {
+    if (argValue !== cachedRegexStrs) {
+      logInfo(`Argument for ${key} differs from cache. Updating cache.`);
+      try {
+        $.setdata(argValue, key);
+        logSource = "argument (updated cache)";
+      } catch (e) {
+        logError(`Error caching comment regexes for ${key}: ${e}`);
+        logSource = "argument (cache update failed)";
+      }
+    } else {
+      logSource = "argument (same as cache)";
+    }
+    sourceRegexStrs = argValue;
+  } else if (cachedRegexStrs) {
+    logSource = "cache";
+    sourceRegexStrs = cachedRegexStrs;
+  } else {
+    logSource = "empty";
+  }
+
+  logDebug(`Using comment regexes for ${key} from: ${logSource}`);
+
+  const result = { general: [], author: [] };
+  try {
+    const parsed = JSON.parse(sourceRegexStrs);
+    if (parsed && typeof parsed === "object") {
+      if (Array.isArray(parsed.general_comment_regex)) {
+        for (const str of parsed.general_comment_regex) {
+          if (str === "") continue;
+          try {
+            result.general.push(new RegExp(str));
+          } catch (e) {
+            logWarning(`Invalid general_comment_regex: "${str}", Error: ${e}`);
+          }
+        }
+      }
+      if (Array.isArray(parsed.author_comment_regex)) {
+        for (const str of parsed.author_comment_regex) {
+          if (str === "") continue;
+          try {
+            result.author.push(new RegExp(str));
+          } catch (e) {
+            logWarning(`Invalid author_comment_regex: "${str}", Error: ${e}`);
+          }
+        }
+      }
+    }
+  } catch (e) {
+    logWarning(`Error parsing comment regex object for ${key}: ${e}`);
+  }
+  return result;
+};
+
 const getCachedCountsThreshold = (key, argValue) => {
   let cachedCountsStr = $.getdata(key);
   let sourceCounts = "[]";
@@ -583,9 +642,83 @@ if (
   url.includes("/api/sns/v3/note/comment/sub_comments?")
 ) {
   replaceRedIdWithFmz200(obj.data);
+  let skipLivePhoto = false;
+
+  // Comment regex filtering
+  const commentRegexes = getCachedCommentRegex("xhs_comment_regex", runtimeArgument.xhs_comment_regex);
+  const hasAuthorRegex = commentRegexes.author.length > 0;
+  const hasGeneralRegex = commentRegexes.general.length > 0;
+  if (hasAuthorRegex || hasGeneralRegex) {
+    if (hasAuthorRegex && obj.data?.comments?.length > 0) {
+      for (const comment of obj.data.comments) {
+        const isAuthor = comment.show_tags_v2?.some(t => t.type === "is_author");
+        if (isAuthor) {
+          for (const regex of commentRegexes.author) {
+            if (regex.test(comment.content)) {
+              logInfo(`Author comment matched author_comment_regex "${regex.source}", replacing all comments`);
+              obj.data.comments = [{ content: `命中xhsplus的评论正则${regex.source}` }];
+              skipLivePhoto = true;
+              break;
+            }
+          }
+          if (skipLivePhoto) break;
+        }
+        if (comment.sub_comments?.length > 0) {
+          for (const sub of comment.sub_comments) {
+            const isSubAuthor = sub.show_tags_v2?.some(t => t.type === "is_author");
+            if (isSubAuthor) {
+              for (const regex of commentRegexes.author) {
+                if (regex.test(sub.content)) {
+                  logInfo(`Author sub-comment matched author_comment_regex "${regex.source}", replacing all comments`);
+                  obj.data.comments = [{ content: `命中xhsplus的评论正则${regex.source}` }];
+                  skipLivePhoto = true;
+                  break;
+                }
+              }
+              if (skipLivePhoto) break;
+            }
+          }
+        }
+      }
+    }
+
+    if (!skipLivePhoto && hasGeneralRegex && obj.data?.comments?.length > 0) {
+      const filteredComments = [];
+      for (const comment of obj.data.comments) {
+        let matchGeneral = false;
+        for (const regex of commentRegexes.general) {
+          if (regex.test(comment.content)) {
+            logDebug(`Comment ${comment.id} matched general_comment_regex "${regex.source}", removing`);
+            matchGeneral = true;
+            break;
+          }
+        }
+        if (matchGeneral) continue;
+
+        if (comment.sub_comments?.length > 0) {
+          const filteredSubs = [];
+          for (const sub of comment.sub_comments) {
+            let matchSub = false;
+            for (const regex of commentRegexes.general) {
+              if (regex.test(sub.content)) {
+                logDebug(`Sub-comment ${sub.id} matched general_comment_regex "${regex.source}", removing`);
+                matchSub = true;
+                break;
+              }
+            }
+            if (!matchSub) filteredSubs.push(sub);
+          }
+          comment.sub_comments = filteredSubs;
+        }
+        filteredComments.push(comment);
+      }
+      obj.data.comments = filteredComments;
+    }
+  }
+
   let livePhotos = [];
   let note_id = "";
-  if (obj.data?.comments?.length > 0) {
+  if (obj.data?.comments?.length > 0 && !skipLivePhoto) {
     note_id = obj.data.comments[0].note_id;
     for (const comment of obj.data.comments) {
       // comment_type: 0-文字，2-图片/live，3-表情包

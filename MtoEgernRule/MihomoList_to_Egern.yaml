@@ -1,8 +1,8 @@
-# description: "transvert mihomo ruleset to egern format"
+# description: "transvert mihomo ruleset to egern format (support ?no_resolve=false)"
 # author: "leo"
 scriptings:
   - http_response:
-      match: ^https?:\/\/raw\.githubusercontent\.com\/MetaCubeX\/meta-rules-dat\/(?:refs\/heads\/)?meta\/geo\/(?:geosite|geoip)\/.*\.list
+      match: ^https?:\/\/raw\.githubusercontent\.com\/MetaCubeX\/meta-rules-dat\/(?:refs\/heads\/)?meta\/geo\/(?:geosite|geoip)\/.*\.list(?:\?.*)?$
       name: "transvert mihomo ruleset to egern format"
       script_url: https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/MtoEgernRule/MihomoList_to_Egern.js
       body_required: true

@@ -2,7 +2,7 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title Sync Chrome IP
+# @raycast.title Sync Chrome IP For AI
 # @raycast.mode silent
 # @raycast.packageName Tools
 
@@ -10,7 +10,7 @@
 # @raycast.icon 🌐
 # @raycast.description Quit Chrome, fetch current public IP from ipinfo.io, and update Chrome Local State
 
-CHROME_STATE="/Users/leonardox/Library/Application Support/Google/Chrome/Local State"
+CHROME_STATE="~/Library/Application Support/Google/Chrome/Local State"
 
 quit_chrome() {
   if pgrep -x "Google Chrome" > /dev/null 2>&1; then

@@ -22,7 +22,7 @@ function getUserInfo() {
 }
 function modifyAppTabConfig() {
   try {
-    if (!1 === $.data.read("zhihu_settings_app_conf", !1)) return null;
+    if (!1 === $.data.read("zhihu_settings_app_conf", !0)) return null;
     if (!1 === $.data.read("zhihu_settings_remove_live_tab", !0)) return null;
     const e = JSON.parse($.response.body),
       t = ["follow", "recommend"];
@@ -141,7 +141,7 @@ function processUserInfo() {
       const t = { id: e.id, is_vip: e.vip_info.is_vip ?? !1 };
       if (
         ($.data.write(currentUserInfoKey, t),
-        !1 !== $.data.read("zhihu_settings_blocked_keywords") &&
+        !1 !== $.data.read("zhihu_settings_fake_vip") &&
           !1 === e.vip_info.is_vip)
       ) {
         e.vip_info.is_vip = !0;
@@ -311,15 +311,9 @@ function parseKeywordBlockArgument(e) {
     .filter((e) => !!e);
 }
 function syncKeywordBlockFromArgument(e, t = []) {
+  if ("PersistentStore" === $.configSource) return t;
   const r = parseKeywordBlockArgument($.keywordBlockArg || "");
-  if (r.length > t.length)
-    return (
-      $.data.write(keywordBlockKey, r, e),
-      $.logger.info(
-        `关键词列表已由插件参数覆盖并写入持久化：argument=${r.length}, local=${t.length}`,
-      ),
-      r
-    );
+  if (r.length > 0) return r;
   return t;
 }
 function parseCustomTagsArg(e = "") {
@@ -341,23 +335,13 @@ function parseCustomTagsArg(e = "") {
 
 function getAllTagConfigs() {
   try {
-    const fromBoxjs = $.data.read("zhihu_settings_custom_tags", "") || "";
-    const fromArg = $.customTagsArg || "";
-    const parsedBoxjs = parseCustomTagsArg(fromBoxjs);
-    const parsedArg = parseCustomTagsArg(fromArg);
-    const boxjsCount = Object.keys(parsedBoxjs).length;
-    const argCount = Object.keys(parsedArg).length;
     let finalTags;
-    if (argCount > boxjsCount) {
-      finalTags = parsedArg;
-      if (argCount > 0) {
-        $.data.write("zhihu_settings_custom_tags", fromArg);
-        $.logger.info(
-          `自定义标签已由插件参数覆盖并写入持久化：argument=${argCount}, local=${boxjsCount}`,
-        );
-      }
+    if ("PersistentStore" === $.configSource) {
+      const fromBoxjs = $.data.read("zhihu_settings_custom_tags", "") || "";
+      finalTags = parseCustomTagsArg(fromBoxjs);
     } else {
-      finalTags = parsedBoxjs;
+      const fromArg = $.customTagsArg || "";
+      finalTags = parseCustomTagsArg(fromArg);
     }
     const r = {
       付费内容: "查看完整内容|查看全部章节",
@@ -455,11 +439,11 @@ async function removeRecommend() {
         remove_article: $.data.read("zhihu_settings_remove_article", !1),
         remove_advertorial: $.data.read(
           "zhihu_settings_remove_advertorial",
-          !0,
+          !1,
         ),
         recommend_pin: $.data.read("zhihu_settings_recommend_pin", !0),
         remove_live_tab: $.data.read("zhihu_settings_remove_live_tab", !0),
-        blocked_users: $.data.read("zhihu_settings_blocked_users", !1),
+        blocked_users: $.data.read("zhihu_settings_blocked_users", !0),
         blocked_keywords: $.data.read("zhihu_settings_blocked_keywords", !0),
         check_paid_content: $.data.read(
           "zhihu_settings_check_paid_content",
@@ -693,8 +677,9 @@ function removeQuestions() {
   }
 }
 function insertContentTip() {
-  const e = JSON.parse($.response.body ?? "{}"),
-    t = getAllTagConfigs();
+  const e = JSON.parse($.response.body ?? "{}");
+  if (!1 === $.data.read("zhihu_settings_answer_tip", !0)) return e;
+  const t = getAllTagConfigs();
   if (e?.endorsement) {
     for (const [r, n] of Object.entries(t))
       if (
@@ -1032,13 +1017,25 @@ function MagicJS(e = "MagicJS", t = "INFO") {
             : void 0),
         void 0 !== this.data)
       ) {
-        let e =
-          this.data.read("zhihu_settings_loglevel") ||
-          this.data.read("magic_loglevel");
-        let threshold = this.data.read("zhihu_settings_threshold") || "50,0,0";
-        let keywordBlockArg = "";
-        let customTagsArg = "";
+        let configSource = "Argument";
         if (this.argument) {
+          if ("string" == typeof this.argument) {
+            const m = this.argument.match(/Config=([^&,]*)/i);
+            m && (configSource = m[1]);
+          } else if ("object" == typeof this.argument) {
+            configSource = this.argument.Config || configSource;
+          }
+        }
+        let e = "",
+          threshold = "",
+          keywordBlockArg = "",
+          customTagsArg = "";
+        if ("PersistentStore" === configSource) {
+          e =
+            this.data.read("zhihu_settings_loglevel") ||
+            this.data.read("magic_loglevel");
+          threshold = this.data.read("zhihu_settings_threshold") || "50,0,0";
+        } else if (this.argument) {
           if ("string" == typeof this.argument) {
             const t = this.argument.match(/LogLevel=([^&,]*)/i);
             t && (e = t[1]);
@@ -1054,9 +1051,11 @@ function MagicJS(e = "MagicJS", t = "INFO") {
             keywordBlockArg = this.argument.KeywordBlock || keywordBlockArg;
             customTagsArg = this.argument.CustomTags || customTagsArg;
           }
+          threshold = threshold || "50,0,0";
         }
         const t = this.data.read("magic_bark_url");
-        (e && this.logger.setLevel(e.toUpperCase()),
+        ((this.configSource = configSource),
+          e && this.logger.setLevel(e.toUpperCase()),
           (this.threshold = threshold),
           (this.keywordBlockArg = keywordBlockArg),
           (this.customTagsArg = customTagsArg),

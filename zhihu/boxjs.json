@@ -71,10 +71,10 @@
         },
         {
           "id": "zhihu_settings_blocked_users",
-          "name": "黑名单屏蔽效果增强",
+          "name": "启用黑名单用户过滤",
           "val": true,
           "type": "boolean",
-          "desc": "增强知乎APP黑名单用户屏蔽效果"
+          "desc": "启用后自动拉黑用户并在推荐/回答/关注页过滤其内容"
         },
         {
           "id": "zhihu_settings_moments_stream",
@@ -119,13 +119,6 @@
           "desc": "屏蔽推荐页中的文章，默认不启用"
         },
         {
-          "id": "zhihu_settings_sys_msg",
-          "name": "屏蔽官方账号推广消息",
-          "val": true,
-          "type": "boolean",
-          "desc": "屏蔽消息页内的官方账号推广消息"
-        },
-        {
           "id": "zhihu_settings_answer_tip",
           "name": "付费内容/营销推广/购物推广提醒",
           "val": true,
@@ -134,10 +127,10 @@
         },
         {
           "id": "zhihu_settings_check_paid_content",
-          "name": "推荐页中提示付费/营销/购物推广",
+          "name": "推荐页过滤付费/营销/购物内容",
           "val": false,
           "type": "boolean",
-          "desc": "需要额外消耗流量，可能会影响推荐页加载速度"
+          "desc": "过滤推荐页中的付费、营销、购物推广内容。注意：此为过滤而非提示，需要额外消耗流量"
         },
         {
           "id": "zhihu_settings_request_content",
