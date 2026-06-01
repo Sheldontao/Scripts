@@ -245,7 +245,7 @@ export default async function (ctx) {
         children: [
           {
             type: "image",
-            src: "sf-symbol:banknote.fill",
+            src: "sf-symbol:dollarsign.circle.fill",
             color: "#FF9500",
             width: 16,
             height: 16,
@@ -283,7 +283,7 @@ export default async function (ctx) {
             date: new Date().toISOString(),
             format: "time",
             font: { size: "caption2" },
-            textColor: C.text,
+            textColor: C.dim,
           },
         ],
       },
