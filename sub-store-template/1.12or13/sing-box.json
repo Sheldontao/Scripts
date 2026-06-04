@@ -442,10 +442,6 @@
         "outbound": "telegram"
       },
       {
-        "rule_set": "google_ip",
-        "outbound": "google"
-      },
-      {
         "action": "sniff",
         "timeout": "500ms"
       },
@@ -501,7 +497,7 @@
         "outbound": "streaming"
       },
       {
-        "rule_set": ["google_domain"],
+        "rule_set": ["google_domain", "google_ip"],
         "outbound": "google"
       },
       {
