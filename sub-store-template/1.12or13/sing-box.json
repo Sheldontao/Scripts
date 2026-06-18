@@ -102,6 +102,7 @@
       },
       {
         "rule_set": "proxy_domain",
+        "query_type": ["A", "AAAA"],
         "server": "fakeip"
       },
       {
