@@ -9,7 +9,8 @@
       {
         "type": "tls",
         "tag": "dns_proxy",
-        "server": "8.8.8.8"
+        "server": "8.8.8.8",
+        "detour": "proxy"
       },
       {
         "type": "local",
