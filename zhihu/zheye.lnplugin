@@ -1,5 +1,5 @@
 #!name=哲野同学
-#!desc=全新版本jq重写\n(ps:当loon关闭时，xxx直连会有httpdns请求，之后即使开启loon规则，已经读取的ip直连仍然会导致部分去广告失败。可以shortcuts设置一个automation，点击xxx后立即启动loon规则代理)\n增添空白提示字段防止检测\n10.88.0版本(最近的无横幅图标)\nminimum vote/collect/comment count; filter “游览”tag; filter "1小时前"tag; add loglevel\n彻底移除占位符卡片，解决新版客户端排版空白刷新异常。当整页过滤为0时，改用原生的顶部悬浮Float Toast作为文字提示。\n\n需手动在本地分流规则添加以下内容(优先级问题):\nIP-CIDR,103.41.167.237/32,REJECT,no-resolve\nIP-CIDR,118.89.204.198/32,REJECT,no-resolve\nIP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT,no-resolve\n如果还是有广告查看请求中是否有http+ip，使用这个规则：^http:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,4}(:\d+)?\/\w+\/resolv reject-200
+#!desc=全新版本jq重写\n(ps:当loon关闭时，xxx直连会有httpdns请求，之后即使开启loon规则，已经读取的ip直连仍然会导致部分去广告失败。可以shortcuts设置一个automation，点击xxx后立即启动loon规则代理)\n增添空白提示字段防止检测\n10.88.0版本(最近的无横幅图标)\nminimum vote/collect/comment count; filter “游览”tag; filter "1小时前"tag; add loglevel\n占位卡片改用缓存的真实卡片克隆+改写文案，新版知乎不再因硬编码UI字段而渲染异常。\n\n需手动在本地分流规则添加以下内容(优先级问题):\nIP-CIDR,103.41.167.237/32,REJECT,no-resolve\nIP-CIDR,118.89.204.198/32,REJECT,no-resolve\nIP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,REJECT,no-resolve\n如果还是有广告查看请求中是否有http+ip，使用这个规则：^http:\/\/[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+){1,4}(:\d+)?\/\w+\/resolv reject-200
 #!openUrl=https://github.com/blackmatrix7/ios_rule_script
 #!author=blackmatrix7, leo
 #!homepage=https://github.com/blackmatrix7/ios_rule_script

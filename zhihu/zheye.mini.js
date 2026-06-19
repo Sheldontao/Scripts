@@ -430,6 +430,36 @@ async function _setContentTagByLocal(e, t) {
       }
   });
 }
+function cloneAsPlaceholder(templateCard) {
+  try {
+    if (!templateCard || typeof templateCard !== "object") return null;
+    const clone = JSON.parse(JSON.stringify(templateCard));
+    const placeholderId = "zheye_placeholder_" + Date.now();
+    const placeholderToken = "zheye_token_" + Date.now();
+    const promptText = "💡 哲野：当前批次推荐内容均不符合阅读设置，请继续下拉加载";
+    const walk = (node) => {
+      if (!node || typeof node !== "object") return;
+      if (Array.isArray(node)) {
+        for (let i = 0; i < node.length; i++) walk(node[i]);
+        return;
+      }
+      if (typeof node.text === "string") node.text = promptText;
+      if (node.reaction && typeof node.count === "number") node.count = 0;
+      if (node.contentId) node.contentId = placeholderToken;
+      if (node.content_id) node.content_id = placeholderToken;
+      if (node.contentToken) node.contentToken = placeholderToken;
+      if (node.content_token) node.content_token = placeholderToken;
+      for (const k in node)
+        if (Object.prototype.hasOwnProperty.call(node, k)) walk(node[k]);
+    };
+    walk(clone);
+    clone.id = placeholderId;
+    return clone;
+  } catch (e) {
+    $.logger.error(`生成占位卡片异常：${e}`);
+    return null;
+  }
+}
 async function removeRecommend() {
   if (!$.response.body)
     return ($.logger.error("推荐列页去广告无法获取响应体"), null);
@@ -477,18 +507,21 @@ async function removeRecommend() {
     }
     e.thresholds = thresholds;
 
+    const templateCard =
+      Array.isArray(s.data) && s.data.length > 0 ? s.data[0] : null;
     s.data = s.data.filter((t) => !isFiltered(t, e, r, n));
 
+    if (s.data.length === 0 && templateCard) {
+      const placeholder = cloneAsPlaceholder(templateCard);
+      if (placeholder) s.data.push(placeholder);
+    }
+
     if (s.fresh_text) {
-      if (s.data.length === 0) {
-        s.fresh_text = "💡 哲野：当前批次内容不符阅读设置，请继续下拉加载";
-      } else {
-        const e = parseInt((s.fresh_text.match(/\d+/) || ["0"])[0]);
-        s.fresh_text =
-          e > 0
-            ? `刷新 ${e} 条内容，过滤后剩余 ${s.data.length} 条`
-            : `过滤后剩余 ${s.data.length} 条`;
-      }
+      const e = parseInt((s.fresh_text.match(/\d+/) || ["0"])[0]);
+      s.fresh_text =
+        e > 0
+          ? `刷新 ${e} 条内容，过滤后剩余 ${s.data.length} 条`
+          : `过滤后剩余 ${s.data.length} 条`;
     }
     return { body: JSON.stringify(s) };
   } catch (e) {
