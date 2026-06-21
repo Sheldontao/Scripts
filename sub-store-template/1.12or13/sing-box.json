@@ -430,8 +430,18 @@
         "timeout": "500ms"
       },
       {
-        "protocol": ["stun"],
-        "outbound": "reject"
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "protocol": "stun"
+          },
+          {
+            "rule_set": "cn_ip",
+            "invert": true
+          }
+        ],
+        "action": "reject"
       },
       {
         "type": "logical",
