@@ -628,81 +628,73 @@ if (
   const commentRegexes = getCachedCommentRegex("xhs_comment_regex", runtimeArgument.xhs_comment_regex);
   const hasAuthorRegex = commentRegexes.author.length > 0;
   const hasGeneralRegex = commentRegexes.general.length > 0;
-  if (hasAuthorRegex || hasGeneralRegex) {
-    if (hasAuthorRegex && obj.data?.comments?.length > 0) {
-      for (const comment of obj.data.comments) {
+  if ((hasAuthorRegex || hasGeneralRegex) && obj.data?.comments?.length > 0) {
+    for (const comment of obj.data.comments) {
+      let matchedRegex = null;
+
+      // Check author_comment_regex if comment author is is_author
+      if (hasAuthorRegex) {
         const isAuthor = comment.show_tags_v2?.some(t => t.type === "is_author");
         if (isAuthor) {
           for (const regex of commentRegexes.author) {
             if (regex.test(comment.content)) {
-              logInfo(`Author comment matched author_comment_regex "${regex.source}", replacing all comments`);
-              const firstComment = obj.data.comments[0];
-              firstComment.content = `该条评论命中${regex.source}规则已屏蔽`;
-              if (firstComment.sub_comments) {
-                delete firstComment.sub_comments;
-              }
-              obj.data.comments = [firstComment];
-              skipLivePhoto = true;
+              matchedRegex = regex;
               break;
             }
           }
-          if (skipLivePhoto) break;
-        }
-        if (comment.sub_comments?.length > 0) {
-          for (const sub of comment.sub_comments) {
-            const isSubAuthor = sub.show_tags_v2?.some(t => t.type === "is_author");
-            if (isSubAuthor) {
-              for (const regex of commentRegexes.author) {
-                if (regex.test(sub.content)) {
-                  logInfo(`Author sub-comment matched author_comment_regex "${regex.source}", replacing all comments`);
-                  const firstComment = obj.data.comments[0];
-                  firstComment.content = `该条评论命中${regex.source}规则已屏蔽`;
-                  if (firstComment.sub_comments) {
-                    delete firstComment.sub_comments;
-                  }
-                  obj.data.comments = [firstComment];
-                  skipLivePhoto = true;
-                  break;
-                }
-              }
-              if (skipLivePhoto) break;
-            }
-          }
         }
       }
-    }
 
-    if (!skipLivePhoto && hasGeneralRegex && obj.data?.comments?.length > 0) {
-      const filteredComments = [];
-      for (const comment of obj.data.comments) {
-        let matchGeneral = false;
+      // Check general_comment_regex if not already matched
+      if (!matchedRegex && hasGeneralRegex) {
         for (const regex of commentRegexes.general) {
           if (regex.test(comment.content)) {
-            logDebug(`Comment ${comment.id} matched general_comment_regex "${regex.source}", removing`);
-            matchGeneral = true;
+            matchedRegex = regex;
             break;
           }
         }
-        if (matchGeneral) continue;
+      }
 
+      if (matchedRegex) {
+        logInfo(`Top-level comment ${comment.id} matched regex "${matchedRegex.source}", preserving with injected warning and clearing sub-comments.`);
+        comment.content = `命中xhs_comment_regex:${matchedRegex.source}`;
+        if (comment.sub_comments) {
+          delete comment.sub_comments;
+        }
+      } else {
+        // If top-level comment didn't match, check sub-comments
         if (comment.sub_comments?.length > 0) {
-          const filteredSubs = [];
           for (const sub of comment.sub_comments) {
-            let matchSub = false;
-            for (const regex of commentRegexes.general) {
-              if (regex.test(sub.content)) {
-                logDebug(`Sub-comment ${sub.id} matched general_comment_regex "${regex.source}", removing`);
-                matchSub = true;
-                break;
+            let matchedSubRegex = null;
+
+            if (hasAuthorRegex) {
+              const isSubAuthor = sub.show_tags_v2?.some(t => t.type === "is_author");
+              if (isSubAuthor) {
+                for (const regex of commentRegexes.author) {
+                  if (regex.test(sub.content)) {
+                    matchedSubRegex = regex;
+                    break;
+                  }
+                }
               }
             }
-            if (!matchSub) filteredSubs.push(sub);
+
+            if (!matchedSubRegex && hasGeneralRegex) {
+              for (const regex of commentRegexes.general) {
+                if (regex.test(sub.content)) {
+                  matchedSubRegex = regex;
+                  break;
+                }
+              }
+            }
+
+            if (matchedSubRegex) {
+              logInfo(`Sub-comment ${sub.id} matched regex "${matchedSubRegex.source}", preserving with injected warning.`);
+              sub.content = `命中xhs_comment_regex:${matchedSubRegex.source}`;
+            }
           }
-          comment.sub_comments = filteredSubs;
         }
-        filteredComments.push(comment);
       }
-      obj.data.comments = filteredComments;
     }
   }
 
