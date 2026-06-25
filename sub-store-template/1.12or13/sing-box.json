@@ -246,6 +246,21 @@
     },
     {
       "type": "selector",
+      "tag": "github",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ],
+      "default": "us-auto"
+    },
+    {
+      "type": "selector",
       "tag": "microsoft@cn",
       "outbounds": [
         "proxy",
@@ -482,6 +497,10 @@
         "outbound": "streaming"
       },
       {
+        "rule_set": "github",
+        "outbound": "github"
+      },
+      {
         "rule_set": "microsoft@cn",
         "outbound": "microsoft@cn"
       },
@@ -593,6 +612,12 @@
         "tag": "private",
         "type": "remote",
         "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/private.srs",
+        "download_detour": "direct"
+      },
+      {
+        "type": "remote",
+        "tag": "github",
+        "url": "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/github.srs",
         "download_detour": "direct"
       }
     ],
