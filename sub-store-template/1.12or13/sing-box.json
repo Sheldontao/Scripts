@@ -7,7 +7,7 @@
   "dns": {
     "servers": [
       {
-        "type": "tls",
+        "type": "https",
         "tag": "dns_proxy",
         "server": "8.8.8.8",
         "detour": "proxy"
