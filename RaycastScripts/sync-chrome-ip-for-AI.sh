@@ -7,7 +7,7 @@
 # @raycast.packageName Tools
 
 # Optional parameters:
-# @raycast.icon 🌐
+# @raycast.icon https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/GoogleGemini.png
 # @raycast.description Quit Chrome, fetch current public IP from ipinfo.io, and update Chrome Local State
 
 CHROME_STATE="$HOME/Library/Application Support/Google/Chrome/Local State"

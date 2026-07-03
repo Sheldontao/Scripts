@@ -1,0 +1,442 @@
+# HTTP, SOCKS5, SOCKS5-over-TLS 混合端口
+mixed-port: 7890
+ipv6: true
+# 允许局域网连接
+allow-lan: true # 允许局域网连接
+unified-delay: true
+tcp-concurrent: true
+
+# RESTful API
+external-controller: "127.0.0.1:9090"
+external-ui: "ui"
+external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip"
+
+# 缓存设置
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+# 日志设置
+#log-level: info
+
+# 国内外 DNS 定义
+chinaDNS:
+  &chinaDNS [
+    "https://dns.alidns.com/dns-query#DIRECT",
+    "https://doh.pub/dns-query#DIRECT",
+  ]
+foreignDNS:
+  &foreignDNS [
+    "https://dns.cloudflare.com/dns-query#proxy",
+    "https://dns.google/dns-query#proxy&ecs=114.114.114.114/24",
+  ]
+
+# DNS 设置
+dns:
+  enable: true
+  prefer-h3: true
+  enhanced-mode: fake-ip
+  cache-algorithm: arc
+  # respect-rules: true
+  ipv6: true #ipv6默认值false
+  # use-system-hosts: true #默认就是true
+  fake-ip-range: 198.18.0.1/16
+  # fake-ip-range6: fdfe:dcba:9876::1/64
+  # fake-ip-filter-mode: rule
+  fake-ip-filter:
+    - ".lan"
+    - ".local"
+    - ".market.xiaomi.com"
+    - ".wiwide.com"
+    - "captive.apple.com"
+    - "emby.+"
+    - "rule-set:private,ads,apple_cn,emby,bank_cn_domain,cn_domain"
+  # 用于解析其他 DNS 服务器域名，必须是 IP 地址
+  default-nameserver:
+    - tls://223.5.5.5
+    - tls://119.29.29.29
+  nameserver: *foreignDNS
+  nameserver-policy:
+    ".wiwide.com": "system://"
+    "captive.apple.com": "system://"
+    ".market.xiaomi.com": "system://"
+    ".lan": "system://"
+    ".local": "system://"
+    "rule-set:ads": "rcode://success"
+    "rule-set:private,apple_cn,emby": "system://"
+    "emby.+": "system://"
+    "rule-set:bank_cn_domain,cn_domain": *chinaDNS
+    # # 国外域名使用国外 DNS (通过代理)
+    # "rule-set:proxy_domain":
+    #   - https://dns.google/dns-query#ecs=114.114.114.114/24
+    #   - https://cloudflare-dns.com/dns-query
+  direct-nameserver: *chinaDNS
+  direct-nameserver-follow-policy: true
+  proxy-server-nameserver: *chinaDNS
+
+ntp:
+  enable: true
+  # write-to-system: false
+  server: "ntp.aliyun.com"
+  # port: 123
+  interval: 60
+
+# TUN 模式设置
+tun:
+  enable: true
+  stack: mixed
+  auto-route: true
+  auto-detect-interface: true
+  dns-hijack:
+    - "any:53"
+    - "tcp://any:53"
+
+sniffer:
+  enable: true
+  ## 以下三个值默认true
+  # force-dns-mapping: true
+  # parse-pure-ip: true
+  # override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  force-domain:
+    - ".v2ex.com"
+  skip-domain:
+    - "Mijia Cloud"
+    - "dlg.io.mi.com"
+    - ".push.apple.com"
+    - ".apple.com"
+    - ".wechat.com"
+    - ".qpic.cn"
+    - ".qq.com"
+    - ".wechatapp.com"
+    - ".vivox.com"
+    # 向日葵服务
+    - ".oray.com"
+    - ".sunlogin.net"
+
+# ------------------------------------------------- #
+#              代理订阅 (Proxy Providers)            #
+# ------------------------------------------------- #
+# 机场订阅，Airport_01/02/03名称不能重复,但可修改为自己喜欢的
+# 订阅链接1/2/3是用来写订阅链接的，填入即可
+# 机场名称1/2/3是用来给节点添加备注的，不用记得整行删除
+
+PProviders: &PProviders
+  type: http
+  interval: 86400
+  health-check:
+    enable: true
+    # url: "https://www.gstatic.com/generate_204"
+    # interval: 300
+    # timeout: 1000
+    lazy: true
+  filter: "^(?!.*(拒绝|直连|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|traffic))"
+
+proxy-providers:
+  yourProvider1:
+    <<: *PProviders
+    url: "yourUrl"
+    override:
+      additional-prefix: "[yourProvider1]"
+      # udp: true
+  yourProvider2:
+    <<: *PProviders
+    url: "yourUrl2"
+    override:
+      additional-prefix: "[yourProvider2]"
+      # udp: true
+      proxy-name:
+        - pattern: "^(.+) - IEPL.+- (.+)$"
+          target: "$1-$2"
+  yourProvider3:
+    <<: *PProviders
+    url: "yourUrl3"
+    override:
+      additional-prefix: "yourProvider3"
+      # udp: true
+
+# ------------------------------------------------- #
+#                 代理组 (Proxy Groups)              #
+# ------------------------------------------------- #
+
+# 锚点定义区 (Anchors)
+# 锚点 - 节点筛选组
+FilterHK: &FilterHK '^(?=.*((?i)🇭🇰|香港|(\b(HK|HKG|Hong)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b)|([2-9]\.\d+))).*$'
+FilterTW: &FilterTW '^(?=.*((?i)🇹🇼|台湾|(\b(TW|TWN|Tai|Taiwan)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b)|([2-9]\.\d+))).*$'
+FilterJP: &FilterJP '^(?=.*((?i)🇯🇵|日本|川日|东京|大阪|泉日|埼玉|(\b(JP|JPN|Japan)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b)|([2-9]\.\d+))).*$'
+FilterKR: &FilterKR '^(?=.*((?i)🇰🇷|韩国|韓|首尔|(\b(KR|KOR|Korea)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b)|([2-9]\.\d+))).*$'
+FilterSG: &FilterSG '^(?=.*((?i)🇸🇬|新加坡|狮|(\b(SG|SGP|Singapore)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b)|([2-9]\.\d+))).*$'
+FilterUS: &FilterUS '^(?=.*((?i)🇺🇸|美国|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|(\b(US|USA|United States)(\d+)?\b)))(?!.*((?i)回国|校园|游戏|🎮|(\b(GAME)\b)|([2-9]\.\d+))).*$'
+FilterNoCN: &FilterNoCN '^(?=.*(?i)(港|hk|hongkong|Hong Kong|🇭🇰|台|🇹🇼|TW|Taiwan|([2-9]\.\d+)))'
+
+# &BaseProxy: 定义一个基础的策略组选项列表，用于大多数分流规则
+BaseProxy:
+  &BaseProxy {
+    type: select,
+    empty-fallback: REJECT,
+    proxies: [proxy, DIRECT, REJECT, hk, tw, jp, sg, us, noCN, allproxies],
+  }
+
+BaseSmart: &BaseSmart {
+    type: url-test,
+    empty-fallback: REJECT,
+    # interval: 200,
+    lazy: true,
+    # url: "https://www.google.com/generate_204",
+    hidden: true,
+    # uselightgbm: true,
+    include-all: true,
+    # policy-priority: "element:0.8",
+  }
+# -------------------------------------------------
+proxy-groups:
+  # --- 核心选择组 (全部使用锚点，保持一致) ---
+  - name: bilibili
+    <<: *BaseProxy
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/bilibili.png
+  - name: github
+    <<: *BaseProxy
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/GitHub.png
+  - name: microsoft@cn
+    type: select
+    proxies:
+      - DIRECT
+      - proxy
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png
+  - name: Speedtest
+    type: select
+    include-all-providers: true
+    proxies: [PASS, DIRECT]
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Speedtest.png
+  - name: ai
+    <<: *BaseProxy
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/AI.png
+  - name: emby
+    <<: *BaseProxy
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png
+  - name: telegram
+    <<: *BaseProxy
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Telegram.png
+  # - name: apple@cn
+  #   <<: *BaseProxy
+  - name: streaming
+    <<: *BaseProxy
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Streaming.png
+  - name: google
+    <<: *BaseProxy
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Google.png
+
+  - name: proxy
+    type: select
+    empty-fallback: REJECT
+    proxies:
+      - hk
+      - tw
+      - jp
+      - sg
+      - us
+      - noCN
+      - allproxies # 全部节点手动
+    icon: https://github.com/666OS/YYDS/raw/main/mihomo/image/mihomo.png
+
+  - name: cn
+    type: select
+    proxies:
+      - DIRECT # [修正] 国内规则应优先直连
+      - proxy
+      - allproxies
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png
+
+  # --- 自动分流组 ---
+  - name: noCN
+    # use:
+    # - element
+    # - fb
+    <<: *BaseSmart
+    exclude-filter: *FilterNoCN
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_Nations.png
+
+  - name: allproxies
+    type: select
+    include-all: true
+    exclude-filter: "(?i)(🟢 直连)"
+    icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Proxy.png
+  - name: hk
+    <<: *BaseSmart
+    filter: *FilterHK
+  - name: tw
+    <<: *BaseSmart
+    filter: *FilterTW
+  - name: jp
+    <<: *BaseSmart
+    filter: *FilterJP
+  - name: sg
+    <<: *BaseSmart
+    filter: *FilterSG
+  - name: us
+    <<: *BaseSmart
+    filter: *FilterUS
+
+# ------------------------------------------------- #
+#               规则集 (Rule Providers)              #
+# ------------------------------------------------- #
+rule-anchor:
+  ip:
+    &ip {
+      type: http,
+      interval: 86400,
+      behavior: ipcidr,
+      format: mrs,
+      proxy: proxy,
+    }
+  domain:
+    &domain {
+      type: http,
+      interval: 86400,
+      behavior: domain,
+      format: mrs,
+      proxy: proxy,
+    }
+rule-providers:
+  # apple_ip:
+  #   type: http
+  #   behavior: ipcidr
+  #   url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/apple.yaml"
+  #   path: ./ruleset/apple_ip.yaml
+  #   interval: 86400
+  apple_cn:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-cn.mrs"
+    path: ./ruleset/apple_cn.mrs
+  # apple@cn:
+  #   <<: *domain
+  #   url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple@cn.mrs"
+  #   path: ./ruleset/apple@cn.mrs
+  bilibili_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geosite/bilibili.mrs"
+    path: ./ruleset/bilibili_domain.mrs
+  cn_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
+    path: ./ruleset/cn_ip.mrs
+  cn_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"
+    path: ./ruleset/cn_domain.mrs
+  google_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/google.mrs"
+    path: ./ruleset/google_ip.mrs
+  google_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geosite/google.mrs"
+    path: ./ruleset/google_domain.mrs
+  netflix_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/netflix.mrs"
+    path: ./ruleset/netflix_ip.mrs
+  netflix_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geosite/netflix.mrs"
+    path: ./ruleset/netflix_domain.mrs
+  ai_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-chat-!cn.mrs"
+    path: ./ruleset/ai_domain.mrs
+  proxy_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"
+    path: ./ruleset/proxy_domain.mrs
+  telegram_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/telegram.mrs"
+    path: ./ruleset/telegram_ip.mrs
+  telegram_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geosite/telegram.mrs"
+    path: ./ruleset/telegram_domain.mrs
+  youtube_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geosite/youtube.mrs"
+    path: ./ruleset/youtube_domain.mrs
+  microsoft@cn:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft@cn.mrs"
+    path: ./ruleset/microsoft@cn.mrs
+  private_ip:
+    <<: *ip
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"
+    path: ./ruleset/private_ip.mrs
+  bank_cn_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-bank-cn.mrs"
+    path: ./ruleset/bank_cn_domain.mrs
+  Speedtest:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-speedtest.mrs"
+    path: ./ruleset/Speedtest.mrs
+  ads:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ads.mrs"
+    path: ./ruleset/ads.mrs
+  private:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"
+    path: ./ruleset/private.mrs
+  github:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"
+    path: ./ruleset/github.mrs
+  emby:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-emby.mrs"
+    path: ./ruleset/emby.mrs
+# ------------------------------------------------- #
+#                   规则 (Rules)                     #
+# ------------------------------------------------- #
+rules:
+  # --- Block Trackers, Leaks, and Ads ---
+  # Block STUN protocol (WebRTC IP leak)
+  - AND,((OR,((DST-PORT,3478),(DST-PORT,5349))),(NOT,((RULE-SET,cn_ip,no-resolve)))),REJECT
+  # The following rule blocks UDP traffic on port 443, which is the primary port for QUIC.
+  - RULE-SET,private,DIRECT
+  - DOMAIN-SUFFIX,wiwide.com,DIRECT
+  - DOMAIN,captive.apple.com,DIRECT
+  - RULE-SET,private_ip,DIRECT,no-resolve
+  - PROCESS-NAME,aria2c,DIRECT
+  - PROCESS-NAME,motrix-next-engine,DIRECT
+  - PROCESS-NAME,Microsoft Outlook,DIRECT
+  - RULE-SET,ads,REJECT
+
+  # --- Rule Set Based Routing ---
+  # - RULE-SET,apple_ip,apple,no-resolve
+  #  - RULE-SET,apple@cn,apple@cn
+  - RULE-SET,bilibili_domain,bilibili
+  - RULE-SET,github,github
+  - RULE-SET,microsoft@cn,microsoft@cn
+  - RULE-SET,Speedtest,Speedtest
+  - RULE-SET,ai_domain,ai
+  - AND,((RULE-SET,emby),(DOMAIN-KEYWORD,emby.)),emby
+  - RULE-SET,netflix_domain,streaming
+  - RULE-SET,netflix_ip,streaming,no-resolve
+  - RULE-SET,telegram_domain,telegram
+  - RULE-SET,telegram_ip,telegram,no-resolve
+  - RULE-SET,youtube_domain,streaming
+  - RULE-SET,google_domain,google
+  - RULE-SET,google_ip,google,no-resolve
+  - DOMAIN,apps.apple.com,proxy
+  - RULE-SET,apple_cn,cn
+  - RULE-SET,proxy_domain,proxy
+  - RULE-SET,cn_domain,cn
+  - RULE-SET,bank_cn_domain,cn
+  - RULE-SET,cn_ip,cn
+
+  # --- Final Match ---
+  - MATCH,proxy
