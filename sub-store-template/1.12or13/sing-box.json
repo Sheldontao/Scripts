@@ -31,7 +31,7 @@
     "rules": [
       {
         "domain_suffix": [".local", ".lan", "miwifi.com"],
-        "rule_set": "private",
+        "rule_set": ["private", "apple_cn", "bilibili_domain"],
         "server": "local"
       },
       {
@@ -57,6 +57,26 @@
         "action": "predefined"
       },
       {
+        "process_name": [
+          "Microsoft Outlook",
+          "motrix-next-engine",
+          "aria2c.exe",
+          "fdm.exe",
+          "folx.exe",
+          "nettransport.exe",
+          "thunder.exe",
+          "transmission.exe",
+          "utorrent.exe",
+          "webtorrent.exe",
+          "webtorrent helper.exe",
+          "qbittorrent.exe",
+          "downloadservice.exe",
+          "weiyun.exe",
+          "baidunetdisk.exe"
+        ],
+        "server": "local"
+      },
+      {
         "domain": ["ghfast.top", "cdn.jsdelivr.net"],
         "domain_suffix": [
           "tplogin.cn",
@@ -74,31 +94,7 @@
           "market.xiaomi.com",
           "lancache.steamcontent.com"
         ],
-        "rule_set": [
-          "cn_domain",
-          "apple_cn",
-          "microsoft@cn",
-          "bilibili_domain"
-        ],
-        "server": "dns_direct"
-      },
-      {
-        "process_name": [
-          "motrix-next-engine",
-          "aria2c.exe",
-          "fdm.exe",
-          "folx.exe",
-          "nettransport.exe",
-          "thunder.exe",
-          "transmission.exe",
-          "utorrent.exe",
-          "webtorrent.exe",
-          "webtorrent helper.exe",
-          "qbittorrent.exe",
-          "downloadservice.exe",
-          "weiyun.exe",
-          "baidunetdisk.exe"
-        ],
+        "rule_set": ["cn_domain", "microsoft@cn"],
         "server": "dns_direct"
       },
       {
@@ -409,6 +405,7 @@
       },
       {
         "process_name": [
+          "Microsoft Outlook",
           "motrix-next-engine",
           "aria2c.exe",
           "fdm.exe",
@@ -435,8 +432,7 @@
         "outbound": "cn"
       },
       {
-        "action": "sniff",
-        "timeout": "500ms"
+        "action": "sniff"
       },
       {
         "type": "logical",
