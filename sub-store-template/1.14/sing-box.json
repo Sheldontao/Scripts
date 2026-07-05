@@ -21,7 +21,7 @@
         "tag": "local"
       },
       {
-        "type": "udp",
+        "type": "quic",
         "tag": "dns_direct",
         "server": "223.5.5.5"
       },
@@ -36,11 +36,6 @@
       {
         "preferred_by": "hosts",
         "server": "hosts"
-      },
-      {
-        "domain_suffix": [".local", ".lan", "miwifi.com"],
-        "rule_set": ["private", "apple_cn", "bilibili_domain"],
-        "server": "local"
       },
       {
         "clash_mode": "Direct",
@@ -63,6 +58,11 @@
           }
         ],
         "action": "predefined"
+      },
+      {
+        "domain_suffix": [".local", ".lan", "miwifi.com"],
+        "rule_set": ["private", "bilibili_domain", "apple_cn"],
+        "server": "local"
       },
       {
         "process_name": [
@@ -140,7 +140,12 @@
     {
       "tag": "proxy_client",
       "version": 2,
-      "detour": "proxy"
+      "headers": {
+        "Authorization": ""
+      },
+      "detour": "proxy",
+      "stream_receive_window": 0,
+      "connection_receive_window": 0
     }
   ],
   "inbounds": [
@@ -149,7 +154,6 @@
       "address": ["172.18.0.1/30", "fdfe:dcba:9876::1/126"],
       "auto_route": true,
       "loopback_address": "10.7.0.1",
-      "route_exclude_address": "192.168.0.0/16",
       "stack": "mixed",
       "platform": {
         "http_proxy": {
@@ -212,7 +216,7 @@
     },
     {
       "type": "selector",
-      "tag": "youtube",
+      "tag": "emby",
       "outbounds": [
         "proxy",
         "direct",
@@ -448,20 +452,17 @@
         "outbound": "telegram"
       },
       {
-        "rule_set": "youtube_domain",
-        "outbound": "youtube"
+        "rule_set": ["youtube_domain", "netflix_domain"],
+        "outbound": "streaming"
       },
       {
         "rule_set": ["google_domain", "google_ip"],
         "outbound": "google"
       },
       {
-        "rule_set": "netflix_domain",
-        "outbound": "streaming"
-      },
-      {
         "domain_keyword": "emby.",
-        "outbound": "streaming"
+        "rule_set": "emby",
+        "outbound": "emby"
       },
       {
         "rule_set": "github",
@@ -559,7 +560,7 @@
       {
         "type": "remote",
         "tag": "ads",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads.srs"
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads@ads.srs"
       },
       {
         "type": "remote",
@@ -570,6 +571,11 @@
         "type": "remote",
         "tag": "github",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/github.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "emby",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-emby.srs"
       }
     ],
     "final": "proxy",
