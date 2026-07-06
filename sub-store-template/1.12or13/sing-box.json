@@ -114,7 +114,7 @@
             "rule_set": "cn_ip"
           }
         ],
-        "server": "dns_proxy"
+        "server": "local"
       },
       {
         "query_type": ["A", "AAAA"],
