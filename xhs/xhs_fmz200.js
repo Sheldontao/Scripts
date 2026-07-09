@@ -290,6 +290,54 @@ const getCachedCountsThreshold = (key, argValue) => {
   return counts;
 };
 
+const getCachedCommentLikeRatioThreshold = (key, argValue) => {
+  let cachedRatioStr = $.getdata(key);
+  let sourceRatio = "0";
+  let logSource = "empty";
+
+  if (argValue) {
+    if (argValue !== cachedRatioStr) {
+      logInfo(`Argument for ${key} differs from cache. Updating cache.`);
+      try {
+        $.setdata(argValue, key);
+        logSource = "argument (updated cache)";
+      } catch (e) {
+        logError(`Error caching ratio threshold for ${key}: ${e}`);
+        logSource = "argument (cache update failed)";
+      }
+    } else {
+      logSource = "argument (same as cache)";
+    }
+    sourceRatio = argValue;
+  } else if (cachedRatioStr) {
+    logSource = "cache";
+    sourceRatio = cachedRatioStr;
+  } else {
+    logSource = "empty";
+  }
+
+  logDebug(`Using ratio threshold for ${key} from: ${logSource}`);
+
+  let ratio = 0;
+  try {
+    const parsedRatio = parseFloat(sourceRatio);
+    if (!isNaN(parsedRatio) && parsedRatio >= 0) {
+      ratio = parsedRatio;
+    } else {
+      logWarning(`Invalid ratio threshold format: "${sourceRatio}". Expected a non-negative number.`);
+    }
+  } catch (e) {
+    logWarning(`Error parsing ratio threshold string for ${key}: ${e}`);
+  }
+  return ratio;
+};
+
+const parseBoolean = (val) => {
+  if (typeof val === "boolean") return val;
+  if (typeof val === "string") return val.trim().toLowerCase() === "true";
+  return false;
+};
+
 if (
   url.includes("/system_service/splash_config") ||
   url.includes("/httpdns") ||
@@ -343,6 +391,45 @@ if (url.includes("/search/notes")) {
             logDebug(
               `[Search] Filtered Nickname (Match: ${regex.source}): ${currentNickname}`,
             );
+            return false;
+          }
+        }
+      }
+      // 3. 全局数值阈值过滤
+      if (parseBoolean(runtimeArgument.xhs_general_counts_threshold)) {
+        const searchCounts = getCachedCountsThreshold(
+          "fmz200.xhs_counts_threshold_cache",
+          runtimeArgument.xhs_counts_threshold,
+        );
+        if (searchCounts.length === 5) {
+          const [minLikes, minCollected, minComments, minShared, minNice] = searchCounts;
+          const itemNote = item?.note || item;
+          if (
+            (itemNote?.shared_count !== undefined && itemNote.shared_count < minShared) ||
+            (itemNote?.likes !== undefined && itemNote.likes < minLikes) ||
+            (itemNote?.comments_count !== undefined && itemNote.comments_count < minComments) ||
+            (itemNote?.collected_count !== undefined && itemNote.collected_count < minCollected) ||
+            (itemNote?.nice_count !== undefined && itemNote.nice_count < minNice)
+          ) {
+            return false;
+          }
+        }
+      }
+      // 4. 全局评论/点赞比阈值过滤
+      if (parseBoolean(runtimeArgument.xhs_general_comment_like_ratio_threshold)) {
+        const searchRatio = getCachedCommentLikeRatioThreshold(
+          "fmz200.xhs_comment_like_ratio_cache",
+          runtimeArgument.xhs_comment_like_ratio_threshold,
+        );
+        if (searchRatio > 0) {
+          const itemNote = item?.note || item;
+          const likes = itemNote?.likes;
+          const commentsCount = itemNote?.comments_count;
+          if (likes === undefined || likes === null || likes === 0) {
+            return false;
+          }
+          const ratio = (commentsCount ?? 0) / likes;
+          if (ratio <= searchRatio) {
             return false;
           }
         }
@@ -536,6 +623,10 @@ if (url.includes("/homefeed")) {
       "fmz200.xhs_counts_threshold_cache",
       runtimeArgument.xhs_counts_threshold,
     );
+    const ratioThreshold = getCachedCommentLikeRatioThreshold(
+      "fmz200.xhs_comment_like_ratio_cache",
+      runtimeArgument.xhs_comment_like_ratio_threshold,
+    );
     obj.data = obj.data.filter((item) => {
       // 1. 核心过滤：识别直播、广告、带货笔记
       if (
@@ -604,6 +695,18 @@ if (url.includes("/homefeed")) {
             item.collected_count < minCollected) ||
           (item?.nice_count !== undefined && item.nice_count < minNice)
         ) {
+          return false;
+        }
+      }
+      // 6. 评论/点赞比阈值过滤
+      if (ratioThreshold > 0) {
+        const likes = item?.likes;
+        const commentsCount = item?.comments_count;
+        if (likes === undefined || likes === null || likes === 0) {
+          return false;
+        }
+        const ratio = (commentsCount ?? 0) / likes;
+        if (ratio <= ratioThreshold) {
           return false;
         }
       }

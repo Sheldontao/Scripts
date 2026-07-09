@@ -13,11 +13,15 @@
 [Argument]
 xhs_des_regex = input,"["峰哥","恋爱","雪茄","新闻","manus","揽佬","红十字","胡锡进"]",tag=xhs_des_regex
 xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=xhs_nickname_regex
-xhs_counts_threshold = input, "[0,10,10,0,0]", tag=xhs_counts_threshold_点赞/收藏/评论/分享/好
+xhs_counts_threshold = input, "[0,10,10,0,0]", tag=点赞/收藏/评论/分享/好阈值
+xhs_general_counts_threshold = switch, false, tag=xhs_counts_threshold全局开关
+xhs_comment_like_ratio_threshold = input, "0", tag=评论/点赞比阈值
+xhs_general_comment_like_ratio_threshold = switch, false, tag=评论/点赞比阈值全局开关
+
 xhs_search_des_regex = input, "["一个正则表达式",""]",tag=xhs_search_des_regex
 xhs_search_nickname_regex = input, "["中介","看房","租房","好房","探房","管家","房东直租","公寓","房.*产","住宿","寻房","找房"]",tag=xhs_search_nickname_regex
 xhs_comment_regex = input, "{"author_comment_regex":["^私$","直接私信"],"general_comment_regex":["神经病",""]}",tag=xhs_comment_regex,desc=注意格式，所有参数标点符号均为英文。\n{"author_comment_regex":["regex1"],"general_comment_regex":["regex2"]}
-xhs_loglevel = select, "WARNING", "DEBUG", "INFO", "ERROR", tag=xhs_loglevel_日志级别
+xhs_loglevel = select, "WARNING", "DEBUG", "INFO", "ERROR", tag=日志级别
 
 [Rule]
 DOMAIN, ads-img-qc.xhscdn.com, REJECT
@@ -69,10 +73,10 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/detailfeed\/preload script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书preload屏蔽词过滤, argument = [{xhs_des_regex},{xhs_loglevel}]
 
 # 信息流,homefeed regex过滤，图片水印
-http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/homefeed script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书首页流regex过滤, argument = [{xhs_des_regex},{xhs_nickname_regex},{xhs_counts_threshold},{xhs_loglevel}]
+http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/homefeed script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书首页流regex过滤, argument = [{xhs_des_regex},{xhs_nickname_regex},{xhs_counts_threshold},{xhs_comment_like_ratio_threshold},{xhs_loglevel}]
 
 # 搜索页
-http-response ^https?:\/\/(?:so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/notes script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书搜索页, argument = [{xhs_search_des_regex},{xhs_search_nickname_regex},{xhs_loglevel}]
+http-response ^https?:\/\/(?:so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/notes script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书搜索页, argument = [{xhs_search_des_regex},{xhs_search_nickname_regex},{xhs_comment_like_ratio_threshold},{xhs_general_comment_like_ratio_threshold},{xhs_general_counts_threshold},{xhs_loglevel}]
 
 # 实况、图片、视频水印
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note(\/imagefeed|\/live_photo\/save|\/feed|\/videofeed\?|\/video\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=图片水印视频水印, argument = [{xhs_des_regex},{xhs_loglevel}]
