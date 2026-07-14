@@ -109,10 +109,34 @@ describe("Homefeed ratio filter (U4)", () => {
     expect(body.data.find((i) => i.id === "null-likes")).toBeUndefined();
   });
 
-  it("item without comments_count uses 0 for ratio — filtered when ratio > 0", () => {
+  it("item without comments_count treated as 0 — filtered out when threshold > 0", () => {
     const result = runRatioTest({ items, threshold: 0.01 });
     const body = JSON.parse(result.donePayload.body);
     expect(body.data.find((i) => i.id === "no-comments")).toBeUndefined();
+  });
+
+  it("item with 0 comments filtered out when threshold > 0 — another item remains", () => {
+    const result = runRatioTest({
+      items: [
+        { id: "zero-comments", likes: 100, comments_count: 0 },
+        { id: "normal", likes: 100, comments_count: 50 },
+      ],
+      threshold: 0.01,
+    });
+    const body = JSON.parse(result.donePayload.body);
+    expect(body.data.find((i) => i.id === "zero-comments")).toBeUndefined();
+    expect(body.data.find((i) => i.id === "normal")).toBeDefined();
+  });
+
+  it("all items filtered out — shows placeholder card", () => {
+    const result = runRatioTest({
+      items: [{ id: "only-item", likes: 100, comments_count: 0, desc: "原始描述" }],
+      threshold: 0.001,
+    });
+    const body = JSON.parse(result.donePayload.body);
+    expect(body.data).toHaveLength(1);
+    expect(body.data[0].id).toBe("only-item");
+    expect(body.data[0].desc).toBe("所有推荐均不符合筛选条件");
   });
 
   it("works alongside existing desc regex filter", () => {

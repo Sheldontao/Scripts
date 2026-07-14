@@ -353,6 +353,7 @@ if (url.includes("/search/notes")) {
   // 搜索结果
   if (obj.data.items?.length > 0) {
     obj.data.items = obj.data.items.filter((i) => i.model_type === "note");
+    const firstSearchItem = obj.data.items[0];
 
     const searchDesRegexes = getCachedRegexes(
       "fmz200.xhs_search_des_regex_cache",
@@ -436,6 +437,15 @@ if (url.includes("/search/notes")) {
       }
       return true;
     });
+    if (obj.data.items.length === 0 && firstSearchItem) {
+      obj.data.items = [{
+        ...firstSearchItem,
+        note: {
+          ...(firstSearchItem.note || {}),
+          desc: "所有推荐均不符合筛选条件",
+        },
+      }];
+    }
   }
 }
 
@@ -627,6 +637,7 @@ if (url.includes("/homefeed")) {
       "fmz200.xhs_comment_like_ratio_cache",
       runtimeArgument.xhs_comment_like_ratio_threshold,
     );
+    const firstItem = obj.data[0];
     obj.data = obj.data.filter((item) => {
       // 1. 核心过滤：识别直播、广告、带货笔记
       if (
@@ -716,6 +727,12 @@ if (url.includes("/homefeed")) {
       }
       return true;
     });
+    if (obj.data.length === 0 && firstItem) {
+      obj.data = [{
+        ...firstItem,
+        desc: "所有推荐均不符合筛选条件",
+      }];
+    }
   }
 }
 
@@ -1028,7 +1045,6 @@ function deduplicateLivePhotos(livePhotos) {
     seen.set(item.videId, true);
     return true;
   });
-  return livePhotos;
 }
 
 function replaceRedIdWithFmz200(obj) {
