@@ -371,6 +371,10 @@
         "outbound": "direct"
       },
       {
+        "network": "icmp",
+        "outbound": "direct"
+      },
+      {
         "type": "logical",
         "mode": "and",
         "rules": [

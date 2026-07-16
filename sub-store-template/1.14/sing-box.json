@@ -377,6 +377,14 @@
         "outbound": "direct"
       },
       {
+        "network": "icmp",
+        "action": "resolve"
+      },
+      {
+        "network": "icmp",
+        "outbound": "direct"
+      },
+      {
         "clash_mode": "Global",
         "outbound": "all"
       },
