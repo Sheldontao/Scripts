@@ -8,9 +8,15 @@
     "servers": [
       {
         "type": "https",
-        "tag": "dns_proxy",
+        "tag": "dns_gg",
         "detour": "proxy",
         "server": "8.8.8.8"
+      },
+      {
+        "type": "https",
+        "tag": "dns_cf",
+        "detour": "proxy",
+        "server": "1.1.1.1"
       },
       {
         "type": "hosts",
@@ -34,8 +40,8 @@
     ],
     "rules": [
       {
-        "preferred_by": "hosts",
-        "server": "hosts"
+        "preferred_by": "local",
+        "server": "local"
       },
       {
         "clash_mode": "Direct",
@@ -60,8 +66,24 @@
         "action": "predefined"
       },
       {
-        "domain_suffix": [".local", ".lan", "miwifi.com"],
-        "rule_set": ["private", "apple-cn"],
+        "domain": [
+          "ghfast.top",
+          "cdn.jsdelivr.net"
+        ],
+        "domain_suffix": [
+          "tplogin.cn",
+          "router.asus.com",
+          "tendawifi.com",
+          "tplinkwifi.net",
+          ".local",
+          ".lan",
+          "miwifi.com"
+        ],
+        "rule_set": [
+          "private",
+          "bilibili",
+          "apple-cn"
+        ],
         "server": "local"
       },
       {
@@ -85,28 +107,17 @@
         "server": "local"
       },
       {
-        "domain": ["ghfast.top", "cdn.jsdelivr.net"],
-        "domain_suffix": [
-          "tplogin.cn",
-          "router.asus.com",
-          "tendawifi.com",
-          "tplinkwifi.net",
-          "app-measurement.com",
-          "hm.baidu.com",
-          "firebaselogging.googleapis.com",
-          "firebaselogging-pa.googleapis.com",
-          "beacons.gvt2.com",
-          "beacons2.gvt2.com",
-          "beacons3.gvt2.com",
-          "tracking.miui.com",
-          "market.xiaomi.com",
-          "lancache.steamcontent.com"
+        "rule_set": [
+          "cn",
+          "microsoft@cn"
         ],
-        "rule_set": ["cn", "microsoft@cn"],
         "server": "dns_direct"
       },
       {
-        "query_type": ["A", "AAAA"],
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
         "rule_set": "gfw",
         "server": "fakeip"
       },
@@ -114,20 +125,38 @@
         "rule_set": "gfw",
         "invert": true,
         "action": "evaluate",
-        "server": "dns_proxy",
+        "server": "dns_gg",
+        "tag": "dns_gg",
         "client_subnet": "114.114.114.114/24"
       },
       {
-        "rule_set": "cn_ip",
-        "match_response": true,
-        "server": "local"
+        "rule_set": "gfw",
+        "invert": true,
+        "action": "evaluate",
+        "server": "dns_cf",
+        "tag": "dns_cf"
       },
       {
-        "query_type": ["A", "AAAA"],
+        "rule_set": "cn_ip",
+        "match_response": "dns_gg",
+        "server": "local",
+        "race": true
+      },
+      {
+        "rule_set": "cn_ip",
+        "match_response": "dns_cf",
+        "server": "local",
+        "race": true
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
         "server": "fakeip"
       }
     ],
-    "final": "dns_proxy",
+    "final": "dns_gg",
     "optimistic": true
   },
   "ntp": {
@@ -467,6 +496,7 @@
       {
         "type": "remote",
         "tag": [
+          "bilibili",
           "cn",
           "netflix",
           "telegram",

@@ -52,8 +52,24 @@
         "action": "predefined"
       },
       {
-        "domain_suffix": [".local", ".lan", "miwifi.com"],
-        "rule_set": ["private", "bilibili_domain", "apple_cn"],
+        "domain": [
+          "ghfast.top",
+          "cdn.jsdelivr.net"
+        ],
+        "domain_suffix": [
+          "tplogin.cn",
+          "router.asus.com",
+          "tendawifi.com",
+          "tplinkwifi.net",
+          ".local",
+          ".lan",
+          "miwifi.com"
+        ],
+        "rule_set": [
+          "private",
+          "bilibili_domain",
+          "apple_cn"
+        ],
         "server": "local"
       },
       {
@@ -77,23 +93,6 @@
         "server": "local"
       },
       {
-        "domain": ["ghfast.top", "cdn.jsdelivr.net"],
-        "domain_suffix": [
-          "tplogin.cn",
-          "router.asus.com",
-          "tendawifi.com",
-          "tplinkwifi.net",
-          "app-measurement.com",
-          "hm.baidu.com",
-          "firebaselogging.googleapis.com",
-          "firebaselogging-pa.googleapis.com",
-          "beacons.gvt2.com",
-          "beacons2.gvt2.com",
-          "beacons3.gvt2.com",
-          "tracking.miui.com",
-          "market.xiaomi.com",
-          "lancache.steamcontent.com"
-        ],
         "rule_set": ["cn_domain", "microsoft@cn"],
         "server": "dns_direct"
       },
