@@ -54,14 +54,14 @@
             "invert": true
           },
           {
-            "rule_set": "ads"
+            "rule_set": "category-ads"
           }
         ],
         "action": "predefined"
       },
       {
         "domain_suffix": [".local", ".lan", "miwifi.com"],
-        "rule_set": ["private", "bilibili_domain", "apple_cn"],
+        "rule_set": ["private", "apple-cn"],
         "server": "local"
       },
       {
@@ -102,16 +102,16 @@
           "market.xiaomi.com",
           "lancache.steamcontent.com"
         ],
-        "rule_set": ["cn_domain", "microsoft@cn"],
+        "rule_set": ["cn", "microsoft@cn"],
         "server": "dns_direct"
       },
       {
         "query_type": ["A", "AAAA"],
-        "rule_set": "proxy_domain",
+        "rule_set": "gfw",
         "server": "fakeip"
       },
       {
-        "rule_set": "proxy_domain",
+        "rule_set": "gfw",
         "invert": true,
         "action": "evaluate",
         "server": "dns_proxy",
@@ -155,6 +155,9 @@
       "auto_route": true,
       "loopback_address": "10.7.0.1",
       "stack": "mixed",
+      "route_exclude_address_set": [
+          "private_ip"
+        ],
       "platform": {
         "http_proxy": {
           "enabled": true,
@@ -230,21 +233,6 @@
     },
     {
       "type": "selector",
-      "tag": "google",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "noCN-auto",
-        "all"
-      ]
-    },
-    {
-      "type": "selector",
       "tag": "streaming",
       "outbounds": [
         "proxy",
@@ -255,8 +243,7 @@
         "sg-auto",
         "us-auto",
         "all"
-      ],
-      "default": "direct"
+      ]
     },
     {
       "type": "selector",
@@ -276,21 +263,6 @@
     {
       "type": "selector",
       "tag": "microsoft@cn",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "all"
-      ],
-      "default": "direct"
-    },
-    {
-      "type": "selector",
-      "tag": "bilibili",
       "outbounds": [
         "proxy",
         "direct",
@@ -446,30 +418,26 @@
             "invert": true
           },
           {
-            "rule_set": "ads"
+            "rule_set": "category-ads"
           }
         ],
         "action": "reject"
       },
       {
-        "rule_set": "ai_domain",
+        "rule_set": "category-ai-chat-!cn",
         "outbound": "ai"
       },
       {
-        "rule_set": "telegram_domain",
+        "rule_set": "telegram",
         "outbound": "telegram"
       },
       {
-        "rule_set": ["youtube_domain", "netflix_domain"],
+        "rule_set": ["youtube", "netflix"],
         "outbound": "streaming"
       },
       {
-        "rule_set": ["google_domain", "google_ip"],
-        "outbound": "google"
-      },
-      {
         "domain_keyword": "emby.",
-        "rule_set": "emby",
+        "rule_set": "category-emby",
         "outbound": "emby"
       },
       {
@@ -479,10 +447,6 @@
       {
         "rule_set": "microsoft@cn",
         "outbound": "microsoft@cn"
-      },
-      {
-        "rule_set": "bilibili_domain",
-        "outbound": "bilibili"
       },
       {
         "domain": "captive.apple.com",
@@ -495,25 +459,28 @@
       },
       {
         "domain_suffix": "miwifi.com",
-        "rule_set": ["cn_domain", "apple_cn"],
+        "rule_set": ["cn", "apple-cn"],
         "outbound": "cn"
       }
     ],
     "rule_set": [
       {
         "type": "remote",
-        "tag": "microsoft@cn",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/microsoft@cn.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "apple_cn",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/apple-cn.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "bilibili_domain",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/bilibili.srs"
+        "tag": [
+          "cn",
+          "netflix",
+          "telegram",
+          "youtube",
+          "microsoft@cn",
+          "apple-cn",
+          "category-ai-chat-!cn",
+          "gfw",
+          "category-ads",
+          "private",
+          "github",
+          "category-emby"
+        ],
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/{tag}.srs"
       },
       {
         "type": "remote",
@@ -522,68 +489,13 @@
       },
       {
         "type": "remote",
-        "tag": "cn_domain",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/cn.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "google_domain",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/google.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "google_ip",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/google.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "netflix_domain",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/netflix.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "ai_domain",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ai-chat-!cn.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "proxy_domain",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/geolocation-!cn.srs"
-      },
-      {
-        "type": "remote",
         "tag": "telegram_ip",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geoip/telegram.srs"
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/telegram.srs"
       },
       {
         "type": "remote",
-        "tag": "telegram_domain",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/telegram.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "youtube_domain",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo-lite/geosite/youtube.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "ads",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-ads@ads.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "private",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/private.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "github",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/github.srs"
-      },
-      {
-        "type": "remote",
-        "tag": "emby",
-        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/category-emby.srs"
+        "tag": "private_ip",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs"
       }
     ],
     "final": "proxy",
