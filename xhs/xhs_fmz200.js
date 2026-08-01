@@ -1365,6 +1365,10 @@ function Env(t, e) {
             (t.cookieJar = this.ckjar)));
     }
     get(t, e = () => {}) {
+      if (t.url && !/^https?:\/\//i.test(t.url)) {
+        e('Invalid URL: only http/https protocols are allowed');
+        return;
+      }
       if (
         (t.headers &&
           (delete t.headers["Content-Type"],
