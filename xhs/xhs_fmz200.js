@@ -913,45 +913,26 @@ if (
         if (contentToMatch) {
           for (const regex of descRegexes) {
             if (regex.test(contentToMatch)) {
-              logDebug(
-                `[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
+              logInfo(
+                `[Detail] Marked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
               );
-              obj.data = {};
-              obj.code = -1;
-              obj.msg = "内容已被正则过滤";
-              const blockedNoteId =
-                note?.id ||
-                note?.note_id ||
-                note?.note?.id ||
-                note?.note?.note_id;
-              if (blockedNoteId) {
-                let blockedIds = [];
-                try {
-                  blockedIds = JSON.parse(
-                    $.getdata("fmz200.xhs.blocked_note_ids") || "[]",
-                  );
-                } catch (e) {
-                  blockedIds = [];
-                }
-                if (!Array.isArray(blockedIds)) {
-                  blockedIds = [];
-                }
-                blockedIds = Array.from(
-                  new Set(blockedIds.concat([blockedNoteId])),
-                ).slice(-100);
-                $.setdata(
-                  JSON.stringify(blockedIds),
-                  "fmz200.xhs.blocked_note_ids",
-                );
-                logDebug(`[Detail] cached blocked note id: ${blockedNoteId}`);
+              // 命中后不再清空整个响应（旧实现返回 data:{} code:-1，App 无数据
+              // 渲染导致详情页白屏）。像 comment_regex 一样把 desc 替换成命中
+              // 提示，笔记其余内容（图片/作者/标题）保持正常展示。
+              // 注：当前 App 的 homefeed 卡片不返回 desc，正文正则只能在详情
+              // 页/搜索页生效，详情页命中一律按此软标记处理。
+              const hitMsg = `命中xhs_des_regex:${regex.source}`;
+              if (note && typeof note.desc === "string") {
+                note.desc = hitMsg;
+              }
+              if (note?.note && typeof note.note.desc === "string") {
+                note.note.desc = hitMsg;
               }
               break;
             }
           }
         }
-        if (obj.code === -1) break;
       }
-      if (obj.code === -1) break;
     }
   }
 }
