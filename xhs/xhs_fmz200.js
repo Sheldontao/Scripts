@@ -993,8 +993,12 @@ function imageEnhance(jsonStr) {
   if (imageQuality === "original") {
     // 原始分辨率，PNG格式的图片，占用空间比较大
     logInfo("画质修改为-原始分辨率");
+    // [^"&]* 限定在单个 URL 字符串内匹配：& 是 URL 内参数分隔符，" 是 JSON
+    // 字符串边界。原 [^&]* 可跨过 JSON 字段分隔符，导致匹配起点在第一个
+    // ?imageView2/2 URL、终点在更靠后的 &redImage/frame/0，中间所有图片条目
+    // 被整体替换删除（详情页只剩第一张图）。
     jsonStr = jsonStr.replace(
-      /\?imageView2\/2[^&]*(?:&redImage\/frame\/0)/,
+      /\?imageView2\/2[^"&]*(?:&redImage\/frame\/0)/,
       "?imageView2/0/format/png&redImage/frame/0",
     );
   } else {
