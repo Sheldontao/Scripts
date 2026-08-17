@@ -213,7 +213,7 @@
       "type": "selector",
       "tag": "ai",
       "outbounds": [],
-      "default": "noCN-auto"
+      "default": "us-auto"
     },
     {
       "type": "selector",
@@ -223,19 +223,18 @@
     {
       "type": "selector",
       "tag": "emby",
-      "outbounds": []
+      "outbounds": [],
+      "default": "all"
     },
     {
       "type": "selector",
       "tag": "google",
-      "outbounds": [],
-      "default": "noCN-auto"
+      "outbounds": []
     },
     {
       "type": "selector",
       "tag": "streaming",
-      "outbounds": [],
-      "default": "direct"
+      "outbounds": []
     },
     {
       "type": "selector",
@@ -246,12 +245,6 @@
     {
       "type": "selector",
       "tag": "microsoft@cn",
-      "outbounds": [],
-      "default": "direct"
-    },
-    {
-      "type": "selector",
-      "tag": "bilibili",
       "outbounds": [],
       "default": "direct"
     },

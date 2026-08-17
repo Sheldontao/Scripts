@@ -177,7 +177,7 @@
         "noCN-auto",
         "all"
       ],
-      "default": "noCN-auto"
+      "default": "us-auto"
     },
     {
       "tag": "telegram",
@@ -205,7 +205,8 @@
         "sg-auto",
         "us-auto",
         "all"
-      ]
+      ],
+      "default": "all"
     },
     {
       "tag": "google",
@@ -220,8 +221,7 @@
         "us-auto",
         "noCN-auto",
         "all"
-      ],
-      "default": "noCN-auto"
+      ]
     },
     {
       "tag": "streaming",
@@ -235,8 +235,7 @@
         "sg-auto",
         "us-auto",
         "all"
-      ],
-      "default": "direct"
+      ]
     },
     {
       "type": "selector",
@@ -256,21 +255,6 @@
     {
       "type": "selector",
       "tag": "microsoft@cn",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "all"
-      ],
-      "default": "direct"
-    },
-    {
-      "tag": "bilibili",
-      "type": "selector",
       "outbounds": [
         "proxy",
         "direct",
@@ -492,10 +476,6 @@
       {
         "rule_set": "microsoft@cn",
         "outbound": "microsoft@cn"
-      },
-      {
-        "rule_set": "bilibili_domain",
-        "outbound": "bilibili"
       },
       {
         "domain": "captive.apple.com",
