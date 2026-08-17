@@ -1,4 +1,5 @@
 {
+  "$schema": "https://sing-box.sagernet.org/schema.json",
   "log": {
     "level": "warn",
     "output": "sing-box.log",
@@ -11,12 +12,18 @@
         "tag": "dns_gg",
         "detour": "proxy",
         "server": "8.8.8.8"
-      },
+      }, //      {
+      //        "type": "https",
+      //        "tag": "dns_cf",
+      //        "detour": "proxy",
+      //        "server": "1.1.1.1"
+      //      },
       {
         "type": "https",
-        "tag": "dns_cf",
+        "tag": "dns_adguard",
         "detour": "proxy",
-        "server": "1.1.1.1"
+        "domain_resolver": "dns_gg",
+        "server": "dns.adguard-dns.com"
       },
       {
         "type": "hosts",
@@ -108,7 +115,7 @@
       },
       {
         "rule_set": [
-          "cn",
+          "geolocation-cn",
           "microsoft@cn"
         ],
         "server": "dns_direct"
@@ -128,25 +135,29 @@
         "server": "dns_gg",
         "tag": "dns_gg",
         "client_subnet": "114.114.114.114/24"
-      },
-      {
-        "rule_set": "gfw",
-        "invert": true,
-        "action": "evaluate",
-        "server": "dns_cf",
-        "tag": "dns_cf"
-      },
+      }, //      {
+      //        "rule_set": "gfw",
+      //        "invert": true,
+      //        "action": "evaluate",
+      //        "server": "dns_cf",
+      //        "tag": "dns_cf"
+      //      },
       {
         "rule_set": "cn_ip",
         "match_response": "dns_gg",
-        "server": "local",
-        "race": true
-      },
+        "race": true,
+        "server": "local"
+      }, //      {
+      //        "rule_set": "cn_ip",
+      //        "match_response": "dns_cf",
+      //        "race": true,
+      //        "server": "local"
+      //      },
       {
-        "rule_set": "cn_ip",
-        "match_response": "dns_cf",
-        "server": "local",
-        "race": true
+        "rule_set": "gfw",
+        "invert": true,
+        "server": "dns_adguard",
+        "speculative": true
       },
       {
         "query_type": [
@@ -169,9 +180,6 @@
     {
       "tag": "proxy_client",
       "version": 2,
-      "headers": {
-        "Authorization": ""
-      },
       "detour": "proxy",
       "stream_receive_window": 0,
       "connection_receive_window": 0
@@ -180,20 +188,14 @@
   "inbounds": [
     {
       "type": "tun",
-      "address": ["172.18.0.1/30", "fdfe:dcba:9876::1/126"],
+      "address": [
+        "172.18.0.1/30",
+        "fdfe:dcba:9876::1/126"
+      ],
       "auto_route": true,
       "loopback_address": "10.7.0.1",
-      "stack": "mixed",
-      "route_exclude_address_set": [
-          "private_ip"
-        ],
-      "platform": {
-        "http_proxy": {
-          "enabled": true,
-          "server": "127.0.0.1",
-          "server_port": 7890
-        }
-      }
+      "route_exclude_address_set": "private_ip",
+      "stack": "system"
     },
     {
       "type": "mixed",
@@ -205,119 +207,63 @@
     {
       "type": "selector",
       "tag": "proxy",
-      "outbounds": [
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "noCN-auto",
-        "all"
-      ],
-      "default": "noCN-auto"
+      "outbounds": []
     },
     {
       "type": "selector",
       "tag": "ai",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "noCN-auto",
-        "all"
-      ],
-      "default": "us-auto"
+      "outbounds": [],
+      "default": "noCN-auto"
     },
     {
       "type": "selector",
       "tag": "telegram",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "all"
-      ]
+      "outbounds": []
     },
     {
       "type": "selector",
       "tag": "emby",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "all"
-      ]
+      "outbounds": []
+    },
+    {
+      "type": "selector",
+      "tag": "google",
+      "outbounds": [],
+      "default": "noCN-auto"
     },
     {
       "type": "selector",
       "tag": "streaming",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "all"
-      ]
+      "outbounds": [],
+      "default": "direct"
     },
     {
       "type": "selector",
       "tag": "github",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "all"
-      ],
+      "outbounds": [],
       "default": "us-auto"
     },
     {
       "type": "selector",
       "tag": "microsoft@cn",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "all"
-      ],
+      "outbounds": [],
+      "default": "direct"
+    },
+    {
+      "type": "selector",
+      "tag": "bilibili",
+      "outbounds": [],
       "default": "direct"
     },
     {
       "type": "selector",
       "tag": "cn",
-      "outbounds": [
-        "proxy",
-        "direct",
-        "hk-auto",
-        "tw-auto",
-        "jp-auto",
-        "sg-auto",
-        "us-auto",
-        "all"
-      ],
+      "outbounds": [],
       "default": "direct"
+    },
+    {
+      "type": "bridge",
+      "tag": "bridge"
     },
     {
       "type": "direct",
@@ -375,6 +321,11 @@
     "rules": [
       {
         "ip_is_private": true,
+        "preferred_by": "bridge",
+        "outbound": "bridge"
+      },
+      {
+        "ip_is_private": true,
         "outbound": "direct"
       },
       {
@@ -383,7 +334,8 @@
       },
       {
         "network": "icmp",
-        "outbound": "direct"
+        "preferred_by": "bridge",
+        "outbound": "bridge"
       },
       {
         "clash_mode": "Global",
@@ -391,7 +343,8 @@
       },
       {
         "clash_mode": "Direct",
-        "outbound": "direct"
+        "preferred_by": "bridge",
+        "outbound": "bridge"
       },
       {
         "process_name": [
@@ -411,17 +364,28 @@
           "weiyun.exe",
           "baidunetdisk.exe"
         ],
-        "outbound": "direct"
+        "preferred_by": "bridge",
+        "outbound": "bridge"
+      },
+      {
+        "preferred_by": "bridge",
+        "rule_set": "cn_ip",
+        "outbound": "bridge"
       },
       {
         "rule_set": "telegram_ip",
         "outbound": "telegram"
       },
       {
-        "rule_set": "cn_ip",
-        "outbound": "cn"
-      },
-      {
+        "rule_set": [
+          "netflix",
+          "telegram",
+          "youtube",
+          "category-ai-chat-!cn",
+          "github",
+          "category-emby"
+        ],
+        "invert": true,
         "action": "sniff"
       },
       {
@@ -453,6 +417,10 @@
         "action": "reject"
       },
       {
+        "protocol": "bittorrent",
+        "outbound": "direct"
+      },
+      {
         "rule_set": "category-ai-chat-!cn",
         "outbound": "ai"
       },
@@ -461,7 +429,10 @@
         "outbound": "telegram"
       },
       {
-        "rule_set": ["youtube", "netflix"],
+        "rule_set": [
+          "youtube",
+          "netflix"
+        ],
         "outbound": "streaming"
       },
       {
@@ -484,11 +455,15 @@
       },
       {
         "domain": "apps.apple.com",
+        "rule_set": "appleid",
         "outbound": "proxy"
       },
       {
         "domain_suffix": "miwifi.com",
-        "rule_set": ["cn", "apple-cn"],
+        "rule_set": [
+          "geolocation-cn",
+          "apple-cn"
+        ],
         "outbound": "cn"
       }
     ],
@@ -497,7 +472,7 @@
         "type": "remote",
         "tag": [
           "bilibili",
-          "cn",
+          "geolocation-cn",
           "netflix",
           "telegram",
           "youtube",
@@ -526,6 +501,11 @@
         "type": "remote",
         "tag": "private_ip",
         "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "appleid",
+        "url": "https://raw.githubusercontent.com/senshinya/singbox_ruleset/refs/heads/main/rule/AppleID/AppleID.srs"
       }
     ],
     "final": "proxy",
