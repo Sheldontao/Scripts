@@ -26,10 +26,6 @@
         "server": "dns.adguard-dns.com"
       },
       {
-        "type": "hosts",
-        "tag": "hosts"
-      },
-      {
         "type": "local",
         "tag": "local"
       },
