@@ -196,18 +196,14 @@
       "loopback_address": "10.7.0.1",
       "route_exclude_address_set": "private_ip",
       "stack": "system"
-    },
-    {
-      "type": "mixed",
-      "listen": "127.0.0.1",
-      "listen_port": 7890
     }
   ],
   "outbounds": [
     {
       "type": "selector",
       "tag": "proxy",
-      "outbounds": []
+      "outbounds": [],
+      "default": "noCN-auto"
     },
     {
       "type": "selector",
@@ -225,11 +221,6 @@
       "tag": "emby",
       "outbounds": [],
       "default": "all"
-    },
-    {
-      "type": "selector",
-      "tag": "google",
-      "outbounds": []
     },
     {
       "type": "selector",
@@ -374,7 +365,7 @@
           "netflix",
           "telegram",
           "youtube",
-          "category-ai-chat-!cn",
+          "category-ai-!cn",
           "github",
           "category-emby"
         ],
@@ -414,7 +405,7 @@
         "outbound": "direct"
       },
       {
-        "rule_set": "category-ai-chat-!cn",
+        "rule_set": "category-ai-!cn",
         "outbound": "ai"
       },
       {
@@ -471,7 +462,7 @@
           "youtube",
           "microsoft@cn",
           "apple-cn",
-          "category-ai-chat-!cn",
+          "category-ai-!cn",
           "gfw",
           "category-ads",
           "private",
@@ -511,10 +502,10 @@
       "enabled": true,
       "store_fakeip": true
     },
-    "clash_api": {
-      "external_controller": "127.0.0.1:9090",
-      "external_ui": "ClashUIforSingbox",
-      "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip"
-    }
+    // "clash_api": {
+    //   "external_controller": "127.0.0.1:9090",
+    //   "external_ui": "ClashUIforSingbox",
+    //   "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip"
+    // }
   }
 }
