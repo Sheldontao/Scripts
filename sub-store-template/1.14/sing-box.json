@@ -37,8 +37,8 @@
       {
         "type": "fakeip",
         "tag": "fakeip",
-        "inet4_range": "198.18.0.0/15",
-        "inet6_range": "fc00::/18"
+        "inet4_range": "198.18.0.1/16",
+        "inet6_range": "fdfe:dcba:9876::1/64"
       }
     ],
     "rules": [
@@ -51,6 +51,10 @@
         "server": "local"
       },
       {
+        "query_type": [
+          "AAAA",
+          "A"
+        ],
         "clash_mode": "Global",
         "server": "fakeip"
       },
@@ -92,20 +96,7 @@
       {
         "process_name": [
           "Microsoft Outlook",
-          "motrix-next-engine",
-          "aria2c.exe",
-          "fdm.exe",
-          "folx.exe",
-          "nettransport.exe",
-          "thunder.exe",
-          "transmission.exe",
-          "utorrent.exe",
-          "webtorrent.exe",
-          "webtorrent helper.exe",
-          "qbittorrent.exe",
-          "downloadservice.exe",
-          "weiyun.exe",
-          "baidunetdisk.exe"
+          "motrix-next-engine"
         ],
         "server": "local"
       },
@@ -172,13 +163,13 @@
     "server": "ntp.aliyun.com",
     "server_port": 123
   },
+  "certificate": {
+    "store": "chrome"
+  },
   "http_clients": [
     {
       "tag": "proxy_client",
-      "version": 2,
-      "detour": "proxy",
-      "stream_receive_window": 0,
-      "connection_receive_window": 0
+      "detour": "proxy"
     }
   ],
   "inbounds": [
@@ -198,47 +189,118 @@
     {
       "type": "selector",
       "tag": "proxy",
-      "outbounds": [],
+      "outbounds": [
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "noCN-auto",
+        "all"
+      ],
       "default": "noCN-auto"
     },
     {
       "type": "selector",
       "tag": "ai",
-      "outbounds": [],
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "noCN-auto",
+        "all"
+      ],
       "default": "us-auto"
     },
     {
       "type": "selector",
       "tag": "telegram",
-      "outbounds": []
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ]
     },
     {
       "type": "selector",
       "tag": "emby",
-      "outbounds": [],
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ],
       "default": "all"
     },
     {
       "type": "selector",
       "tag": "streaming",
-      "outbounds": []
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ]
     },
     {
       "type": "selector",
       "tag": "github",
-      "outbounds": [],
-      "default": "us-auto"
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ]
     },
     {
       "type": "selector",
       "tag": "microsoft@cn",
-      "outbounds": [],
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ],
       "default": "direct"
     },
     {
       "type": "selector",
       "tag": "cn",
-      "outbounds": [],
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ],
       "default": "direct"
     },
     {
@@ -329,20 +391,7 @@
       {
         "process_name": [
           "Microsoft Outlook",
-          "motrix-next-engine",
-          "aria2c.exe",
-          "fdm.exe",
-          "folx.exe",
-          "nettransport.exe",
-          "thunder.exe",
-          "transmission.exe",
-          "utorrent.exe",
-          "webtorrent.exe",
-          "webtorrent helper.exe",
-          "qbittorrent.exe",
-          "downloadservice.exe",
-          "weiyun.exe",
-          "baidunetdisk.exe"
+          "motrix-next-engine"
         ],
         "preferred_by": "bridge",
         "outbound": "bridge"
@@ -401,6 +450,12 @@
         "outbound": "direct"
       },
       {
+        "domain": "captive.apple.com",
+        "domain_suffix": "wiwide.com",
+        "outbound": "direct"
+      },
+      {
+        "domain": "userlocations.googleapis.com",
         "rule_set": "category-ai-!cn",
         "outbound": "ai"
       },
@@ -427,11 +482,6 @@
       {
         "rule_set": "microsoft@cn",
         "outbound": "microsoft@cn"
-      },
-      {
-        "domain": "captive.apple.com",
-        "domain_suffix": "wiwide.com",
-        "outbound": "direct"
       },
       {
         "domain": "apps.apple.com",
@@ -492,16 +542,15 @@
     "auto_detect_interface": true,
     "default_domain_resolver": "dns_direct",
     "default_http_client": "proxy_client"
-  },
+  }, //    "clash_api": {
+  //      "external_controller": "127.0.0.1:9090",
+  //      "external_ui": "ClashUIforSingbox",
+  //      "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip"
+  //    }
   "experimental": {
     "cache_file": {
       "enabled": true,
       "store_fakeip": true
-    },
-    // "clash_api": {
-    //   "external_controller": "127.0.0.1:9090",
-    //   "external_ui": "ClashUIforSingbox",
-    //   "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip"
-    // }
+    }
   }
 }
