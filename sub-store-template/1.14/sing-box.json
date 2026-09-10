@@ -12,12 +12,13 @@
         "tag": "dns_gg",
         "detour": "proxy",
         "server": "8.8.8.8"
-      }, //      {
-      //        "type": "https",
-      //        "tag": "dns_cf",
-      //        "detour": "proxy",
-      //        "server": "1.1.1.1"
-      //      },
+      },
+      {
+             "type": "https",
+             "tag": "dns_cf",
+             "detour": "proxy",
+             "server": "1.1.1.1"
+      },
       {
         "type": "https",
         "tag": "dns_adguard",
@@ -116,35 +117,36 @@
         "server": "fakeip"
       },
       {
+        "domain_keyword": "emby.",
+        "rule_set": "category-emby",
+        "server": "fakeip"
+      },
+      {
         "rule_set": "gfw",
         "invert": true,
         "action": "evaluate",
         "server": "dns_gg",
         "tag": "dns_gg",
         "client_subnet": "114.114.114.114/24"
-      }, //      {
-      //        "rule_set": "gfw",
-      //        "invert": true,
-      //        "action": "evaluate",
-      //        "server": "dns_cf",
-      //        "tag": "dns_cf"
-      //      },
+      },
+      {
+        "rule_set": "gfw",
+        "invert": true,
+        "action": "evaluate",
+        "server": "dns_cf",
+        "tag": "dns_cf"
+      },
       {
         "rule_set": "cn_ip",
         "match_response": "dns_gg",
         "race": true,
         "server": "local"
-      }, //      {
-      //        "rule_set": "cn_ip",
-      //        "match_response": "dns_cf",
-      //        "race": true,
-      //        "server": "local"
-      //      },
+      },
       {
-        "rule_set": "gfw",
-        "invert": true,
-        "server": "dns_adguard",
-        "speculative": true
+        "rule_set": "cn_ip",
+        "match_response": "dns_cf",
+        "race": true,
+        "server": "local"
       },
       {
         "query_type": [
