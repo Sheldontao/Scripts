@@ -184,19 +184,7 @@
       "auto_route": true,
       "loopback_address": "10.7.0.1",
       "route_exclude_address_set": "private_ip",
-      "stack": "system",
-      "platform": {
-        "http_proxy": {
-          "enabled": true,
-          "server": "127.0.0.1",
-          "server_port": 7890
-        }
-      }
-    },
-    {
-      "type": "mixed",
-      "listen": "127.0.0.1",
-      "listen_port": 7890
+      "stack": "system"
     }
   ],
   "outbounds": [
@@ -318,6 +306,10 @@
       "default": "direct"
     },
     {
+      "type": "bridge",
+      "tag": "bridge"
+    },
+    {
       "type": "direct",
       "tag": "direct"
     },
@@ -373,6 +365,11 @@
     "rules": [
       {
         "ip_is_private": true,
+        "preferred_by": "bridge",
+        "outbound": "bridge"
+      },
+      {
+        "ip_is_private": true,
         "outbound": "direct"
       },
       {
@@ -381,7 +378,8 @@
       },
       {
         "network": "icmp",
-        "outbound": "direct"
+        "preferred_by": "bridge",
+        "outbound": "bridge"
       },
       {
         "clash_mode": "Global",
@@ -389,18 +387,21 @@
       },
       {
         "clash_mode": "Direct",
-        "outbound": "direct"
+        "preferred_by": "bridge",
+        "outbound": "bridge"
       },
       {
         "process_name": [
           "Microsoft Outlook",
           "motrix-next-engine"
         ],
-        "outbound": "direct"
+        "preferred_by": "bridge",
+        "outbound": "bridge"
       },
       {
+        "preferred_by": "bridge",
         "rule_set": "cn_ip",
-        "outbound": "direct"
+        "outbound": "bridge"
       },
       {
         "rule_set": "telegram_ip",
