@@ -122,6 +122,11 @@
         "server": "fakeip"
       },
       {
+        "domain_keyword": "emby.",
+        "rule_set": "category-emby",
+        "server": "local"
+      },
+      {
         "rule_set": "gfw",
         "invert": true,
         "action": "evaluate",
