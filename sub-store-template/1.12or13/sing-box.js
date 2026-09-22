@@ -5,7 +5,14 @@ const compatible_outbound = {
 };
 
 let compatible;
-let config = JSON.parse($files[0]);
+let rawConfig =
+  typeof $files[0] === "string"
+    ? $files[0].replace(
+        /\\"|"(?:\\"|[^"])*"|(\/\/.*|\/\*[\s\S]*?\*\/)/g,
+        (m, g) => (g ? "" : m)
+      )
+    : $files[0];
+let config = typeof rawConfig === "string" ? JSON.parse(rawConfig) : rawConfig;
 let proxies = await produceArtifact({
   name,
   type: /^1$|col/i.test(type) ? "collection" : "subscription",
