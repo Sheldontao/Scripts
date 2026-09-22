@@ -5,21 +5,20 @@
 #!homepage=https://github.com/Sheldontao/Scripts
 #!raw-url=https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
 #!loon_version = 3.3.7(921)
-#!date = 2026-8-1
-#!system_version = 18
+#!date = 2026-9-22
 
 
 [Argument]
-xhs_des_regex = input,"["峰哥","恋爱","雪茄","新闻","manus","揽佬","红十字","胡锡进"]",tag=xhs_des_regex
-xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=xhs_nickname_regex
-xhs_counts_threshold = input, "[0,10,10,0,0]", tag=点赞/收藏/评论/分享/好阈值
-xhs_general_counts_threshold = switch, false, tag=xhs_counts_threshold全局开关
-xhs_comment_like_ratio_threshold = input, "0", tag=评论/点赞比阈值
-xhs_general_comment_like_ratio_threshold = switch, false, tag=评论/点赞比阈值全局开关
+xhs_des_regex = input,"["峰哥","恋爱","雪茄","新闻","manus","揽佬","红十字","胡锡进"]",tag=推荐描述正则
+xhs_nickname_regex = input,"["新闻","红十字","日报","晚报","电影","剪辑","影视","峰哥","主播","广播","视频","谈.*规划",".+[姐哥].*谈","老兵","ai","AI","新华","区块链"]",tag=推荐用户名正则
+xhs_counts_threshold = input, "[0,10,10,0,0]", tag=点赞/收藏/评论/分享/好的阈值
+xhs_general_counts_threshold = switch, false, tag=阈值全局开关（包括搜索，默认关闭）
+xhs_comment_like_ratio_threshold = input, "0", tag=评论/点赞比的阈值
+xhs_general_comment_like_ratio_threshold = switch, false, tag=评论/点赞比的阈值全局开关（包括搜索，默认关闭）
+xhs_comment_regex = input, "{"author_comment_regex":["^私$","直接私信"],"general_comment_regex":["神经病"]}",tag=全局评论正则,desc=注意格式，所有参数标点符号均为英文。\n{"author_comment_regex":["regex1"],"general_comment_regex":["regex2"]}
 
-xhs_search_des_regex = input, "["一个正则表达式",""]",tag=xhs_search_des_regex
-xhs_search_nickname_regex = input, "["中介","看房","租房","好房","探房","管家","房东直租","公寓","房.*产","住宿","寻房","找房"]",tag=xhs_search_nickname_regex
-xhs_comment_regex = input, "{"author_comment_regex":["^私$","直接私信"],"general_comment_regex":["神经病",""]}",tag=xhs_comment_regex,desc=注意格式，所有参数标点符号均为英文。\n{"author_comment_regex":["regex1"],"general_comment_regex":["regex2"]}
+xhs_search_des_regex = input, "["一个正则表达式"]",tag=搜索描述正则
+xhs_search_nickname_regex = input, "["中介","看房","租房","好房","探房","管家","房东直租","公寓","房.*产","住宿","寻房","找房"]",tag=搜索用户名正则
 xhs_loglevel = select, "WARNING", "DEBUG", "INFO", "ERROR", tag=日志级别
 
 [Rule]

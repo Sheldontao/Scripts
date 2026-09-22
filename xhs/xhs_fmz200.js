@@ -365,13 +365,15 @@ if (url.includes("/search/notes")) {
     );
 
     obj.data.items = obj.data.items.filter((item) => {
-      // 1. 正则过滤内容 (标题 + 描述 + 标签)
-      const title = item?.note?.title || "";
-      const desc = item?.note?.desc || "";
+      // 1. 正则过滤内容 (显示标题 + 标题 + 描述 + 标签)
+      const displayTitle = item?.note?.display_title || item?.display_title || "";
+      const title = item?.note?.title || item?.title || "";
+      const desc = item?.note?.desc || item?.desc || "";
       const tags = item?.note?.hash_tag
         ? item.note.hash_tag.map((t) => t.name).join(" ")
         : "";
-      const contentToMatch = `${title} ${desc} ${tags}`.trim();
+      const contentParts = [displayTitle, title, desc, tags].filter(Boolean);
+      const contentToMatch = Array.from(new Set(contentParts)).join(" ").trim();
 
       if (searchDesRegexes.length > 0 && contentToMatch) {
         for (const regex of searchDesRegexes) {
@@ -662,13 +664,15 @@ if (url.includes("/homefeed")) {
       ) {
         return false;
       }
-      // 3. 正则过滤内容 (标题 + 描述 + 标签)
+      // 3. 正则过滤内容 (显示标题 + 标题 + 描述 + 标签)
+      const displayTitle = item?.display_title || item?.note?.display_title || "";
       const title = item?.title || item?.note?.title || "";
       const desc = item?.desc || item?.note?.desc || "";
       const tags = item?.note?.hash_tag
         ? item.note.hash_tag.map((t) => t.name).join(" ")
         : "";
-      const contentToMatch = `${title} ${desc} ${tags}`.trim();
+      const contentParts = [displayTitle, title, desc, tags].filter(Boolean);
+      const contentToMatch = Array.from(new Set(contentParts)).join(" ").trim();
 
       if (descRegexes.length > 0 && contentToMatch) {
         for (const regex of descRegexes) {
@@ -901,6 +905,7 @@ if (
       // 视频流可能在 note_list 里，或者直接就是 noteItem
       const notes = noteItem?.note_list || [noteItem];
       for (let note of notes) {
+        const displayTitle = note?.display_title || note?.note?.display_title || "";
         const title = note?.title || note?.note?.title || "";
         const desc = note?.desc || note?.note?.desc || "";
         const tags = note?.hash_tag
@@ -908,7 +913,8 @@ if (
           : note?.note?.hash_tag
             ? note.note.hash_tag.map((t) => t.name).join(" ")
             : "";
-        const contentToMatch = `${title} ${desc} ${tags}`.trim();
+        const contentParts = [displayTitle, title, desc, tags].filter(Boolean);
+        const contentToMatch = Array.from(new Set(contentParts)).join(" ").trim();
 
         if (contentToMatch) {
           for (const regex of descRegexes) {
