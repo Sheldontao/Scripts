@@ -1,0 +1,611 @@
+{
+  "$schema": "https://sing-box.sagernet.org/schema.json",
+  "log": {
+    "level": "warn",
+    "output": "sing-box.log",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "type": "https",
+        "tag": "dns_gg",
+        "detour": "proxy",
+        "server": "8.8.8.8"
+      },
+      {
+        "type": "https",
+        "tag": "dns_cf",
+        "detour": "proxy",
+        "server": "1.1.1.1"
+      }, //      {
+      //        "type": "https",
+      //        "tag": "dns_adguard",
+      //        "detour": "proxy",
+      //        "domain_resolver": "dns_gg",
+      //        "server": "dns.adguard-dns.com"
+      //      },
+      {
+        "type": "local",
+        "tag": "local"
+      },
+      {
+        "type": "quic",
+        "tag": "dns_direct",
+        "server": "223.5.5.5"
+      },
+      {
+        "type": "fakeip",
+        "tag": "fakeip",
+        "inet4_range": "198.18.0.1/16",
+        "inet6_range": "fdfe:dcba:9876::1/64"
+      }
+    ],
+    "rules": [
+      {
+        "preferred_by": "local",
+        "server": "local"
+      },
+      {
+        "clash_mode": "Direct",
+        "server": "local"
+      },
+      {
+        "query_type": [
+          "AAAA",
+          "A"
+        ],
+        "clash_mode": "Global",
+        "server": "fakeip"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "clash_mode": "AllowAds",
+            "invert": true
+          },
+          {
+            "rule_set": "category-ads"
+          }
+        ],
+        "action": "predefined"
+      },
+      {
+        "domain": [
+          "ghfast.top",
+          "cdn.jsdelivr.net"
+        ],
+        "domain_suffix": [
+          "tplogin.cn",
+          "router.asus.com",
+          "tendawifi.com",
+          "tplinkwifi.net",
+          ".local",
+          ".lan",
+          "miwifi.com"
+        ],
+        "rule_set": [
+          "private",
+          "bilibili",
+          "apple-cn"
+        ],
+        "server": "local"
+      },
+      {
+        "process_name": [
+          "Microsoft Outlook",
+          "motrix-next-engine"
+        ],
+        "server": "local"
+      },
+      {
+        "rule_set": [
+          "geolocation-cn",
+          "microsoft@cn"
+        ],
+        "server": "dns_direct"
+      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "rule_set": "gfw",
+        "server": "fakeip"
+      },
+      {
+        "domain_keyword": "emby.",
+        "rule_set": "category-emby",
+        "server": "fakeip"
+      },
+      {
+        "domain_keyword": "emby.",
+        "rule_set": "category-emby",
+        "server": "local"
+      },
+      {
+        "rule_set": "gfw",
+        "invert": true,
+        "action": "evaluate",
+        "server": "dns_gg",
+        "tag": "dns_gg",
+        "client_subnet": "114.114.114.114/24"
+      },
+      {
+        "rule_set": "gfw",
+        "invert": true,
+        "action": "evaluate",
+        "server": "dns_cf",
+        "tag": "dns_cf"
+      },
+      {
+        "rule_set": "cn_ip",
+        "match_response": "dns_gg",
+        "race": true,
+        "server": "local"
+      },
+      {
+        "rule_set": "cn_ip",
+        "match_response": "dns_cf",
+        "race": true,
+        "server": "local"
+      }, //      {
+      //        "type": "logical",
+      //        "mode": "and",
+      //        "rules": [
+      //          {
+      //            "clash_mode": "AllowAds",
+      //            "invert": true
+      //          },
+      //          {
+      //            "rule_set": "gfw",
+      //            "invert": true
+      //          }
+      //        ],
+      //        "server": "dns_adguard",
+      //        "speculative": true
+      //      },
+      {
+        "query_type": [
+          "A",
+          "AAAA"
+        ],
+        "server": "fakeip"
+      }
+    ],
+    "final": "dns_gg",
+    "optimistic": true
+  },
+  "ntp": {
+    "enabled": true,
+    "interval": "30m0s",
+    "server": "ntp.aliyun.com",
+    "server_port": 123
+  },
+  "certificate": {
+    "store": "chrome"
+  },
+  "http_clients": [
+    {
+      "tag": "proxy_client",
+      "version": 2,
+      "detour": "proxy",
+      "stream_receive_window": 0,
+      "connection_receive_window": 0
+    }
+  ],
+  "inbounds": [
+    {
+      "type": "tun",
+      "address": [
+        "172.18.0.1/30",
+        "fdfe:dcba:9876::1/126"
+      ],
+      "auto_route": true,
+      "loopback_address": "10.7.0.1",
+      "route_exclude_address_set": "private_ip"
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "selector",
+      "tag": "ai",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "noCN-auto",
+        "all"
+      ],
+      "default": "us-auto"
+    },
+    {
+      "type": "selector",
+      "tag": "telegram",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "emby",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ],
+      "default": "all"
+    },
+    {
+      "type": "selector",
+      "tag": "streaming",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "github",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ]
+    },
+    {
+      "type": "selector",
+      "tag": "microsoft@cn",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ],
+      "default": "direct"
+    },
+    {
+      "type": "selector",
+      "tag": "google",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ],
+      "default": "all"
+    },
+    {
+      "type": "selector",
+      "tag": "proxy",
+      "outbounds": [
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "noCN-auto",
+        "all"
+      ],
+      "default": "noCN-auto"
+    },
+    {
+      "type": "selector",
+      "tag": "cn",
+      "outbounds": [
+        "proxy",
+        "direct",
+        "hk-auto",
+        "tw-auto",
+        "jp-auto",
+        "sg-auto",
+        "us-auto",
+        "all"
+      ],
+      "default": "direct"
+    },
+    {
+      "type": "bridge",
+      "tag": "bridge"
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "urltest",
+      "tag": "noCN-auto",
+      "outbounds": [],
+      "interval": "2m0s",
+      "interrupt_exist_connections": true
+    },
+    {
+      "type": "urltest",
+      "tag": "hk-auto",
+      "outbounds": [],
+      "interval": "2m0s",
+      "interrupt_exist_connections": true
+    },
+    {
+      "type": "urltest",
+      "tag": "tw-auto",
+      "outbounds": [],
+      "interval": "2m0s",
+      "interrupt_exist_connections": true
+    },
+    {
+      "type": "urltest",
+      "tag": "jp-auto",
+      "outbounds": [],
+      "interval": "2m0s",
+      "interrupt_exist_connections": true
+    },
+    {
+      "type": "urltest",
+      "tag": "sg-auto",
+      "outbounds": [],
+      "interval": "2m0s",
+      "interrupt_exist_connections": true
+    },
+    {
+      "type": "urltest",
+      "tag": "us-auto",
+      "outbounds": [],
+      "interval": "2m0s",
+      "interrupt_exist_connections": true
+    },
+    {
+      "type": "selector",
+      "tag": "all",
+      "outbounds": []
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "ip_is_private": true,
+        "preferred_by": "bridge",
+        "outbound": "bridge"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      },
+      {
+        "network": "icmp",
+        "action": "resolve"
+      },
+      {
+        "network": "icmp",
+        "preferred_by": "bridge",
+        "outbound": "bridge"
+      },
+      {
+        "clash_mode": "Global",
+        "outbound": "all"
+      },
+      {
+        "clash_mode": "Direct",
+        "preferred_by": "bridge",
+        "outbound": "bridge"
+      },
+      {
+        "process_name": [
+          "Microsoft Outlook",
+          "motrix-next-engine"
+        ],
+        "preferred_by": "bridge",
+        "outbound": "bridge"
+      },
+      {
+        "preferred_by": "bridge",
+        "rule_set": "cn_ip",
+        "outbound": "bridge"
+      },
+      {
+        "rule_set": "telegram_ip",
+        "outbound": "telegram"
+      },
+      {
+        "rule_set": [
+          "netflix",
+          "telegram",
+          "youtube",
+          "category-ai-!cn",
+          "github",
+          "category-emby",
+          "google"
+        ],
+        "invert": true,
+        "action": "sniff"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "protocol": "stun"
+          },
+          {
+            "rule_set": "cn_ip",
+            "invert": true
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "type": "logical",
+        "mode": "and",
+        "rules": [
+          {
+            "clash_mode": "AllowAds",
+            "invert": true
+          },
+          {
+            "rule_set": "category-ads"
+          }
+        ],
+        "action": "reject"
+      },
+      {
+        "protocol": "bittorrent",
+        "outbound": "direct"
+      },
+      {
+        "domain": "captive.apple.com",
+        "domain_suffix": [
+          "wiwide.com",
+          "ipip.net"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "domain": [
+          "userlocations.googleapis.com",
+          "locationhistory-pa.googleapis.com",
+          "locationhistoryaggregates-pa.googleapis.com",
+          "locationhistoryplacedetails-pa.googleapis.com"
+        ],
+        "rule_set": "category-ai-!cn",
+        "outbound": "ai"
+      },
+      {
+        "rule_set": "telegram",
+        "outbound": "telegram"
+      },
+      {
+        "domain_keyword": "emby.",
+        "rule_set": "category-emby",
+        "outbound": "emby"
+      },
+      {
+        "rule_set": [
+          "youtube",
+          "netflix"
+        ],
+        "outbound": "streaming"
+      },
+      {
+        "rule_set": "github",
+        "outbound": "github"
+      },
+      {
+        "rule_set": "microsoft@cn",
+        "outbound": "microsoft@cn"
+      },
+      {
+        "rule_set": "google",
+        "outbound": "google"
+      },
+      {
+        "domain": "apps.apple.com",
+        "rule_set": [
+          "appleid",
+          "gfw"
+        ],
+        "outbound": "proxy"
+      },
+      {
+        "domain_suffix": "miwifi.com",
+        "rule_set": [
+          "geolocation-cn",
+          "apple-cn"
+        ],
+        "outbound": "cn"
+      }
+    ],
+    "rule_set": [
+      {
+        "type": "remote",
+        "tag": [
+          "bilibili",
+          "geolocation-cn",
+          "netflix",
+          "telegram",
+          "youtube",
+          "microsoft@cn",
+          "apple-cn",
+          "category-ai-!cn",
+          "gfw",
+          "category-ads",
+          "private",
+          "github",
+          "category-emby",
+          "google"
+        ],
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geosite/{tag}.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "cn_ip",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/cn.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "telegram_ip",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/telegram.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "private_ip",
+        "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/sing/geo/geoip/private.srs"
+      },
+      {
+        "type": "remote",
+        "tag": "appleid",
+        "url": "https://raw.githubusercontent.com/senshinya/singbox_ruleset/refs/heads/main/rule/AppleID/AppleID.srs"
+      }
+    ],
+    "final": "proxy",
+    "auto_detect_interface": true,
+    "default_domain_resolver": "dns_direct",
+    "default_http_client": "proxy_client"
+  }, //    "clash_api": {
+  //      "external_controller": "127.0.0.1:9090",
+  //      "external_ui": "ClashUIforSingbox",
+  //      "external_ui_download_url": "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip"
+  //    }
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "store_fakeip": true
+    }
+  }
+}
