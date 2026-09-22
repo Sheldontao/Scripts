@@ -1,7 +1,18 @@
-xhs/*
-hutao_sign.js
+# macOS / OS files
 .DS_Store
+**/.DS_Store
+
+# Logs and packet captures
+*.log
+*.har
+
+# Local scripts & docs
+hutao_sign.js
+docs/*
+
+# xhs whitelist
+xhs/*
 !xhs/xhs_fmz200.js
 !xhs/xiaohongshu.plugin
 !xhs/Readme.md
-docs/*
+!xhs/adguard_xiaohongshu_filter.txt
