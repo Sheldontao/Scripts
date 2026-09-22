@@ -381,8 +381,9 @@ async function operator(proxies = [], targetPlatform, context) {
       }
       api = { ...api, ...extracted };
     }
-    let f = format.replace(/\{\{(.*?)\}\}/g, "${$1}");
-    return eval(`\`${f}\``);
+    return format
+      .replace(/\{\{api\.(\w+)\}\}/g, (_, k) => api?.[k] ?? "")
+      .replace(/\{\{proxy\.(\w+)\}\}/g, (_, k) => proxy?.[k] ?? "");
   }
   function executeAsyncTasks(tasks, { wrap, result, concurrency = 1 } = {}) {
     return new Promise(async (resolve, reject) => {
@@ -458,9 +459,11 @@ async function operator(proxies = [], targetPlatform, context) {
                       : "gpt"
         ] = MEDIA_RESULT_SYMBOLS[results[p.key]] || "?";
       }
-      let f = mediaFormat.replace(/\{\{(.*?)\}\}/g, "${$1}");
       try {
-        return eval(`\`${f}\``);
+        return mediaFormat.replace(
+          /\{\{(.*?)\}\}/g,
+          (_, key) => vars[key.trim()] ?? "",
+        );
       } catch (e) {
         return "";
       }
@@ -526,8 +529,8 @@ async function operator(proxies = [], targetPlatform, context) {
         timeout: mediaTimeout,
         headers: {
           "Accept-Language": "en",
-          Authorization:
-            "ZGlzbmV5JmJyb3dzZXImMS4wLjA.Cu56AgSfBTDag5NiRA81oLHkDZfu5L3CKadnefEAY84",
+        Authorization:
+          $arguments.disney_token || "",
           "Content-Type": "application/json",
           "User-Agent":
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36",
