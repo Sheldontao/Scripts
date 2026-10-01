@@ -1,10 +1,10 @@
 #!name=小红书Plus
-#!desc=如果还有广告直连，必须重装清除cache\n一定参照默认格式\n 1.增加4个regex筛选和1个信息等级筛选\n 2.添加推荐页热点删除\n 3.添加推荐页live删除\n 4.新增对detailfeed/preload的判断，如果你点不开某个卡片，就说明被屏蔽了
+#!desc=如果还有广告直连，必须重装清除cache\n一定参照默认格式\n 1.增加4个regex筛选和1个信息等级筛选\n 2.添加推荐页热点删除\n 3.添加推荐页live删除\n 4.新增对detailfeed/preload的判断，如果你点不开某个卡片，就说明被屏蔽了\n 5.新增无痕模式开关（不产生浏览/播放记录，借鉴PiliNara）
 #!author=奶思[https://github.com/fmz200], Leo
 #!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png
 #!homepage=https://github.com/Sheldontao/Scripts
 #!raw-url=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xiaohongshu.plugin
-#!loon_version = 3.3.7(921)
+#!loon_version = 3.5.1(978)
 #!date = 2026-10-1
 
 
@@ -16,6 +16,8 @@ xhs_general_counts_threshold = switch, false, tag=阈值全局开关（包括搜
 xhs_comment_like_ratio_threshold = input, "0", tag=评论/点赞比的阈值
 xhs_general_comment_like_ratio_threshold = switch, false, tag=评论/点赞比的阈值全局开关（包括搜索，默认关闭）
 xhs_comment_regex = input, "{"author_comment_regex":["^私$","直接私信"],"general_comment_regex":["神经病"]}",tag=全局评论正则,desc=注意格式，所有参数标点符号均为英文。\n{"author_comment_regex":["regex1"],"general_comment_regex":["regex2"]}
+xhs_incognito = switch, false, tag=无痕模式（不产生浏览/播放记录）, desc=开启后拦截浏览历史与播放上报；App内浏览记录页将为空
+xhs_incognito_extra = switch, false, tag=无痕增强（设备信号与广告追踪上报）, desc=拦截设备信号、用户行为流与广告追踪上报
 xhs_image_quality = select, "high", "original", tag=画质增强模式, desc=high=高像素输出(默认)，original=原始分辨率PNG(体积大)
 xhs_hard_block = switch, false, tag=命中详情正则直接白屏, desc=关(默认)=详情页命中xhs_des_regex时仅替换描述为命中提示；开=清空响应直接白屏并上报未曝光
 
@@ -45,13 +47,28 @@ AND, ((PROTOCOL,QUIC), (OR, ((IP-CIDR, 101.227.133.99/32, no-resolve), (IP-CIDR,
 ^https?:\/\/(so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/trending response-body-json-jq 'del(.data.data)'
 
 # --- 整体配置 (包含开屏、皮肤、侧边栏新年配置清理) ---
-^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config response-body-json-jq '.data.configs |= with_entries(select(.key | (contains("splash") or contains("cny") or contains("theme") or contains("loading_img")) | not))'
+^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/config response-body-json-jq '.data.configs |= with_entries(select(.key | (ascii_downcase | contains("splash") or contains("cny") or contains("theme") or contains("loading_img")) | not))'
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system\/service\/ui\/config response-body-json-jq 'del(.data.sideConfigHomepage?.componentConfig?.sidebar_config_cny_2025, .data.sideConfigPersonalPage?.componentConfig?.sidebar_config_cny_2025)'
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/splash_config reject-dict
 
 # --- 网络 & DNS 屏蔽 ---
 ^https?:\/\/.*\.xiaohongshu\.com\/api\/sns\/v\d+\/httpdns reject-dict
 ^https?:\/\/.*\.xhscdn\.com\/(.*\/httpdns|o_live_p2p_mobilesdk) reject-dict
+# httpdns 端点已漂移至 gslb/mediacloud（2026-10 抓包核实）
+request if ${url} ~= /^https:\/\/(gslb|mediacloud)\.xiaohongshu\.com\/api\/httpdns/ then reject_dict(200)
+# o_live_p2p_mobilesdk 已漂移至第三方明文 HTTP 域
+request if ${url} ~= /^http:\/\/sdkgen\.data\.tianwenca\.com\/o_live_p2p_mobilesdk/ then reject_dict(200)
+
+# --- 无痕模式：浏览与播放记录抑制 ---
+request if ${xhs_incognito} == true && ${url} ~= /^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/history\/report$/ then reject_dict(200)
+request if ${xhs_incognito} == true && ${url} ~= /^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/metrics_report$/ then reject_dict(200)
+request if ${xhs_incognito} == true && ${url} ~= /^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/video_(played|finished)/ then reject_dict(200)
+request if ${xhs_incognito} == true && ${url} ~= /^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/videofeed\/exit$/ then reject_dict(200)
+
+# --- 无痕增强：设备信号 / 行为流 / 广告追踪 ---
+request if ${xhs_incognito_extra} == true && ${url} ~= /^https:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/system_service\/signal_report$/ then reject_dict(200)
+request if ${xhs_incognito_extra} == true && ${url} ~= /^https:\/\/edith\.xiaohongshu\.com\/api\/usergrowth\/behavior\/report$/ then reject_dict(200)
+request if ${xhs_incognito_extra} == true && ${url} ~= /^https:\/\/www\.xiaohongshu\.com\/api\/sns\/v\d+\/(ads\/apple\/record|tag\/ads_engage)$/ then reject_dict(200)
 
 # --- 详情页 & 小部件 ---
 ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/widgets response-body-json-jq 'del(.data.cooperate_binds?, .data.generic?, .data.note_next_step?, .data.widget_list?)'
@@ -90,4 +107,4 @@ http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/i
 # MITM：中间人攻击，解密/跳过相关域名的内容，"-"开头为跳过
 # =====================================
 [MITM]
-hostname = edith.xiaohongshu.com, www.xiaohongshu.com, ci.xiaohongshu.com, rec.xiaohongshu.com, so.xiaohongshu.com, api.xiaohongshu.com, *.xhscdn.com
+hostname = edith.xiaohongshu.com, www.xiaohongshu.com, ci.xiaohongshu.com, rec.xiaohongshu.com, so.xiaohongshu.com, api.xiaohongshu.com, gslb.xiaohongshu.com, mediacloud.xiaohongshu.com, *.xhscdn.com
