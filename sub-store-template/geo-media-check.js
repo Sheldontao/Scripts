@@ -34,6 +34,7 @@
  * - [youtube/netflix/disney/dazn/paramount/discovery/chatgpt] 媒体解锁检测. 设为 true 启用. 对每个节点发起 HTTP 请求检测对应平台解锁状态, 通过则追加后缀标签
  * - [media_format] 自定义媒体检测后缀格式, 默认只显示通过的平台标签. 可用变量: {{yt}} {{nf}} {{dp}} {{dz}} {{pm}} {{dc}} {{gpt}}, 值为 ✓ (通过) 或 ✗ (失败) 或 ◐ (部分)
  * - [media_timeout] 媒体检测单独超时(毫秒). 默认取 timeout 值. 设为较小值可不拖慢整体检测
+ * - [disney_token] 自定义 Disney+ 检测 Authorization Token (可选, 默认使用内置官方公开密钥)
  * 关于缓存时长
  * 当使用相关脚本时, 若在对应的脚本中使用参数(⚠ 别忘了这个, 一般为 cache, 值设为 true 即可)开启缓存
  * 可在前端(>=2.16.0) 配置各项缓存的默认时长
@@ -381,8 +382,22 @@ async function operator(proxies = [], targetPlatform, context) {
       }
       api = { ...api, ...extracted };
     }
-    let f = format.replace(/\{\{(.*?)\}\}/g, "${$1}");
-    return eval(`\`${f}\``);
+    return format.replace(
+      /\{\{\s*([a-zA-Z0-9_.\s]+)\s*\}\}/g,
+      (_, rawPath) => {
+        const path = rawPath.replace(/\s+/g, "");
+        if (path.includes("__proto__") || path.includes("constructor")) return "";
+        let val;
+        if (path.startsWith("api.")) {
+          val = lodash_get(api, path.slice(4));
+        } else if (path.startsWith("proxy.")) {
+          val = lodash_get(proxy, path.slice(6));
+        } else {
+          val = lodash_get({ proxy, api }, path);
+        }
+        return val !== undefined && val !== null ? val : "";
+      },
+    );
   }
   function executeAsyncTasks(tasks, { wrap, result, concurrency = 1 } = {}) {
     return new Promise(async (resolve, reject) => {
@@ -458,9 +473,11 @@ async function operator(proxies = [], targetPlatform, context) {
                       : "gpt"
         ] = MEDIA_RESULT_SYMBOLS[results[p.key]] || "?";
       }
-      let f = mediaFormat.replace(/\{\{(.*?)\}\}/g, "${$1}");
       try {
-        return eval(`\`${f}\``);
+        return mediaFormat.replace(
+          /\{\{(.*?)\}\}/g,
+          (_, key) => vars[key.trim()] ?? "",
+        );
       } catch (e) {
         return "";
       }
@@ -527,6 +544,7 @@ async function operator(proxies = [], targetPlatform, context) {
         headers: {
           "Accept-Language": "en",
           Authorization:
+            $arguments.disney_token ||
             "ZGlzbmV5JmJyb3dzZXImMS4wLjA.Cu56AgSfBTDag5NiRA81oLHkDZfu5L3CKadnefEAY84",
           "Content-Type": "application/json",
           "User-Agent":
