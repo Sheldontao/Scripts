@@ -381,8 +381,10 @@ async function operator(proxies = [], targetPlatform, context) {
       }
       api = { ...api, ...extracted };
     }
-    let f = format.replace(/\{\{(.*?)\}\}/g, "${$1}");
-    return eval(`\`${f}\``);
+    return format.replace(/\{\{(.*?)\}\}/g, (_, expr) => {
+      const value = lodash_get({ proxy, api }, expr.trim());
+      return value === undefined || value === null ? "" : value;
+    });
   }
   function executeAsyncTasks(tasks, { wrap, result, concurrency = 1 } = {}) {
     return new Promise(async (resolve, reject) => {
