@@ -73,9 +73,12 @@ update_local_state() {
     exit 1
   fi
 
-  # Update both the variations_permanent_consistency_country array and general country keys
+  # variations_permanent_overridden_country is the only country key Chrome 154+
+  # reads for permanent-consistency filtering that the seed cannot overwrite.
+  # The rest are kept for older Chrome versions.
   /usr/bin/jq --arg ip "$ip" --arg country "$country" \
-    '.variations_permanent_consistency_country[0] = $ip |
+    '.variations_permanent_overridden_country = $country |
+     .variations_permanent_consistency_country[0] = $ip |
      .variations_permanent_consistency_country[1] = $country |
      .variations_country = $country |
      .variations_safe_seed_permanent_consistency_country = $country |
@@ -97,10 +100,19 @@ update_local_state() {
 
 quit_chrome
 read -r current_ip country <<< "$(fetch_ip_and_country)"
+
+# What Google's own geo service recorded at Chrome's last seed fetch. Gemini's
+# button follows this, not ipinfo's view of the exit IP.
+google_country=$(/usr/bin/jq -r '.variations_safe_seed_session_consistency_country // "unknown"' "$CHROME_STATE")
+
 update_local_state "$current_ip" "$country"
 
 if [ "$country" = "us" ]; then
   echo "Successfully synced Chrome IP to: $current_ip ($country) - MATCH US"
 else
   echo "Successfully synced Chrome IP to: $current_ip ($country) - NO MATCH US"
+fi
+
+if [ "$google_country" != "$country" ]; then
+  echo "Warning: Google geo reports country '$google_country', not '$country'. Gemini follows Google, so the button may stay hidden until the exit IP is actually US."
 fi
