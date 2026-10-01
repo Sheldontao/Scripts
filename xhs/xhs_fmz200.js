@@ -1,5 +1,5 @@
 /**
- * @author fmz200, Baby, leo
+ * @author Baby, leo
  * @function 小红书去广告、净化、解除下载限制、画质增强、正则去除主页流，搜索流等
  * @date 2025-12-10 22:10:00
  * @quote @RuCu6
@@ -68,61 +68,63 @@ function logError(...messages) {
 
 if (isRequestPhase) {
   if (url.includes("/api/sns/v1/note/videofeed/exit")) {
-    let reqBody = $request.body;
-    if (!reqBody) {
-      $.done({});
-    } else {
-      try {
-        const reqObj = JSON.parse(reqBody);
-        const blockedIds = JSON.parse(
-          $.getdata("fmz200.xhs.blocked_note_ids") || "[]",
+    const reqBody = $request.body;
+    // 缓存为空或解析失败时保持请求原样；命中时在 try 外 $.done 返回上报体，
+    // 避免终止信号被自身 catch 捕获后落到底部 $.done({}) 覆盖为空。
+    let patchedBody = "";
+    try {
+      const reqObj = JSON.parse(reqBody || "{}");
+      const blockedIds = JSON.parse(
+        $.getdata("xhs.blocked_note_ids") || "[]",
+      );
+      if (Array.isArray(blockedIds) && blockedIds.length > 0) {
+        const idSet = new Set(blockedIds.filter(Boolean));
+
+        const originalUnexposed = Array.isArray(reqObj.unexposed_note_ids)
+          ? reqObj.unexposed_note_ids
+          : [];
+        reqObj.unexposed_note_ids = Array.from(
+          new Set(originalUnexposed.concat(Array.from(idSet))),
         );
-        if (Array.isArray(blockedIds) && blockedIds.length > 0) {
-          const idSet = new Set(blockedIds.filter(Boolean));
 
-          const originalUnexposed = Array.isArray(reqObj.unexposed_note_ids)
-            ? reqObj.unexposed_note_ids
-            : [];
-          reqObj.unexposed_note_ids = Array.from(
-            new Set(originalUnexposed.concat(Array.from(idSet))),
-          );
-
-          if (!Array.isArray(reqObj.video_play_progress)) {
-            reqObj.video_play_progress = [];
-          }
-
-          for (const progressItem of reqObj.video_play_progress) {
-            if (idSet.has(progressItem?.note_id)) {
-              progressItem.duration = 0;
-              progressItem.replay_times = 0;
-              progressItem.max_play_time = 0;
-              progressItem.current_play_time = 0;
-            }
-          }
-
-          if (reqObj.note_id && idSet.has(reqObj.note_id)) {
-            const hasCurrent = reqObj.video_play_progress.some(
-              (item) => item?.note_id === reqObj.note_id,
-            );
-            if (!hasCurrent) {
-              reqObj.video_play_progress.push({
-                duration: 0,
-                replay_times: 0,
-                max_play_time: 0,
-                note_id: reqObj.note_id,
-                current_play_time: 0,
-              });
-            }
-          }
-
-          logInfo(
-            `[Exit] merged blocked note ids: ${Array.from(idSet).length}`,
-          );
-          $.done({ body: JSON.stringify(reqObj) });
+        if (!Array.isArray(reqObj.video_play_progress)) {
+          reqObj.video_play_progress = [];
         }
-      } catch (e) {
-        logError(`[Exit] request body parse/patch failed: ${e}`);
+
+        for (const progressItem of reqObj.video_play_progress) {
+          if (idSet.has(progressItem?.note_id)) {
+            progressItem.duration = 0;
+            progressItem.replay_times = 0;
+            progressItem.max_play_time = 0;
+            progressItem.current_play_time = 0;
+          }
+        }
+
+        if (reqObj.note_id && idSet.has(reqObj.note_id)) {
+          const hasCurrent = reqObj.video_play_progress.some(
+            (item) => item?.note_id === reqObj.note_id,
+          );
+          if (!hasCurrent) {
+            reqObj.video_play_progress.push({
+              duration: 0,
+              replay_times: 0,
+              max_play_time: 0,
+              note_id: reqObj.note_id,
+              current_play_time: 0,
+            });
+          }
+        }
+
+        logInfo(
+          `[Exit] merged blocked note ids: ${Array.from(idSet).length}`,
+        );
+        patchedBody = JSON.stringify(reqObj);
       }
+    } catch (e) {
+      logError(`[Exit] request body parse/patch failed: ${e}`);
+    }
+    if (patchedBody) {
+      $.done({ body: patchedBody });
     }
   }
   $.done({});
@@ -356,11 +358,11 @@ if (url.includes("/search/notes")) {
     const firstSearchItem = obj.data.items[0];
 
     const searchDesRegexes = getCachedRegexes(
-      "fmz200.xhs_search_des_regex_cache",
+      "xhs.search_des_regex_cache",
       runtimeArgument.xhs_search_des_regex,
     );
     const searchUserRegexes = getCachedRegexes(
-      "fmz200.xhs_search_nickname_regex_cache",
+      "xhs.search_nickname_regex_cache",
       runtimeArgument.xhs_search_nickname_regex,
     );
 
@@ -401,7 +403,7 @@ if (url.includes("/search/notes")) {
       // 3. 全局数值阈值过滤
       if (parseBoolean(runtimeArgument.xhs_general_counts_threshold)) {
         const searchCounts = getCachedCountsThreshold(
-          "fmz200.xhs_counts_threshold_cache",
+          "xhs.counts_threshold_cache",
           runtimeArgument.xhs_counts_threshold,
         );
         if (searchCounts.length === 5) {
@@ -421,7 +423,7 @@ if (url.includes("/search/notes")) {
       // 4. 全局评论/点赞比阈值过滤
       if (parseBoolean(runtimeArgument.xhs_general_comment_like_ratio_threshold)) {
         const searchRatio = getCachedCommentLikeRatioThreshold(
-          "fmz200.xhs_comment_like_ratio_cache",
+          "xhs.comment_like_ratio_cache",
           runtimeArgument.xhs_comment_like_ratio_threshold,
         );
         if (searchRatio > 0) {
@@ -484,7 +486,7 @@ if (
       if (note_list[0]?.images_list) {
         const images_list = note_list[0].images_list;
         note_list[0].images_list = imageEnhance(JSON.stringify(images_list));
-        $.setdata(JSON.stringify(images_list), "fmz200.xiaohongshu.feed.rsp");
+        $.setdata(JSON.stringify(images_list), "xhs.feed.rsp");
         logInfo("已存储无水印信息♻️");
       }
     }
@@ -493,8 +495,8 @@ if (
 
 if (url.includes("/note/live_photo/save")) {
   logDebug("原body：" + rsp_body);
-  const rsp = $.getdata("fmz200.xiaohongshu.feed.rsp");
-  logDebug("读取缓存key：fmz200.xiaohongshu.feed.rsp");
+  const rsp = $.getdata("xhs.feed.rsp");
+  logDebug("读取缓存key：xhs.feed.rsp");
   // console.log("读取缓存val：" + rsp);
   if (rsp == null || rsp.length === 0) {
     logWarning("缓存无内容，返回原body");
@@ -624,19 +626,19 @@ if (url.includes("/v10/note/video/save")) {
 if (url.includes("/homefeed")) {
   if (obj?.data?.length > 0) {
     const descRegexes = getCachedRegexes(
-      "fmz200.xhs_des_regex_cache",
+      "xhs.des_regex_cache",
       runtimeArgument.xhs_des_regex,
     );
     const nicknameRegexes = getCachedRegexes(
-      "fmz200.xhs_nickname_regex_cache",
+      "xhs.nickname_regex_cache",
       runtimeArgument.xhs_nickname_regex,
     );
     const countsThreshold = getCachedCountsThreshold(
-      "fmz200.xhs_counts_threshold_cache",
+      "xhs.counts_threshold_cache",
       runtimeArgument.xhs_counts_threshold,
     );
     const ratioThreshold = getCachedCommentLikeRatioThreshold(
-      "fmz200.xhs_comment_like_ratio_cache",
+      "xhs.comment_like_ratio_cache",
       runtimeArgument.xhs_comment_like_ratio_threshold,
     );
     const firstItem = obj.data[0];
@@ -745,7 +747,6 @@ if (
   url.includes("/api/sns/v5/note/comment/list?") ||
   url.includes("/api/sns/v3/note/comment/sub_comments?")
 ) {
-  replaceRedIdWithFmz200(obj.data);
   let skipLivePhoto = false;
 
   // Comment regex filtering
@@ -843,7 +844,7 @@ if (
   logDebug("本次note_id：" + note_id);
   if (livePhotos.length > 0) {
     let commitsRsp;
-    const commitsCache = $.getdata("fmz200.xiaohongshu.comments.rsp");
+    const commitsCache = $.getdata("xhs.comments.rsp");
     logDebug("读取缓存val：" + commitsCache);
     if (!commitsCache) {
       commitsRsp = { noteId: note_id, livePhotos: livePhotos };
@@ -861,13 +862,13 @@ if (
       }
     }
     logDebug("写入缓存val：" + JSON.stringify(commitsRsp));
-    $.setdata(JSON.stringify(commitsRsp), "fmz200.xiaohongshu.comments.rsp");
+    $.setdata(JSON.stringify(commitsRsp), "xhs.comments.rsp");
   }
 }
 
 // 下载评论区live图
 if (url.includes("/api/sns/v1/interaction/comment/video/download?")) {
-  const commitsCache = $.getdata("fmz200.xiaohongshu.comments.rsp");
+  const commitsCache = $.getdata("xhs.comments.rsp");
   logDebug("读取缓存val：" + commitsCache);
   logDebug("目标video_id：" + obj.data.video.video_id);
   if (commitsCache) {
@@ -895,7 +896,7 @@ if (
   url.includes("/note/video/save")
 ) {
   const descRegexes = getCachedRegexes(
-    "fmz200.xhs_des_regex_cache",
+    "xhs.des_regex_cache",
     runtimeArgument.xhs_des_regex,
   );
   if (descRegexes.length > 0 && obj.data) {
@@ -919,20 +920,52 @@ if (
         if (contentToMatch) {
           for (const regex of descRegexes) {
             if (regex.test(contentToMatch)) {
-              logInfo(
-                `[Detail] Marked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
-              );
-              // 命中后不再清空整个响应（旧实现返回 data:{} code:-1，App 无数据
-              // 渲染导致详情页白屏）。像 comment_regex 一样把 desc 替换成命中
-              // 提示，笔记其余内容（图片/作者/标题）保持正常展示。
-              // 注：当前 App 的 homefeed 卡片不返回 desc，正文正则只能在详情
-              // 页/搜索页生效，详情页命中一律按此软标记处理。
-              const hitMsg = `命中xhs_des_regex:${regex.source}`;
-              if (note && typeof note.desc === "string") {
-                note.desc = hitMsg;
-              }
-              if (note?.note && typeof note.note.desc === "string") {
-                note.note.desc = hitMsg;
+              const hardBlock = parseBoolean(runtimeArgument.xhs_hard_block);
+              if (hardBlock) {
+                logInfo(
+                  `[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
+                );
+                // 硬屏蔽：清空响应，App 无数据渲染将出现白屏。记录 note_id，
+                // 退出视频页时由 /videofeed/exit 上报未曝光，抑制同类推荐。
+                obj.data = {};
+                obj.code = -1;
+                obj.msg = `将出现白屏，命中xhs_des_regex:${regex.source}`;
+                const blockedNoteId =
+                  note?.id ||
+                  note?.note_id ||
+                  note?.note?.id ||
+                  note?.note?.note_id;
+                if (blockedNoteId) {
+                  let blockedIds = [];
+                  try {
+                    blockedIds = JSON.parse(
+                      $.getdata("xhs.blocked_note_ids") || "[]",
+                    );
+                  } catch (e) {
+                    blockedIds = [];
+                  }
+                  if (!Array.isArray(blockedIds)) {
+                    blockedIds = [];
+                  }
+                  blockedIds = Array.from(
+                    new Set(blockedIds.concat([blockedNoteId])),
+                  ).slice(-100);
+                  $.setdata(JSON.stringify(blockedIds), "xhs.blocked_note_ids");
+                  logDebug(`[Detail] cached blocked note id: ${blockedNoteId}`);
+                }
+              } else {
+                logInfo(
+                  `[Detail] Marked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
+                );
+                // 软标记：像 comment_regex 一样把 desc 替换成命中提示，笔记
+                // 其余内容（图片/作者/标题）保持正常展示，避免白屏。
+                const hitMsg = `命中xhs_des_regex:${regex.source}`;
+                if (note && typeof note.desc === "string") {
+                  note.desc = hitMsg;
+                }
+                if (note?.note && typeof note.note.desc === "string") {
+                  note.note.desc = hitMsg;
+                }
               }
               break;
             }
@@ -946,7 +979,7 @@ if (
 // 详情预加载过滤 (preload_map 结构: data.preload_map[note_id] = { desc, type, ... })
 if (url.includes("/note/detailfeed/preload")) {
   const descRegexes = getCachedRegexes(
-    "fmz200.xhs_des_regex_cache",
+    "xhs.des_regex_cache",
     runtimeArgument.xhs_des_regex,
   );
   if (descRegexes.length > 0 && obj.data?.preload_map) {
@@ -975,7 +1008,7 @@ function imageEnhance(jsonStr) {
     return [];
   }
 
-  const imageQuality = $.getdata("fmz200.xiaohongshu.imageQuality");
+  const imageQuality = runtimeArgument.xhs_image_quality || "high";
   logDebug(`Image Quality: ${imageQuality}`);
   if (imageQuality === "original") {
     // 原始分辨率，PNG格式的图片，占用空间比较大
@@ -1022,7 +1055,6 @@ function replaceUrlContent(collectionA, collectionB) {
       } else {
         itemA.url = itemB.url;
       }
-      itemA.author = "@fmz200";
     }
   });
 }
@@ -1036,20 +1068,6 @@ function deduplicateLivePhotos(livePhotos) {
     seen.set(item.videId, true);
     return true;
   });
-}
-
-function replaceRedIdWithFmz200(obj) {
-  if (Array.isArray(obj)) {
-    obj.forEach((item) => replaceRedIdWithFmz200(item));
-  } else if (typeof obj === "object" && obj !== null) {
-    if ("red_id" in obj) {
-      obj.fmz200 = obj.red_id; // 创建新属性fmz200
-      delete obj.red_id; // 删除旧属性red_id
-    }
-    Object.keys(obj).forEach((key) => {
-      replaceRedIdWithFmz200(obj[key]);
-    });
-  }
 }
 
 /**

@@ -3,7 +3,7 @@
 #!author=奶思[https://github.com/fmz200], Leo
 #!icon=https://raw.githubusercontent.com/luestr/IconResource/main/App_icon/120px/RedPaper.png
 #!homepage=https://github.com/Sheldontao/Scripts
-#!raw-url=https://github.com/fmz200/wool_scripts/raw/main/Loon/plugin/blockAds.plugin
+#!raw-url=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xiaohongshu.plugin
 #!loon_version = 3.3.7(921)
 #!date = 2026-9-22
 
@@ -16,6 +16,8 @@ xhs_general_counts_threshold = switch, false, tag=阈值全局开关（包括搜
 xhs_comment_like_ratio_threshold = input, "0", tag=评论/点赞比的阈值
 xhs_general_comment_like_ratio_threshold = switch, false, tag=评论/点赞比的阈值全局开关（包括搜索，默认关闭）
 xhs_comment_regex = input, "{"author_comment_regex":["^私$","直接私信"],"general_comment_regex":["神经病"]}",tag=全局评论正则,desc=注意格式，所有参数标点符号均为英文。\n{"author_comment_regex":["regex1"],"general_comment_regex":["regex2"]}
+xhs_image_quality = select, "high", "original", tag=画质增强模式, desc=high=高像素输出(默认)，original=原始分辨率PNG(体积大)
+xhs_hard_block = switch, false, tag=命中详情正则直接白屏, desc=关(默认)=详情页命中xhs_des_regex时仅替换描述为命中提示；开=清空响应直接白屏并上报未曝光
 
 xhs_search_des_regex = input, "["一个正则表达式"]",tag=搜索描述正则
 xhs_search_nickname_regex = input, "["中介","看房","租房","好房","探房","管家","房东直租","公寓","房.*产","住宿","寻房","找房"]",tag=搜索用户名正则
@@ -77,9 +79,9 @@ http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/h
 http-response ^https?:\/\/(?:so|edith)\.xiaohongshu\.com\/api\/sns\/v\d+\/search\/notes script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书搜索页, argument = [{xhs_search_des_regex},{xhs_search_nickname_regex},{xhs_comment_like_ratio_threshold},{xhs_general_comment_like_ratio_threshold},{xhs_general_counts_threshold},{xhs_loglevel}]
 
 # 实况、图片、视频水印
-http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note(\/imagefeed|\/live_photo\/save|\/feed|\/videofeed\?|\/video\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=图片水印视频水印, argument = [{xhs_des_regex},{xhs_loglevel}]
-# videofeed 退出上报：将命中过滤的 note_id 标记为未曝光/未播放
-http-request ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/videofeed\/exit script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书videofeed_exit未曝光修正, argument = [{xhs_loglevel}]
+http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note(\/imagefeed|\/live_photo\/save|\/feed|\/videofeed\?|\/video\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=图片水印视频水印, argument = [{xhs_des_regex},{xhs_image_quality},{xhs_loglevel}]
+# 视频保存：命中详情正则时解除限制并按开关硬屏蔽
+http-response ^https?:\/\/edith\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/video\/save script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书视频保存硬屏蔽, argument = [{xhs_des_regex},{xhs_hard_block},{xhs_loglevel}]
 # 评论区Regex、图片、live图水印，表情包下载
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/note\/comment(\/list|\/sub_comments) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区Regex/去水印存储, argument = [{xhs_loglevel},{xhs_comment_regex}]
 http-response ^https?:\/\/(?:edith|rec|www)\.xiaohongshu\.com\/api\/sns\/v\d+\/interaction\/comment\/video\/download script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs_fmz200.js, requires-body=true, tag=小红书评论区去水印下载, argument = [{xhs_loglevel}]
