@@ -12,7 +12,7 @@ docs/*
 
 # xhs whitelist
 xhs/*
-!xhs/xhs_fmz200.js
+!xhs/xhs.js
 !xhs/xiaohongshu.plugin
 !xhs/Readme.md
 !xhs/adguard_xiaohongshu_filter.txt

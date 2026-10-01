@@ -89,8 +89,8 @@
       },
       {
         "process_name": [
-          "Microsoft Outlook",
-          "motrix-next-engine"
+          "Rayburst",
+          "aria2-next"
         ],
         "server": "local"
       },
@@ -407,8 +407,8 @@
       },
       {
         "process_name": [
-          "Microsoft Outlook",
-          "motrix-next-engine"
+          "Rayburst",
+          "aria2-next"
         ],
         "preferred_by": "bridge",
         "outbound": "bridge"
