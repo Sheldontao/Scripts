@@ -99,7 +99,7 @@ http-response ^https?:\/\/(?:edith|rec|www)\.(xiaohongshu|rnote)\.com\/api\/sns\
 http-response ^https?:\/\/(?:so|edith)\.(xiaohongshu|rnote)\.com\/api\/sns\/v\d+\/search\/notes script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs.js, requires-body=true, tag=小红书搜索页, argument = [{xhs_search_des_regex},{xhs_search_nickname_regex},{xhs_comment_like_ratio_threshold},{xhs_general_comment_like_ratio_threshold},{xhs_general_counts_threshold},{xhs_loglevel}]
 
 # 实况、图片、视频水印
-http-response ^https?:\/\/(?:edith|rec|www)\.(xiaohongshu|rnote)\.com\/api\/sns\/v\d+\/note(\/imagefeed|\/live_photo\/save|\/feed|\/videofeed\?|\/video\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs.js, requires-body=true, tag=图片水印视频水印, argument = [{xhs_des_regex},{xhs_image_quality},{xhs_loglevel}]
+http-response ^https?:\/\/(?:edith|rec|www)\.(xiaohongshu|rnote)\.com\/api\/sns\/v\d+\/note(\/imagefeed|\/live_photo\/save|\/feed|\/videofeed\?|\/video\/save) script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs.js, requires-body=true, tag=图片水印视频水印, argument = [{xhs_des_regex},{xhs_image_quality},{xhs_hard_block},{xhs_loglevel}]
 # 视频保存：命中详情正则时解除限制并按开关硬屏蔽
 http-response ^https?:\/\/edith\.(xiaohongshu|rnote)\.com\/api\/sns\/v\d+\/note\/video\/save script-path=https://raw.githubusercontent.com/Sheldontao/Scripts/refs/heads/main/xhs/xhs.js, requires-body=true, tag=小红书视频保存硬屏蔽, argument = [{xhs_des_regex},{xhs_hard_block},{xhs_loglevel}]
 # 评论区Regex、图片、live图水印，表情包下载
