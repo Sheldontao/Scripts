@@ -19,7 +19,7 @@ xhs_comment_regex = input, "{"author_comment_regex":["^私$","直接私信"],"ge
 xhs_incognito = switch, false, tag=无痕模式（不产生浏览/播放记录）, desc=开启后拦截浏览历史与播放上报；App内浏览记录页将为空
 xhs_incognito_extra = switch, false, tag=无痕增强（设备信号与广告追踪上报）, desc=拦截设备信号、用户行为流与广告追踪上报
 xhs_image_quality = select, "high", "original", tag=画质增强模式, desc=high=高像素输出(默认)，original=原始分辨率PNG(体积大)
-xhs_hard_block = switch, false, tag=命中详情正则直接白屏, desc=关(默认)=详情页命中xhs_des_regex时仅替换描述为命中提示；开=清空响应直接白屏并上报未曝光
+xhs_hard_block = switch, false, tag=命中详情正则删除内容, desc=关(默认)=详情页命中xhs_des_regex时仅替换描述为命中提示；开=删除图片/视频/评论等内容仅保留标题作者与已硬屏蔽提示，并上报未曝光
 
 xhs_search_des_regex = input, "["一个正则表达式"]",tag=搜索描述正则
 xhs_search_nickname_regex = input, "["中介","看房","租房","好房","探房","管家","房东直租","公寓","房.*产","住宿","寻房","找房"]",tag=搜索用户名正则
