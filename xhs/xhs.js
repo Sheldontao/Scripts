@@ -749,6 +749,38 @@ if (
 ) {
   let skipLivePhoto = false;
 
+  // 硬屏蔽拦截：详情页命中 xhs_des_regex 的笔记（骨架模式清了内容但保留
+  // 了骨架），评论区按 blocked_note_ids 缓存清空，避免屏蔽笔记的评论可见。
+  const blockedIdsCache = $.getdata("xhs.blocked_note_ids");
+  if (blockedIdsCache) {
+    let blockedIds = [];
+    try {
+      blockedIds = JSON.parse(blockedIdsCache);
+    } catch (e) {
+      blockedIds = [];
+    }
+    const blockedNoteId = url.match(/note_id=([0-9a-f]+)/i)?.[1];
+    if (
+      Array.isArray(blockedIds) &&
+      blockedNoteId &&
+      blockedIds.includes(blockedNoteId)
+    ) {
+      logInfo(`[Comment] Blocked note ${blockedNoteId} comment list cleared`);
+      if (url.includes("/sub_comments")) {
+        obj.data = { comments: [] };
+      } else {
+        obj.data.comments = [];
+        if (obj.data.hasOwnProperty("cursor")) {
+          obj.data.cursor = "";
+        }
+        if (obj.data.hasOwnProperty("has_more")) {
+          obj.data.has_more = false;
+        }
+      }
+      $.done({ body: JSON.stringify(obj) });
+    }
+  }
+
   // Comment regex filtering
   const commentRegexes = getCachedCommentRegex("xhs_comment_regex", runtimeArgument.xhs_comment_regex);
   const hasAuthorRegex = commentRegexes.author.length > 0;
@@ -925,11 +957,11 @@ if (
                 logInfo(
                   `[Detail] Blocked (Match: ${regex.source}): ${contentToMatch.substring(0, 50)}...`,
                 );
-                // 硬屏蔽：清空响应，App 无数据渲染将出现白屏。记录 note_id，
+                // 硬屏蔽（骨架模式）：基于软屏蔽的合法响应，删除图片/评论等
+                // 内容字段，仅保留 title/作者/desc 提示骨架，避免整响应清空
+                // 导致的无提示纯白屏。记录 note_id，评论接口按缓存拦截，
                 // 退出视频页时由 /videofeed/exit 上报未曝光，抑制同类推荐。
-                obj.data = {};
-                obj.code = -1;
-                obj.msg = `将出现白屏，命中xhs_des_regex:${regex.source}`;
+                const hardBlockMsg = `已硬屏蔽，命中xhs_des_regex:${regex.source}`;
                 const blockedNoteId =
                   note?.id ||
                   note?.note_id ||
@@ -952,6 +984,23 @@ if (
                   ).slice(-100);
                   $.setdata(JSON.stringify(blockedIds), "xhs.blocked_note_ids");
                   logDebug(`[Detail] cached blocked note id: ${blockedNoteId}`);
+                }
+                for (const n of [note, note?.note]) {
+                  if (!n || typeof n !== "object") {
+                    continue;
+                  }
+                  delete n.images_list;
+                  delete n.image_list;
+                  delete n.video;
+                  delete n.comment_list;
+                  delete n.hash_tag;
+                  delete n.tag_list;
+                  delete n.interact_info;
+                  delete n.widgets_groups;
+                  delete n.goods_info;
+                  if (typeof n.desc === "string" || n.desc === undefined) {
+                    n.desc = hardBlockMsg;
+                  }
                 }
               } else {
                 logInfo(
